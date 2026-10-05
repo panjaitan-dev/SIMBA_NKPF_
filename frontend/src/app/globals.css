@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --font-plus-jakarta: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 99px;
+}
+
+/* Prose styles for content */
+.prose h2 { @apply text-2xl font-bold text-slate-900 mt-8 mb-4; }
+.prose h3 { @apply text-xl font-semibold text-slate-800 mt-6 mb-3; }
+.prose p { @apply text-slate-600 leading-relaxed mb-4; }
+.prose ul { @apply list-disc list-inside text-slate-600 mb-4 space-y-1; }
+.prose ol { @apply list-decimal list-inside text-slate-600 mb-4 space-y-1; }
+.prose strong { @apply font-semibold text-slate-800; }
+.prose a { @apply text-emerald-600 hover:underline; }
+
+/* Animation helpers */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
