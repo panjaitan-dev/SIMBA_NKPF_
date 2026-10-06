@@ -1,15 +1,16 @@
 import Link from 'next/link'
 import { Images, MapPin, Calendar } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { safeFetch, SAMPLE_GALERI } from '@/lib/sampleData'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 async function getGaleri() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/galeri`, { next: { revalidate: 300 } })
-    if (!res.ok) return []
-    return (await res.json()).data || []
-  } catch { return [] }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  if (!apiUrl || apiUrl.includes('localhost')) return SAMPLE_GALERI
+
+  const res = await safeFetch(`${apiUrl}/galeri`)
+  return res?.data?.length ? res.data : SAMPLE_GALERI
 }
 
 export default async function GaleriPage() {

@@ -1,15 +1,19 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen } from 'lucide-react'
+import { safeFetch, SAMPLE_EDUKASI } from '@/lib/sampleData'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 async function getEdukasi(slug: string) {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/edukasi/slug/${slug}`, { next: { revalidate: 300 } })
-    if (!res.ok) return null
-    return (await res.json()).data
-  } catch { return null }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  if (!apiUrl || apiUrl.includes('localhost')) {
+    return SAMPLE_EDUKASI.find(e => e.slug === slug) || SAMPLE_EDUKASI[0]
+  }
+
+  const res = await safeFetch(`${apiUrl}/edukasi/slug/${slug}`)
+  if (res?.data) return res.data
+  return SAMPLE_EDUKASI.find(e => e.slug === slug) || SAMPLE_EDUKASI[0]
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -45,7 +49,7 @@ export default async function EdukasiDetailPage({ params }: { params: { slug: st
             {item.ringkasan && (
               <p className="text-lg text-slate-600 italic border-l-4 border-emerald-500 pl-5 mb-8 leading-relaxed">{item.ringkasan}</p>
             )}
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: item.konten.replace(/\n/g, '<br/>') }} />
+            <div className="prose max-w-none text-slate-700 leading-relaxed space-y-4" dangerouslySetInnerHTML={{ __html: item.konten?.replace(/\n/g, '<br/>') || '' }} />
           </div>
         </article>
       </div>

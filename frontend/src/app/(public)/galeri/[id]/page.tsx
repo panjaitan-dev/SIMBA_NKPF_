@@ -2,15 +2,19 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MapPin, Calendar } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { safeFetch, SAMPLE_GALERI } from '@/lib/sampleData'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 async function getAlbum(id: string) {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/galeri/${id}`, { next: { revalidate: 300 } })
-    if (!res.ok) return null
-    return (await res.json()).data
-  } catch { return null }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  if (!apiUrl || apiUrl.includes('localhost')) {
+    return SAMPLE_GALERI.find(g => g.id === id) || SAMPLE_GALERI[0]
+  }
+
+  const res = await safeFetch(`${apiUrl}/galeri/${id}`)
+  if (res?.data) return res.data
+  return SAMPLE_GALERI.find(g => g.id === id) || SAMPLE_GALERI[0]
 }
 
 export default async function GaleriDetailPage({ params }: { params: { id: string } }) {
@@ -34,11 +38,9 @@ export default async function GaleriDetailPage({ params }: { params: { id: strin
           {album.deskripsi && <p className="text-slate-600 mt-3 max-w-2xl">{album.deskripsi}</p>}
         </div>
 
-        {album.fotos?.length === 0 ? (
-          <div className="text-center py-20 text-slate-400">Belum ada foto dalam album ini.</div>
-        ) : (
+        {album.fotos?.length ? (
           <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
-            {album.fotos?.map((foto: any) => (
+            {album.fotos.map((foto: any) => (
               <div key={foto.id} className="break-inside-avoid rounded-xl overflow-hidden shadow-sm">
                 <img src={foto.url} alt={foto.caption || album.judul} className="w-full object-cover hover:opacity-95 transition-opacity" loading="lazy" />
                 {foto.caption && (
@@ -47,6 +49,12 @@ export default async function GaleriDetailPage({ params }: { params: { id: strin
               </div>
             ))}
           </div>
+        ) : album.cover_url ? (
+          <div className="rounded-2xl overflow-hidden max-w-2xl shadow-sm">
+            <img src={album.cover_url} alt={album.judul} className="w-full object-cover" />
+          </div>
+        ) : (
+          <div className="text-center py-20 text-slate-400">Belum ada foto dalam album ini.</div>
         )}
       </div>
     </div>

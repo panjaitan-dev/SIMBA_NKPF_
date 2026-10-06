@@ -2,15 +2,19 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
 import { Calendar, ArrowLeft, Eye } from 'lucide-react'
+import { safeFetch, SAMPLE_BERITA } from '@/lib/sampleData'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 async function getBerita(slug: string) {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/berita/slug/${slug}`, { next: { revalidate: 60 } })
-    if (!res.ok) return null
-    return (await res.json()).data
-  } catch { return null }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  if (!apiUrl || apiUrl.includes('localhost')) {
+    return SAMPLE_BERITA.find(b => b.slug === slug) || SAMPLE_BERITA[0]
+  }
+
+  const res = await safeFetch(`${apiUrl}/berita/slug/${slug}`)
+  if (res?.data) return res.data
+  return SAMPLE_BERITA.find(b => b.slug === slug) || SAMPLE_BERITA[0]
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -37,8 +41,8 @@ export default async function BeritaDetailPage({ params }: { params: { slug: str
           <div className="p-8 md:p-12">
             <div className="flex flex-wrap items-center gap-3 mb-6">
               <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full capitalize">{berita.kategori}</span>
-              <span className="flex items-center gap-1.5 text-sm text-slate-400"><Calendar size={14} />{formatDate(berita.published_at)}</span>
-              <span className="flex items-center gap-1.5 text-sm text-slate-400"><Eye size={14} />{berita.view_count} views</span>
+              <span className="flex items-center gap-1.5 text-sm text-slate-400"><Calendar size={14} />{berita.published_at ? formatDate(berita.published_at) : '-'}</span>
+              <span className="flex items-center gap-1.5 text-sm text-slate-400"><Eye size={14} />{berita.view_count || 0} views</span>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6 leading-tight">{berita.judul}</h1>
@@ -47,7 +51,7 @@ export default async function BeritaDetailPage({ params }: { params: { slug: str
               <p className="text-lg text-slate-600 italic border-l-4 border-emerald-500 pl-5 mb-8 leading-relaxed">{berita.ringkasan}</p>
             )}
 
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: berita.konten.replace(/\n/g, '<br/>') }} />
+            <div className="prose max-w-none text-slate-700 leading-relaxed space-y-4" dangerouslySetInnerHTML={{ __html: berita.konten?.replace(/\n/g, '<br/>') || '' }} />
 
             {berita.profiles && (
               <div className="mt-10 pt-6 border-t border-slate-100">
