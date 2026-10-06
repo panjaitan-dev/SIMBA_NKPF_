@@ -1,16 +1,13 @@
 import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
+import { safeFetch, SAMPLE_EDUKASI } from '@/lib/sampleData'
 
 async function getEdukasi() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/edukasi?limit=3`, {
-      next: { revalidate: 300 },
-    })
-    if (!res.ok) return []
-    return (await res.json()).data || []
-  } catch {
-    return []
-  }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  if (!apiUrl || apiUrl.includes('localhost')) return SAMPLE_EDUKASI
+
+  const res = await safeFetch(`${apiUrl}/edukasi?limit=3`)
+  return res?.data?.length ? res.data : SAMPLE_EDUKASI
 }
 
 const KATEGORI_LABELS: Record<string, string> = {
@@ -46,53 +43,43 @@ export default async function EdukasiSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {edukasi.length === 0 ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-[350px] bg-slate-200 animate-pulse rounded-2xl" />
-            ))
-          ) : (
-            edukasi.map((item: any) => (
-              <Link
-                key={item.id}
-                href={`/edukasi/${item.slug}`}
-                className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-emerald-200 transition-all"
-              >
-                {item.thumbnail_url ? (
-                  <div className="h-48 overflow-hidden">
-                    <img
-                      src={item.thumbnail_url}
-                      alt={item.judul}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-48 bg-emerald-50 flex items-center justify-center">
-                    <BookOpen size={40} className="text-emerald-200" />
-                  </div>
-                )}
-                <div className="p-6">
+          {edukasi.map((item: any) => (
+            <Link
+              key={item.id}
+              href={`/edukasi/${item.slug}`}
+              className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-emerald-200 transition-all flex flex-col"
+            >
+              {item.thumbnail_url ? (
+                <div className="h-48 overflow-hidden">
+                  <img
+                    src={item.thumbnail_url}
+                    alt={item.judul}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              ) : (
+                <div className="h-48 bg-emerald-50 flex items-center justify-center">
+                  <BookOpen size={40} className="text-emerald-200" />
+                </div>
+              )}
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
                   <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
                     {KATEGORI_LABELS[item.kategori] || item.kategori}
                   </span>
-                  <h3 className="font-bold text-slate-800 mt-3 mb-2 group-hover:text-emerald-700 transition-colors">
+                  <h3 className="font-bold text-slate-800 mt-3 mb-2 group-hover:text-emerald-700 transition-colors line-clamp-2">
                     {item.judul}
                   </h3>
                   {item.ringkasan && (
                     <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{item.ringkasan}</p>
                   )}
-                  <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-emerald-600">
-                    Baca Selengkapnya <ArrowRight size={14} />
-                  </div>
                 </div>
-              </Link>
-            ))
-          )}
-        </div>
-
-        <div className="mt-8 md:hidden text-center">
-          <Link href="/edukasi" className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-semibold w-full justify-center">
-            Lihat Semua Edukasi <ArrowRight size={15} />
-          </Link>
+                <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-emerald-600">
+                  Baca Selengkapnya <ArrowRight size={14} />
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

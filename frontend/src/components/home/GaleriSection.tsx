@@ -1,17 +1,14 @@
 import Link from 'next/link'
 import { ArrowRight, Images, MapPin, Calendar } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import { safeFetch, SAMPLE_GALERI } from '@/lib/sampleData'
 
 async function getGaleri() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/galeri?limit=3`, {
-      next: { revalidate: 300 },
-    })
-    if (!res.ok) return []
-    return (await res.json()).data || []
-  } catch {
-    return []
-  }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  if (!apiUrl || apiUrl.includes('localhost')) return SAMPLE_GALERI
+
+  const res = await safeFetch(`${apiUrl}/galeri?limit=3`)
+  return res?.data?.length ? res.data : SAMPLE_GALERI
 }
 
 export default async function GaleriSection() {
@@ -39,47 +36,41 @@ export default async function GaleriSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {albums.length === 0 ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-[320px] bg-slate-100 animate-pulse rounded-2xl" />
-            ))
-          ) : (
-            albums.map((album: any) => (
-              <Link
-                key={album.id}
-                href={`/galeri/${album.id}`}
-                className="group relative overflow-hidden rounded-2xl bg-slate-100 shadow-sm hover:shadow-xl transition-all"
-              >
-                {album.cover_url ? (
-                  <img
-                    src={album.cover_url}
-                    alt={album.judul}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-full h-64 bg-gradient-to-br from-emerald-100 to-slate-200 flex items-center justify-center">
-                    <Images size={48} className="text-emerald-300" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-lg mb-1">{album.judul}</h3>
-                  <div className="flex items-center gap-3 text-xs text-slate-300">
-                    {album.lokasi && (
-                      <span className="flex items-center gap-1">
-                        <MapPin size={11} /> {album.lokasi}
-                      </span>
-                    )}
-                    {album.tanggal_kegiatan && (
-                      <span className="flex items-center gap-1">
-                        <Calendar size={11} /> {formatDate(album.tanggal_kegiatan)}
-                      </span>
-                    )}
-                  </div>
+          {albums.map((album: any) => (
+            <Link
+              key={album.id}
+              href={`/galeri/${album.id}`}
+              className="group relative overflow-hidden rounded-2xl bg-slate-100 shadow-sm hover:shadow-xl transition-all"
+            >
+              {album.cover_url ? (
+                <img
+                  src={album.cover_url}
+                  alt={album.judul}
+                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-64 bg-gradient-to-br from-emerald-100 to-slate-200 flex items-center justify-center">
+                  <Images size={48} className="text-emerald-300" />
                 </div>
-              </Link>
-            ))
-          )}
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <h3 className="text-white font-bold text-lg mb-1">{album.judul}</h3>
+                <div className="flex items-center gap-3 text-xs text-slate-300">
+                  {album.lokasi && (
+                    <span className="flex items-center gap-1">
+                      <MapPin size={11} /> {album.lokasi}
+                    </span>
+                  )}
+                  {album.tanggal_kegiatan && (
+                    <span className="flex items-center gap-1">
+                      <Calendar size={11} /> {formatDate(album.tanggal_kegiatan)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
