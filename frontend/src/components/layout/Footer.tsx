@@ -16,16 +16,16 @@ const InstagramIcon = () => (
 
 const navLinks = ['Tentang', 'Berita', 'Edukasi', 'Galeri']
 const resources = [
-  { label: 'Tugas Pokok & Fungsi', href: 'https://dislindup.tobakab.go.id/tugas-pokok-dan-fungsi/' },
-  { label: 'Dokumen RPJMD', href: 'https://dislindup.tobakab.go.id/rpjmd/' },
-  { label: 'Dokumen RENSTRA', href: 'https://dislindup.tobakab.go.id/renstra/' },
-  { label: 'Struktur Organisasi', href: 'https://dislindup.tobakab.go.id/struktur-organisasi/' },
+  { label: 'Portal SIMBA KLHK', href: 'https://simba.kemenlh.go.id/portal/' },
+  { label: 'Permen LHK No. 14/2021', href: 'https://jdih.menlhk.go.id/' },
+  { label: 'SIPSN Kemensetneg / KLHK', href: 'https://sipsn.menlhk.go.id/' },
+  { label: 'Gerakan Indonesia Bersih 2029', href: '#' },
 ]
 const bankLinks = [
   { label: 'Daftar Nasabah', href: '/register' },
-  { label: 'Cek Saldo', href: '/nasabah' },
-  { label: 'Setoran Sampah', href: '/nasabah/setoran' },
-  { label: 'Jenis & Harga Sampah', href: '/jenis-sampah' },
+  { label: 'Cek Saldo & Tabungan', href: '/nasabah' },
+  { label: 'Setoran Sampah (Beli)', href: '/admin/setoran/baru' },
+  { label: 'Katalog Sampah & Harga', href: '/admin/jenis-sampah' },
 ]
 
 export default function Footer() {
@@ -41,17 +41,16 @@ export default function Footer() {
               </div>
               <div>
                 <h3 className="text-white font-extrabold text-lg">SIMBA</h3>
-                <p className="text-emerald-500 text-[10px] font-bold tracking-widest uppercase">Bank Sampah Toba</p>
+                <p className="text-emerald-500 text-[10px] font-bold tracking-widest uppercase">Bank Sampah Indonesia</p>
               </div>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Sistem Informasi Bank Sampah — Dinas Lingkungan Hidup Kabupaten Toba. Bersama menjaga lingkungan Danau Toba yang asri dan berkelanjutan.
+              Sistem Informasi Bank Sampah Indonesia — Platform digital pelayanan publik terpadu untuk pencatatan transaksi jual beli, pengelolaan tabungan sampah, dan akselerasi ekonomi sirkular nasional.
             </p>
             <div className="flex gap-3">
               {[
-                { href: 'https://www.facebook.com', icon: <FacebookIcon />, label: 'Facebook' },
-                { href: 'https://www.instagram.com/dlh_kab.toba', icon: <InstagramIcon />, label: 'Instagram' },
-                { href: 'mailto:dlhtoba@gmail.com', icon: <Mail size={16} />, label: 'Email' },
+                { href: 'https://simba.kemenlh.go.id/portal/', icon: <Leaf size={16} />, label: 'SIMBA Nasional' },
+                { href: 'mailto:kontak@banksampah.id', icon: <Mail size={16} />, label: 'Email' },
               ].map((s) => (
                 <a
                   key={s.label}
@@ -69,7 +68,7 @@ export default function Footer() {
 
           {/* Bank Sampah */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Bank Sampah</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Layanan Nasabah</h4>
             <ul className="space-y-3">
               {bankLinks.map((l) => (
                 <li key={l.label}>
@@ -84,7 +83,7 @@ export default function Footer() {
 
           {/* Sumber Daya */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Informasi Publik</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Regulasi & Jaringan</h4>
             <ul className="space-y-3">
               {resources.map((r) => (
                 <li key={r.label}>
@@ -99,19 +98,19 @@ export default function Footer() {
 
           {/* Kontak */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Hubungi Kami</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Sekretariat Pusat</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-slate-500 shrink-0 mt-0.5" />
-                <span className="text-slate-400">Jl. Hutabulu Mejan No. 14, Sibola Hotangsas, Balige, Toba, Sumatera Utara</span>
+                <span className="text-slate-400">Pusat Layanan Bank Sampah Indonesia, Gedung Manggala Wanabakti, Jakarta, Indonesia</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-slate-500 shrink-0" />
-                <a href="mailto:dlhtoba@gmail.com" className="text-slate-400 hover:text-emerald-400 transition-colors">dlhtoba@gmail.com</a>
+                <a href="mailto:info@simba.id" className="text-slate-400 hover:text-emerald-400 transition-colors">info@simba.id</a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} className="text-slate-500 shrink-0" />
-                <span className="text-slate-400">(0632) 21xxx</span>
+                <span className="text-slate-400">+62 21 5703246</span>
               </li>
             </ul>
           </div>
@@ -120,11 +119,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-slate-500 text-sm">
-            © 2026 <strong className="text-slate-300">Dinas Lingkungan Hidup Kabupaten Toba</strong>. All rights reserved.
+            © 2026 <strong className="text-slate-300">Sistem Informasi Bank Sampah Indonesia</strong>. Hak Cipta Dilindungi Undang-Undang.
           </p>
           <div className="flex gap-6 text-sm font-medium">
             <Link href="/kebijakan-privasi" className="text-slate-500 hover:text-emerald-400 transition-colors">Kebijakan Privasi</Link>
-            <Link href="/syarat-ketentuan" className="text-slate-500 hover:text-emerald-400 transition-colors">Syarat Ketentuan</Link>
+            <Link href="/syarat-ketentuan" className="text-slate-500 hover:text-emerald-400 transition-colors">Syarat & Ketentuan</Link>
           </div>
         </div>
       </div>

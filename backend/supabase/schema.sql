@@ -58,9 +58,11 @@ CREATE TABLE IF NOT EXISTS public.jenis_sampah (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   nama TEXT NOT NULL,
   kode TEXT UNIQUE NOT NULL,
-  kategori TEXT NOT NULL CHECK (kategori IN ('organik', 'anorganik', 'b3', 'lainnya')),
+  kategori TEXT NOT NULL CHECK (kategori IN ('organik', 'anorganik', 'b3', 'logam', 'lainnya')),
   satuan TEXT DEFAULT 'kg',
   harga_per_satuan DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  harga_beli DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  harga_jual DECIMAL(10, 2) NOT NULL DEFAULT 0,
   deskripsi TEXT,
   icon TEXT,
   is_active BOOLEAN DEFAULT TRUE,
@@ -78,9 +80,12 @@ CREATE TABLE IF NOT EXISTS public.setoran (
   unit_id UUID REFERENCES public.unit_bank_sampah(id),
   nomor_setoran TEXT UNIQUE NOT NULL,
   tanggal_setoran DATE NOT NULL DEFAULT CURRENT_DATE,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'diverifikasi', 'ditolak')),
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'diverifikasi', 'ditolak', 'dibatalkan')),
   total_nilai DECIMAL(15, 2) DEFAULT 0,
+  total_berat_kg DECIMAL(10, 3) DEFAULT 0,
+  metode_pembayaran TEXT DEFAULT 'Saldo Tabungan',
   catatan TEXT,
+  created_by UUID REFERENCES public.profiles(id),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -91,7 +96,9 @@ CREATE TABLE IF NOT EXISTS public.setoran (
 CREATE TABLE IF NOT EXISTS public.detail_setoran (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   setoran_id UUID NOT NULL REFERENCES public.setoran(id) ON DELETE CASCADE,
-  jenis_sampah_id UUID NOT NULL REFERENCES public.jenis_sampah(id),
+  jenis_sampah_id UUID REFERENCES public.jenis_sampah(id),
+  nama_sampah TEXT,
+  kode_sampah TEXT,
   berat_kg DECIMAL(10, 3) NOT NULL,
   harga_satuan DECIMAL(10, 2) NOT NULL,
   subtotal DECIMAL(15, 2) GENERATED ALWAYS AS (berat_kg * harga_satuan) STORED,
@@ -107,7 +114,7 @@ CREATE TABLE IF NOT EXISTS public.penarikan (
   petugas_id UUID REFERENCES public.profiles(id),
   nomor_penarikan TEXT UNIQUE NOT NULL,
   jumlah DECIMAL(15, 2) NOT NULL,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'disetujui', 'ditolak', 'dibayar')),
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'disetujui', 'ditolak', 'dibayar', 'dibatalkan')),
   catatan TEXT,
   tanggal_request TIMESTAMPTZ DEFAULT NOW(),
   tanggal_proses TIMESTAMPTZ,
@@ -263,28 +270,57 @@ LEFT JOIN public.unit_bank_sampah u ON s.unit_id = u.id;
 -- FUNCTIONS & TRIGGERS
 -- ============================================================
 
--- Fungsi: Auto-update saldo nasabah ketika setoran diverifikasi
+-- Fungsi: Auto-update saldo nasabah ketika setoran diverifikasi atau dibatalkan
 CREATE OR REPLACE FUNCTION update_saldo_nasabah()
 RETURNS TRIGGER AS $$
+DECLARE
+  v_total_berat DECIMAL(10, 3);
 BEGIN
-  IF NEW.status = 'diverifikasi' AND OLD.status != 'diverifikasi' THEN
+  -- 1. Ketika status berubah menjadi 'diverifikasi' (baik dari INSERT langsung maupun UPDATE)
+  IF (TG_OP = 'INSERT' AND NEW.status = 'diverifikasi') OR
+     (TG_OP = 'UPDATE' AND NEW.status = 'diverifikasi' AND (OLD.status IS NULL OR OLD.status != 'diverifikasi')) THEN
+     
+    SELECT COALESCE(SUM(berat_kg), 0) INTO v_total_berat
+    FROM public.detail_setoran
+    WHERE setoran_id = NEW.id;
+
+    IF (v_total_berat = 0 OR v_total_berat IS NULL) AND NEW.total_berat_kg IS NOT NULL THEN
+      v_total_berat := NEW.total_berat_kg;
+    END IF;
+
     UPDATE public.nasabah
     SET 
       saldo = saldo + NEW.total_nilai,
-      total_setoran_kg = total_setoran_kg + (
-        SELECT COALESCE(SUM(berat_kg), 0)
-        FROM public.detail_setoran
-        WHERE setoran_id = NEW.id
-      ),
+      total_setoran_kg = total_setoran_kg + COALESCE(v_total_berat, 0),
+      updated_at = NOW()
+    WHERE id = NEW.nasabah_id;
+
+  -- 2. Jika status berubah dari 'diverifikasi' ke status lain (dibatalkan/ditolak)
+  ELSIF TG_OP = 'UPDATE' AND OLD.status = 'diverifikasi' AND NEW.status != 'diverifikasi' THEN
+
+    SELECT COALESCE(SUM(berat_kg), 0) INTO v_total_berat
+    FROM public.detail_setoran
+    WHERE setoran_id = NEW.id;
+
+    IF (v_total_berat = 0 OR v_total_berat IS NULL) AND OLD.total_berat_kg IS NOT NULL THEN
+      v_total_berat := OLD.total_berat_kg;
+    END IF;
+
+    UPDATE public.nasabah
+    SET 
+      saldo = GREATEST(0, saldo - OLD.total_nilai),
+      total_setoran_kg = GREATEST(0, total_setoran_kg - COALESCE(v_total_berat, 0)),
       updated_at = NOW()
     WHERE id = NEW.nasabah_id;
   END IF;
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_update_saldo ON public.setoran;
 CREATE TRIGGER trigger_update_saldo
-AFTER UPDATE ON public.setoran
+AFTER INSERT OR UPDATE ON public.setoran
 FOR EACH ROW
 EXECUTE FUNCTION update_saldo_nasabah();
 
@@ -296,36 +332,53 @@ BEGIN
   SET total_nilai = (
     SELECT COALESCE(SUM(subtotal), 0)
     FROM public.detail_setoran
-    WHERE setoran_id = NEW.setoran_id
+    WHERE setoran_id = COALESCE(NEW.setoran_id, OLD.setoran_id)
+  ),
+  total_berat_kg = (
+    SELECT COALESCE(SUM(berat_kg), 0)
+    FROM public.detail_setoran
+    WHERE setoran_id = COALESCE(NEW.setoran_id, OLD.setoran_id)
   ),
   updated_at = NOW()
-  WHERE id = NEW.setoran_id;
-  RETURN NEW;
+  WHERE id = COALESCE(NEW.setoran_id, OLD.setoran_id);
+  RETURN COALESCE(NEW, OLD);
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_update_total_setoran ON public.detail_setoran;
 CREATE TRIGGER trigger_update_total_setoran
 AFTER INSERT OR UPDATE OR DELETE ON public.detail_setoran
 FOR EACH ROW
 EXECUTE FUNCTION update_total_setoran();
 
--- Fungsi: Kurangi saldo saat penarikan disetujui
+-- Fungsi: Kurangi saldo saat penarikan dibayar (dan kembalikan jika void/batal)
 CREATE OR REPLACE FUNCTION proses_penarikan()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.status = 'dibayar' AND OLD.status != 'dibayar' THEN
+  -- 1. Penarikan dicairkan / dibayar
+  IF NEW.status = 'dibayar' AND (OLD.status IS NULL OR OLD.status != 'dibayar') THEN
     UPDATE public.nasabah
     SET 
-      saldo = saldo - NEW.jumlah,
+      saldo = GREATEST(0, saldo - NEW.jumlah),
       updated_at = NOW()
     WHERE id = NEW.nasabah_id;
     
     NEW.tanggal_proses = NOW();
+
+  -- 2. Penarikan dibatalkan setelah sebelumnya dibayar
+  ELSIF OLD.status = 'dibayar' AND NEW.status != 'dibayar' THEN
+    UPDATE public.nasabah
+    SET 
+      saldo = saldo + OLD.jumlah,
+      updated_at = NOW()
+    WHERE id = NEW.nasabah_id;
   END IF;
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_proses_penarikan ON public.penarikan;
 CREATE TRIGGER trigger_proses_penarikan
 BEFORE UPDATE ON public.penarikan
 FOR EACH ROW
@@ -404,28 +457,105 @@ CREATE POLICY "laporan_select_own" ON public.laporan_lingkungan FOR SELECT USING
 CREATE POLICY "laporan_insert_public" ON public.laporan_lingkungan FOR INSERT WITH CHECK (TRUE);
 
 -- ============================================================
--- SEED DATA — Jenis Sampah Dasar
+-- 14. KLIEN / PEMBELI INDUSTRI (OFFTAKER)
 -- ============================================================
-INSERT INTO public.jenis_sampah (nama, kode, kategori, satuan, harga_per_satuan, deskripsi) VALUES
-('Kertas Koran', 'KRT-KOR', 'anorganik', 'kg', 1500, 'Koran, majalah, dan kertas bekas sejenis'),
-('Kertas HVS', 'KRT-HVS', 'anorganik', 'kg', 2000, 'Kertas putih, buku tulis, dokumen'),
-('Kardus/Karton', 'KRT-KDL', 'anorganik', 'kg', 1200, 'Kardus kemasan dan kotak bekas'),
-('Botol Plastik PET', 'PLS-PET', 'anorganik', 'kg', 3500, 'Botol air mineral, botol minuman'),
-('Plastik Kresek', 'PLS-KRK', 'anorganik', 'kg', 800, 'Kantong plastik kresek'),
-('Plastik Keras (HDPE)', 'PLS-HDP', 'anorganik', 'kg', 2500, 'Ember, jerigen, pipa plastik'),
-('Kaleng Besi', 'LOG-BES', 'anorganik', 'kg', 1800, 'Kaleng cat, kaleng makanan besi'),
-('Kaleng Aluminium', 'LOG-ALU', 'anorganik', 'kg', 8000, 'Kaleng minuman aluminium'),
-('Tembaga', 'LOG-TEM', 'anorganik', 'kg', 65000, 'Kabel tembaga, pipa tembaga'),
-('Besi/Baja', 'LOG-BSI', 'anorganik', 'kg', 3500, 'Besi tua, rangka besi'),
-('Botol Kaca', 'KCA-BTL', 'anorganik', 'kg', 500, 'Botol kaca bekas minuman'),
-('Sampah Organik (Kompos)', 'ORG-KMP', 'organik', 'kg', 200, 'Sisa makanan, daun, sayuran untuk kompos'),
-('Minyak Jelantah', 'ORG-MJL', 'organik', 'liter', 3000, 'Minyak goreng bekas'),
-('Elektronik Bekas (e-Waste)', 'B3-ELK', 'b3', 'unit', 5000, 'HP, laptop, elektronik bekas')
+CREATE TABLE IF NOT EXISTS public.klien_pembeli (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  kode_client TEXT UNIQUE NOT NULL,
+  nama_client TEXT NOT NULL,
+  perusahaan TEXT,
+  komoditas TEXT,
+  alamat TEXT NOT NULL,
+  nomor_hp TEXT NOT NULL,
+  email TEXT,
+  status_aktif BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================
+-- 15. TRANSAKSI PENJUALAN KOMODITAS (Sampah Keluar ke Pembeli)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.penjualan_sampah (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  klien_id UUID NOT NULL REFERENCES public.klien_pembeli(id) ON DELETE CASCADE,
+  petugas_id UUID REFERENCES public.profiles(id),
+  nomor_faktur TEXT UNIQUE NOT NULL,
+  tanggal_penjualan DATE NOT NULL DEFAULT CURRENT_DATE,
+  total_berat_kg DECIMAL(10, 3) NOT NULL DEFAULT 0,
+  total_nominal DECIMAL(15, 2) NOT NULL DEFAULT 0,
+  status_pembayaran TEXT DEFAULT 'lunas',
+  nomor_truk TEXT,
+  catatan TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================
+-- 16. DETAIL PENJUALAN
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.detail_penjualan (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  penjualan_id UUID NOT NULL REFERENCES public.penjualan_sampah(id) ON DELETE CASCADE,
+  jenis_sampah_id UUID NOT NULL REFERENCES public.jenis_sampah(id),
+  berat_kg DECIMAL(10, 3) NOT NULL,
+  harga_satuan_jual DECIMAL(10, 2) NOT NULL,
+  subtotal DECIMAL(15, 2) GENERATED ALWAYS AS (berat_kg * harga_satuan_jual) STORED,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================
+-- SEED DATA — Jenis Sampah Dual Pricing
+-- ============================================================
+INSERT INTO public.jenis_sampah (nama, kode, kategori, satuan, harga_per_satuan, harga_beli, harga_jual, deskripsi) VALUES
+('Tembaga Super (Kabel Kupas)', 'LG-TMB01', 'logam', 'kg', 85000, 85000, 95000, 'Kawat tembaga murni tanpa isolator, mengkilap'),
+('Aluminium Kaleng Minuman', 'LG-ALM01', 'logam', 'kg', 14000, 14000, 18000, 'Kaleng minuman aluminium ringan tanpa cairan'),
+('Aluminium Profil / Tebal', 'LG-ALM02', 'logam', 'kg', 16000, 16000, 21000, 'Kusen aluminium, plat tebal, wajan bekas'),
+('Botol Plastik PET Bening', 'PLS-PET01', 'anorganik', 'kg', 3500, 3500, 4800, 'Botol air mineral transparan bersih'),
+('Plastik HDPE / Emberan', 'PLS-HDP02', 'anorganik', 'kg', 2800, 2800, 4000, 'Ember, jerigen, baskom plastik'),
+('Kardus Box Cokelat Tebal', 'KRT-KRD01', 'anorganik', 'kg', 1800, 1800, 2500, 'Kardus kemasan cokelat kering'),
+('Besi Padu / Konstruksi', 'LG-BSI01', 'logam', 'kg', 4500, 4500, 6000, 'Besi plat tebal, beton, dan kontruksi'),
+('Minyak Jelantah Berkualitas', 'MNY-JLT01', 'lainnya', 'liter', 7000, 7000, 9000, 'Minyak goreng bekas disaring bersih'),
+('Botol Kaca Utuh', 'KC-BTL01', 'anorganik', 'pcs', 500, 500, 1000, 'Botol kaca sirup / kecap utuh')
 ON CONFLICT (kode) DO NOTHING;
 
--- Seed: Unit Bank Sampah
+-- Seed: Unit Bank Sampah Nasional
 INSERT INTO public.unit_bank_sampah (nama, kode, alamat) VALUES
-('Bank Sampah Induk Toba', 'BST-IND', 'Jl. Hutabulu Mejan No. 14, Balige'),
-('Bank Sampah Unit Laguboti', 'BST-LGB', 'Laguboti, Kab. Toba'),
-('Bank Sampah Unit Porsea', 'BST-PRS', 'Porsea, Kab. Toba')
+('Bank Sampah Induk Pusat', 'BSI-JKT01', 'Gedung Manggala Wanabakti, Jakarta Pusat'),
+('Bank Sampah Unit Melati Mandiri', 'BSU-JKT02', 'Kecamatan Cempaka Putih, Jakarta'),
+('Bank Sampah Unit Asri Sejahtera', 'BSU-BDO01', 'Kota Bandung, Jawa Barat'),
+('Bank Sampah Unit Resik Lestari', 'BSU-SBY01', 'Kota Surabaya, Jawa Timur')
 ON CONFLICT (kode) DO NOTHING;
+
+-- Seed: Klien / Pembeli Offtaker
+INSERT INTO public.klien_pembeli (kode_client, nama_client, perusahaan, komoditas, alamat, nomor_hp) VALUES
+('CLN-001', 'PT Daur Logam Nusantara', 'Pabrik Peleburan Tembaga & Aluminium', 'Logam (Tembaga, Aluminium, Besi)', 'Kawasan Industri Pulogadung Blok B No. 12, Jakarta', '0812-9876-5432'),
+('CLN-002', 'UD Plastik Berkah Mandiri', 'Pengepul & Penggilingan Plastik', 'Plastik (PET, HDPE, PP)', 'Jl. Raya Narogong Km. 12, Bantar Gebang, Bekasi', '0813-1122-3344'),
+('CLN-003', 'PT Pabrik Kertas Sumber Jaya', 'Industri Pulp & Paper Daur Ulang', 'Kardus Box, Kertas HVS & Koran', 'Jl. Industri Rungkut Blok C No. 45, Surabaya', '0857-4455-6677')
+ON CONFLICT (kode_client) DO NOTHING;
+
+-- ============================================================
+-- 17. PERFORMANCE INDEXES — OPTIMASI KINERJA SKALA BESAR (FASE 5)
+-- ============================================================
+CREATE INDEX IF NOT EXISTS idx_nasabah_unit_id ON public.nasabah(unit_id);
+CREATE INDEX IF NOT EXISTS idx_nasabah_nomor ON public.nasabah(nomor_nasabah);
+CREATE INDEX IF NOT EXISTS idx_nasabah_nama ON public.nasabah(nama_lengkap);
+CREATE INDEX IF NOT EXISTS idx_setoran_nasabah_id ON public.setoran(nasabah_id);
+CREATE INDEX IF NOT EXISTS idx_setoran_unit_id ON public.setoran(unit_id);
+CREATE INDEX IF NOT EXISTS idx_setoran_status ON public.setoran(status);
+CREATE INDEX IF NOT EXISTS idx_setoran_tanggal ON public.setoran(tanggal_setoran DESC);
+CREATE INDEX IF NOT EXISTS idx_setoran_nomor ON public.setoran(nomor_setoran);
+CREATE INDEX IF NOT EXISTS idx_detail_setoran_setoran_id ON public.detail_setoran(setoran_id);
+CREATE INDEX IF NOT EXISTS idx_detail_setoran_jenis_id ON public.detail_setoran(jenis_sampah_id);
+CREATE INDEX IF NOT EXISTS idx_penarikan_nasabah_id ON public.penarikan(nasabah_id);
+CREATE INDEX IF NOT EXISTS idx_penarikan_status ON public.penarikan(status);
+CREATE INDEX IF NOT EXISTS idx_penarikan_tanggal ON public.penarikan(tanggal_request DESC);
+CREATE INDEX IF NOT EXISTS idx_penjualan_client_id ON public.penjualan_sampah(klien_id);
+CREATE INDEX IF NOT EXISTS idx_penjualan_tanggal ON public.penjualan_sampah(tanggal_penjualan DESC);
+CREATE INDEX IF NOT EXISTS idx_penjualan_status ON public.penjualan_sampah(status_pembayaran);
+CREATE INDEX IF NOT EXISTS idx_jenis_sampah_kategori ON public.jenis_sampah(kategori);
+CREATE INDEX IF NOT EXISTS idx_jenis_sampah_is_active ON public.jenis_sampah(is_active);
+CREATE INDEX IF NOT EXISTS idx_laporan_status ON public.laporan_lingkungan(status);
+CREATE INDEX IF NOT EXISTS idx_berita_slug ON public.berita(slug);
+CREATE INDEX IF NOT EXISTS idx_berita_published ON public.berita(is_published, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_edukasi_slug ON public.edukasi(slug);
+CREATE INDEX IF NOT EXISTS idx_edukasi_published ON public.edukasi(is_published);
+

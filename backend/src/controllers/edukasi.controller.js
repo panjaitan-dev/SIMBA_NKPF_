@@ -81,4 +81,19 @@ const deleteEdukasi = async (req, res) => {
   }
 };
 
-module.exports = { getAllEdukasi, getEdukasiBySlug, createEdukasi, updateEdukasi, deleteEdukasi };
+// GET /api/edukasi/admin/all (admin)
+const getAllEdukasiAdmin = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('edukasi')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) return res.status(400).json({ success: false, message: error.message });
+    return res.json({ success: true, data });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal mengambil data edukasi admin' });
+  }
+};
+
+module.exports = { getAllEdukasi, getEdukasiBySlug, createEdukasi, updateEdukasi, deleteEdukasi, getAllEdukasiAdmin };

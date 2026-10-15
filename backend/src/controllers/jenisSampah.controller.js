@@ -18,14 +18,27 @@ const getAllJenisSampah = async (req, res) => {
 
 // POST /api/jenis-sampah
 const createJenisSampah = async (req, res) => {
-  const { nama, kode, kategori, satuan, harga_per_satuan, deskripsi, icon } = req.body;
-  if (!nama || !kode || !kategori || !harga_per_satuan) {
-    return res.status(400).json({ success: false, message: 'nama, kode, kategori, dan harga wajib diisi' });
+  const { nama, kode, kategori, satuan, harga_per_satuan, harga_beli, harga_jual, deskripsi, icon } = req.body;
+  const effectiveHargaBeli = harga_beli || harga_per_satuan || 0;
+  const effectiveHargaJual = harga_jual || Math.round(effectiveHargaBeli * 1.3);
+
+  if (!nama || !kode || !kategori) {
+    return res.status(400).json({ success: false, message: 'nama, kode, dan kategori wajib diisi' });
   }
   try {
     const { data, error } = await supabase
       .from('jenis_sampah')
-      .insert({ nama, kode, kategori, satuan: satuan || 'kg', harga_per_satuan, deskripsi, icon })
+      .insert({
+        nama,
+        kode,
+        kategori,
+        satuan: satuan || 'kg',
+        harga_per_satuan: effectiveHargaBeli,
+        harga_beli: effectiveHargaBeli,
+        harga_jual: effectiveHargaJual,
+        deskripsi,
+        icon,
+      })
       .select().single();
     if (error) return res.status(400).json({ success: false, message: error.message });
     return res.status(201).json({ success: true, message: 'Jenis sampah berhasil ditambahkan', data });
@@ -36,11 +49,18 @@ const createJenisSampah = async (req, res) => {
 
 // PUT /api/jenis-sampah/:id
 const updateJenisSampah = async (req, res) => {
-  const { nama, kode, kategori, satuan, harga_per_satuan, deskripsi, icon, is_active } = req.body;
+  const { nama, kode, kategori, satuan, harga_per_satuan, harga_beli, harga_jual, deskripsi, icon, is_active } = req.body;
   try {
+    const updatePayload = { nama, kode, kategori, satuan, deskripsi, icon, is_active };
+    if (harga_beli !== undefined) updatePayload.harga_beli = harga_beli;
+    if (harga_jual !== undefined) updatePayload.harga_jual = harga_jual;
+    if (harga_per_satuan !== undefined || harga_beli !== undefined) {
+      updatePayload.harga_per_satuan = harga_beli !== undefined ? harga_beli : harga_per_satuan;
+    }
+
     const { error } = await supabase
       .from('jenis_sampah')
-      .update({ nama, kode, kategori, satuan, harga_per_satuan, deskripsi, icon, is_active })
+      .update(updatePayload)
       .eq('id', req.params.id);
     if (error) return res.status(400).json({ success: false, message: error.message });
     return res.json({ success: true, message: 'Jenis sampah diperbarui' });

@@ -1,9 +1,10 @@
 const router = require('express').Router();
-const { getAllEdukasi, getEdukasiBySlug, createEdukasi, updateEdukasi, deleteEdukasi } = require('../controllers/edukasi.controller');
+const { getAllEdukasi, getEdukasiBySlug, createEdukasi, updateEdukasi, deleteEdukasi, getAllEdukasiAdmin } = require('../controllers/edukasi.controller');
 const { authMiddleware, requireRole } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
 
 router.get('/', getAllEdukasi);
+router.get('/admin/all', authMiddleware, requireRole('admin'), getAllEdukasiAdmin);
 router.get('/slug/:slug', getEdukasiBySlug);
 
 router.post('/', authMiddleware, requireRole('admin'), upload.single('thumbnail'), createEdukasi);

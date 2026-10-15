@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 
+const compression = require('compression');
+
 const authRoutes = require('./routes/auth.routes');
 const nasabahRoutes = require('./routes/nasabah.routes');
 const setoranRoutes = require('./routes/setoran.routes');
@@ -17,15 +19,19 @@ const pengumumanRoutes = require('./routes/pengumuman.routes');
 const laporanRoutes = require('./routes/laporan.routes');
 const unitRoutes = require('./routes/unit.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
+const klienRoutes = require('./routes/klien.routes');
+const penjualanRoutes = require('./routes/penjualan.routes');
+const statsRoutes = require('./routes/stats.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security middleware
+// Security & Performance middleware
 app.use(helmet());
+app.use(compression());
 
 // CORS
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',');
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',').map((s) => s.trim());
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -77,18 +83,29 @@ app.use('/api/pengumuman', pengumumanRoutes);
 app.use('/api/laporan', laporanRoutes);
 app.use('/api/unit', unitRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/klien', klienRoutes);
+app.use('/api/penjualan', penjualanRoutes);
+app.use('/api/stats', statsRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({ success: false, message: 'Endpoint tidak ditemukan' });
 });
 
-// Global error handler
+// Global error handler (Production Safe — no stack trace leak)
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
+  if (process.env.NODE_ENV !== 'production') {
+    console.error('[SIMBA Server Error]', err.stack || err.message);
+  }
+  const isProd = process.env.NODE_ENV === 'production';
+  const statusCode = err.status || err.statusCode || 500;
+  const clientMessage = isProd && statusCode === 500
+    ? 'Terjadi kesalahan internal pada sistem. Silakan coba beberapa saat lagi.'
+    : (err.message || 'Terjadi kesalahan pada server');
+
+  res.status(statusCode).json({
     success: false,
-    message: err.message || 'Terjadi kesalahan pada server',
+    message: clientMessage,
   });
 });
 

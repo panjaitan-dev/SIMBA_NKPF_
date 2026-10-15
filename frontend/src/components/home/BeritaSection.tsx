@@ -31,7 +31,7 @@ export default async function BeritaSection() {
             Berita & <span className="text-emerald-600">Pengumuman</span>
           </h2>
           <p className="text-slate-500 mt-4 max-w-2xl mx-auto">
-            Informasi terkini seputar kegiatan dan kebijakan Dinas Lingkungan Hidup Kabupaten Toba.
+            Informasi terkini seputar operasional, harga komoditas, dan kebijakan Bank Sampah Indonesia.
           </p>
         </div>
 

@@ -11,21 +11,21 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'SIMBA — Sistem Informasi Bank Sampah',
-    template: '%s | SIMBA',
+    default: 'SIMBA — Sistem Informasi Bank Sampah Indonesia',
+    template: '%s | SIMBA Indonesia',
   },
-  description: 'Portal resmi Sistem Informasi Bank Sampah Dinas Lingkungan Hidup Kabupaten Toba',
+  description: 'Portal Resmi Sistem Informasi Bank Sampah Indonesia — Platform Nasional Pengelolaan Bank Sampah dan Ekonomi Sirkular Berkelanjutan',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'SIMBA',
+    title: 'SIMBA Indonesia',
   },
   formatDetection: { telephone: false },
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    siteName: 'SIMBA - Bank Sampah Toba',
+    siteName: 'SIMBA — Sistem Informasi Bank Sampah Indonesia',
   },
 }
 

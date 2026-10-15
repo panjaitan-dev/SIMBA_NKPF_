@@ -3,7 +3,7 @@ const supabase = require('../lib/supabase');
 // GET /api/penarikan
 const getAllPenarikan = async (req, res) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, search, page = 1, limit = 20 } = req.query;
     const offset = (page - 1) * limit;
 
     let query = supabase
@@ -12,11 +12,14 @@ const getAllPenarikan = async (req, res) => {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (status) query = query.eq('status', status);
+    if (status && status !== 'all') query = query.eq('status', status);
+    if (search) {
+      query = query.ilike('nomor_penarikan', `%${search}%`);
+    }
 
     const { data, error, count } = await query;
     if (error) return res.status(400).json({ success: false, message: error.message });
-    return res.json({ success: true, data, meta: { total: count, page: +page, limit: +limit } });
+    return res.json({ success: true, data, meta: { total: count || 0, page: +page, limit: +limit } });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengambil data penarikan' });
   }
@@ -102,4 +105,53 @@ const updateStatusPenarikan = async (req, res) => {
   }
 };
 
-module.exports = { getAllPenarikan, getMyPenarikan, createPenarikan, updateStatusPenarikan };
+// DELETE /api/penarikan/:id — batalkan / void request penarikan
+const deletePenarikan = async (req, res) => {
+  try {
+    const { data: penarikan, error: pErr } = await supabase
+      .from('penarikan')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (pErr || !penarikan) {
+      return res.status(404).json({ success: false, message: 'Data penarikan tidak ditemukan' });
+    }
+
+    const userRole = req.user?.profile?.role;
+
+    // Jika nasabah, hanya boleh membatalkan miliknya sendiri yang masih pending
+    if (userRole === 'nasabah') {
+      const { data: nasabah } = await supabase
+        .from('nasabah')
+        .select('id')
+        .eq('profile_id', req.user.id)
+        .single();
+
+      if (!nasabah || penarikan.nasabah_id !== nasabah.id) {
+        return res.status(403).json({ success: false, message: 'Akses ditolak' });
+      }
+
+      if (penarikan.status !== 'pending') {
+        return res.status(400).json({ success: false, message: 'Hanya permohonan berstatus pending yang dapat dibatalkan' });
+      }
+    }
+
+    // Soft-delete / void status ke 'dibatalkan'
+    // Jika status sebelumnya 'dibayar', trigger proses_penarikan() otomatis mengembalikan saldo nasabah
+    const { error } = await supabase
+      .from('penarikan')
+      .update({
+        status: 'dibatalkan',
+        catatan: `${penarikan.catatan ? penarikan.catatan + ' | ' : ''}Dibatalkan oleh ${userRole || 'nasabah'}`
+      })
+      .eq('id', req.params.id);
+
+    if (error) return res.status(400).json({ success: false, message: error.message });
+    return res.json({ success: true, message: 'Permintaan penarikan berhasil dibatalkan' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal membatalkan penarikan' });
+  }
+};
+
+module.exports = { getAllPenarikan, getMyPenarikan, createPenarikan, updateStatusPenarikan, deletePenarikan };

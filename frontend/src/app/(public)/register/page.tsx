@@ -1,32 +1,65 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Leaf, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Leaf, Eye, EyeOff, Loader2, Building2 } from 'lucide-react'
 import api from '@/lib/api'
 import toast from 'react-hot-toast'
+
+const DEFAULT_UNITS = [
+  { id: 'u-1', nama: 'Bank Sampah Induk Pusat', kode: 'BSI-JKT01', alamat: 'Gedung Manggala Wanabakti, Jakarta' },
+  { id: 'u-2', nama: 'Bank Sampah Unit Melati Mandiri', kode: 'BSU-JKT02', alamat: 'Kec. Cempaka Putih, Jakarta' },
+  { id: 'u-3', nama: 'Bank Sampah Unit Asri Sejahtera', kode: 'BSU-BDO01', alamat: 'Kota Bandung, Jawa Barat' },
+  { id: 'u-4', nama: 'Bank Sampah Unit Resik Lestari', kode: 'BSU-SBY01', alamat: 'Kota Surabaya, Jawa Timur' },
+]
 
 export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [showPw, setShowPw] = useState(false)
+  const [units, setUnits] = useState<any[]>(DEFAULT_UNITS)
   const [form, setForm] = useState({
-    nama_lengkap: '', email: '', password: '', nomor_hp: '', alamat: '', nik: '',
+    nama_lengkap: '',
+    email: '',
+    password: '',
+    nomor_hp: '',
+    alamat: '',
+    nik: '',
+    unit_id: '',
   })
 
-  const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm(f => ({ ...f, [key]: e.target.value }))
+  useEffect(() => {
+    api
+      .get('/unit')
+      .then((res) => {
+        if (res.data?.data?.length) {
+          setUnits(res.data.data)
+          setForm((f) => ({ ...f, unit_id: res.data.data[0].id }))
+        } else {
+          setForm((f) => ({ ...f, unit_id: DEFAULT_UNITS[0].id }))
+        }
+      })
+      .catch(() => {
+        setForm((f) => ({ ...f, unit_id: DEFAULT_UNITS[0].id }))
+      })
+  }, [])
+
+  const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (form.password.length < 6) { toast.error('Password minimal 6 karakter'); return }
+    if (form.password.length < 6) {
+      toast.error('Password minimal 6 karakter')
+      return
+    }
     setLoading(true)
     try {
       await api.post('/auth/register', form)
-      toast.success('Pendaftaran berhasil! Silakan login.')
+      toast.success('Pendaftaran berhasil! Silakan masuk.')
       router.push('/login')
     } catch (err: any) {
-      toast.error(err.message || 'Pendaftaran gagal')
+      toast.error(err.response?.data?.message || err.message || 'Pendaftaran gagal')
     } finally {
       setLoading(false)
     }
@@ -40,7 +73,7 @@ export default function RegisterPage() {
             <Leaf size={26} className="text-white" />
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900">Daftar Nasabah SIMBA</h1>
-          <p className="text-slate-500 mt-1 text-sm">Bank Sampah Dinas Lingkungan Hidup Kabupaten Toba</p>
+          <p className="text-slate-500 mt-1 text-sm">Sistem Informasi Bank Sampah Indonesia</p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
@@ -84,10 +117,30 @@ export default function RegisterPage() {
               </div>
 
               <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                  <Building2 size={16} className="text-emerald-600" />
+                  Unit Bank Sampah Terdaftar *
+                </label>
+                <select
+                  required
+                  value={form.unit_id}
+                  onChange={set('unit_id')}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none text-sm bg-white"
+                >
+                  {units.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.nama} {u.kode ? `(${u.kode})` : ''} — {u.alamat || 'Unit Bank Sampah'}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[11px] text-slate-400 mt-1">Pilih unit bank sampah terdekat untuk penyetoran dan pencairan saldo Anda.</p>
+              </div>
+
+              <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Alamat</label>
                 <textarea
                   value={form.alamat} onChange={set('alamat')} rows={2}
-                  placeholder="Alamat lengkap"
+                  placeholder="Alamat lengkap tempat tinggal"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none text-sm resize-none"
                 />
               </div>

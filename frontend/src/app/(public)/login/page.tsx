@@ -49,7 +49,7 @@ export default function LoginPage() {
             <Leaf size={26} className="text-white" />
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900">Masuk ke SIMBA</h1>
-          <p className="text-slate-500 mt-1 text-sm">Sistem Informasi Bank Sampah Kabupaten Toba</p>
+          <p className="text-slate-500 mt-1 text-sm">Sistem Informasi Bank Sampah Indonesia</p>
         </div>
 
         {/* Card */}

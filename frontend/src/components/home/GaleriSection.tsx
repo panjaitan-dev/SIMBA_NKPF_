@@ -24,7 +24,7 @@ export default async function GaleriSection() {
               Galeri <span className="text-emerald-600">Kegiatan</span>
             </h2>
             <p className="text-slate-500 mt-2 max-w-2xl">
-              Dokumentasi kegiatan dan program Dinas Lingkungan Hidup Kabupaten Toba.
+              Dokumentasi kegiatan dan program operasional Bank Sampah Indonesia di berbagai wilayah.
             </p>
           </div>
           <Link

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getAllLaporan, getLaporanById, createLaporan, updateStatusLaporan } = require('../controllers/laporan.controller');
+const { getAllLaporan, getLaporanById, createLaporan, updateStatusLaporan, deleteLaporan } = require('../controllers/laporan.controller');
 const { authMiddleware, requireRole } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
 
@@ -18,5 +18,6 @@ router.post('/', upload.array('fotos', 5), (req, res, next) => {
 router.get('/', authMiddleware, requireRole(['admin', 'petugas']), getAllLaporan);
 router.get('/:id', authMiddleware, requireRole(['admin', 'petugas']), getLaporanById);
 router.put('/:id/status', authMiddleware, requireRole(['admin', 'petugas']), updateStatusLaporan);
+router.delete('/:id', authMiddleware, requireRole(['admin', 'petugas']), deleteLaporan);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 import { Loader2, MapPin, Camera, Send, CheckCircle } from 'lucide-react'
 import api from '@/lib/api'
 import toast from 'react-hot-toast'
@@ -46,7 +47,7 @@ export default function LaporPage() {
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors">
               Buat Laporan Baru
             </button>
-            <a href="/" className="text-sm text-slate-500 hover:text-emerald-600">← Kembali ke Beranda</a>
+            <Link href="/" className="text-sm text-slate-500 hover:text-emerald-600">← Kembali ke Beranda</Link>
           </div>
         </div>
       </div>
@@ -59,7 +60,7 @@ export default function LaporPage() {
         <div className="mb-10">
           <span className="text-emerald-600 font-semibold tracking-widest text-xs uppercase mb-2 block">Partisipasi Warga</span>
           <h1 className="text-3xl font-extrabold text-slate-900">Laporkan Masalah Lingkungan</h1>
-          <p className="text-slate-500 mt-2">Bantu kami menjaga kebersihan lingkungan Kabupaten Toba dengan melaporkan masalah yang Anda temui.</p>
+          <p className="text-slate-500 mt-2">Bantu kami menjaga kebersihan dan kelestarian lingkungan dengan melaporkan timbulan sampah liar atau masalah persampahan di sekitar Anda.</p>
         </div>
 
         <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">

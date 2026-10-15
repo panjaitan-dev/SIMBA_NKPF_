@@ -1,7 +1,7 @@
 {
-  "name": "SIMBA",
+  "name": "SIMBA Indonesia",
   "short_name": "SIMBA",
-  "description": "Sistem Informasi Bank Sampah - Dinas Lingkungan Hidup Kabupaten Toba",
+  "description": "Sistem Informasi Bank Sampah Indonesia — Platform Layanan Publik dan Ekonomi Sirkular Nasional",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8fafc",

@@ -4,7 +4,7 @@ const { uploadToStorage } = require('./auth.controller');
 // GET /api/setoran
 const getAllSetoran = async (req, res) => {
   try {
-    const { status, nasabah_id, page = 1, limit = 20, date_from, date_to } = req.query;
+    const { status, nasabah_id, search, page = 1, limit = 20, date_from, date_to } = req.query;
     const offset = (page - 1) * limit;
 
     let query = supabase
@@ -13,15 +13,18 @@ const getAllSetoran = async (req, res) => {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (status) query = query.eq('status', status);
+    if (status && status !== 'all') query = query.eq('status', status);
     if (nasabah_id) query = query.eq('nasabah_id', nasabah_id);
     if (date_from) query = query.gte('tanggal_setoran', date_from);
     if (date_to) query = query.lte('tanggal_setoran', date_to);
+    if (search) {
+      query = query.or(`nomor_setoran.ilike.%${search}%,nama_nasabah.ilike.%${search}%`);
+    }
 
     const { data, error, count } = await query;
     if (error) return res.status(400).json({ success: false, message: error.message });
 
-    return res.json({ success: true, data, meta: { total: count, page: +page, limit: +limit } });
+    return res.json({ success: true, data, meta: { total: count || 0, page: +page, limit: +limit } });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengambil data setoran' });
   }
@@ -146,4 +149,34 @@ const updateStatusSetoran = async (req, res) => {
   }
 };
 
-module.exports = { getAllSetoran, getMySetoran, getSetoranById, createSetoran, updateStatusSetoran };
+// DELETE /api/setoran/:id — batalkan / void setoran
+const deleteSetoran = async (req, res) => {
+  try {
+    const { data: setoran, error: findError } = await supabase
+      .from('setoran')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (findError || !setoran) {
+      return res.status(404).json({ success: false, message: 'Setoran tidak ditemukan' });
+    }
+
+    // Soft-delete / void: ubah status ke 'dibatalkan'
+    // Trigger update_saldo_nasabah() otomatis mengurangi saldo jika setoran sebelumnya berstatus 'diverifikasi'
+    const { error } = await supabase
+      .from('setoran')
+      .update({
+        status: 'dibatalkan',
+        catatan: `${setoran.catatan ? setoran.catatan + ' | ' : ''}Dibatalkan oleh ${req.user?.profile?.role || 'admin'}`
+      })
+      .eq('id', req.params.id);
+
+    if (error) return res.status(400).json({ success: false, message: error.message });
+    return res.json({ success: true, message: 'Setoran berhasil dibatalkan dan saldo telah disesuaikan' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal membatalkan transaksi setoran' });
+  }
+};
+
+module.exports = { getAllSetoran, getMySetoran, getSetoranById, createSetoran, updateStatusSetoran, deleteSetoran };

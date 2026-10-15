@@ -44,11 +44,11 @@ const authMiddleware = async (req, res, next) => {
  * Middleware: Cek role (opsional, digunakan bersama authMiddleware)
  * Contoh: requireRole('admin') atau requireRole(['admin', 'petugas'])
  */
-const requireRole = (roles) => {
-  const allowedRoles = Array.isArray(roles) ? roles : [roles];
+const requireRole = (...roles) => {
+  const allowedRoles = roles.flat();
 
   return (req, res, next) => {
-    const userRole = req.user?.profile?.role;
+    const userRole = req.user?.profile?.role || req.user?.role;
 
     if (!userRole || !allowedRoles.includes(userRole)) {
       return res.status(403).json({

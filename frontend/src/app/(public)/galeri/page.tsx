@@ -22,7 +22,7 @@ export default async function GaleriPage() {
         <div className="mb-12">
           <span className="text-emerald-600 font-semibold tracking-widest text-xs uppercase mb-2 block">Dokumentasi</span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Galeri Kegiatan</h1>
-          <p className="text-slate-500 mt-2">Dokumentasi kegiatan DLH dan Bank Sampah Kabupaten Toba.</p>
+          <p className="text-slate-500 mt-2">Dokumentasi kegiatan dan operasional Bank Sampah Indonesia.</p>
         </div>
 
         {albums.length === 0 ? (

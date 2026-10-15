@@ -87,4 +87,19 @@ const updateStatusLaporan = async (req, res) => {
   }
 };
 
-module.exports = { getAllLaporan, getLaporanById, createLaporan, updateStatusLaporan };
+// DELETE /api/laporan/:id (admin)
+const deleteLaporan = async (req, res) => {
+  try {
+    const { error } = await supabase
+      .from('laporan_lingkungan')
+      .delete()
+      .eq('id', req.params.id);
+
+    if (error) return res.status(400).json({ success: false, message: error.message });
+    return res.json({ success: true, message: 'Laporan aduan lingkungan berhasil dihapus' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal menghapus laporan' });
+  }
+};
+
+module.exports = { getAllLaporan, getLaporanById, createLaporan, updateStatusLaporan, deleteLaporan };

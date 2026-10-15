@@ -27,7 +27,7 @@ export default async function BeritaPage({ searchParams }: { searchParams: any }
         <div className="mb-10">
           <span className="text-emerald-600 font-semibold tracking-widest text-xs uppercase mb-2 block">Pusat Informasi</span>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Berita & Artikel</h1>
-          <p className="text-slate-500 mt-2">Informasi terkini seputar Dinas Lingkungan Hidup dan Bank Sampah Kabupaten Toba.</p>
+          <p className="text-slate-500 mt-2">Informasi terkini seputar operasional, harga komoditas daur ulang, dan kebijakan Bank Sampah Indonesia.</p>
         </div>
 
         {/* Filter Kategori */}

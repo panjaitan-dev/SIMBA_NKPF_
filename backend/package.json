@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "test": "node --test tests/critical-flows.test.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.47.3",
+    "compression": "^1.8.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -17,7 +19,8 @@
     "helmet": "^8.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

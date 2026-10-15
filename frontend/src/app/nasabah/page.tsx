@@ -5,6 +5,7 @@ import { Leaf, PiggyBank, Recycle, ArrowDownToLine, LogOut, User, ClipboardList 
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import api from '@/lib/api'
+import NasabahSidebar from '@/components/layout/NasabahSidebar'
 import { formatRupiah, formatWeight, formatDate, STATUS_COLORS, STATUS_LABELS } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
@@ -55,40 +56,10 @@ export default function NasabahDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 z-40 flex flex-col">
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center">
-              <Leaf size={16} className="text-white" />
-            </div>
-            <div>
-              <p className="font-extrabold text-slate-900 text-sm">SIMBA</p>
-              <p className="text-[10px] text-emerald-600 font-semibold uppercase tracking-widest">Nasabah</p>
-            </div>
-          </div>
-        </div>
-        <nav className="flex-1 p-4 space-y-1">
-          {[
-            { href: '/nasabah', icon: <PiggyBank size={17} />, label: 'Dashboard' },
-            { href: '/nasabah/setoran', icon: <Recycle size={17} />, label: 'Riwayat Setoran' },
-            { href: '/nasabah/penarikan', icon: <ArrowDownToLine size={17} />, label: 'Riwayat Penarikan' },
-            { href: '/nasabah/profil', icon: <User size={17} />, label: 'Profil Saya' },
-          ].map(l => (
-            <Link key={l.href} href={l.href} className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
-              {l.icon} {l.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="p-4 border-t border-slate-100">
-          <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">
-            <LogOut size={17} /> Keluar
-          </button>
-        </div>
-      </aside>
+      <NasabahSidebar />
 
       {/* Main */}
-      <main className="ml-64 p-8">
+      <main className="flex-1 lg:ml-64 ml-0 w-full min-w-0 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8">
         <div className="mb-8">
           <h1 className="text-2xl font-extrabold text-slate-900">Selamat Datang, {stats?.nama_lengkap?.split(' ')[0]}!</h1>
           <p className="text-slate-500 text-sm mt-1">No. Nasabah: <span className="font-semibold text-slate-700">{stats?.nomor_nasabah}</span></p>

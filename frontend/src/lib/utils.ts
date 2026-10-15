@@ -32,21 +32,23 @@ export function truncate(text: string, length: number = 120): string {
 }
 
 export const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  diproses: 'bg-blue-100 text-blue-800',
-  diverifikasi: 'bg-green-100 text-green-800',
-  selesai: 'bg-green-100 text-green-800',
-  ditolak: 'bg-red-100 text-red-800',
-  disetujui: 'bg-emerald-100 text-emerald-800',
-  dibayar: 'bg-emerald-100 text-emerald-800',
+  pending: 'bg-amber-50 text-amber-800 border border-amber-200/80',
+  diproses: 'bg-blue-50 text-blue-800 border border-blue-200/80',
+  diverifikasi: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  selesai: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  ditolak: 'bg-rose-50 text-rose-800 border border-rose-200/80',
+  disetujui: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  dibayar: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  dibatalkan: 'bg-slate-100 text-slate-700 border border-slate-300/80',
 }
 
 export const STATUS_LABELS: Record<string, string> = {
-  pending: 'Menunggu',
-  diproses: 'Diproses',
+  pending: 'Menunggu Verifikasi',
+  diproses: 'Sedang Diproses',
   diverifikasi: 'Terverifikasi',
   selesai: 'Selesai',
   ditolak: 'Ditolak',
   disetujui: 'Disetujui',
-  dibayar: 'Dibayar',
+  dibayar: 'Telah Dibayar',
+  dibatalkan: 'Dibatalkan (Void)',
 }

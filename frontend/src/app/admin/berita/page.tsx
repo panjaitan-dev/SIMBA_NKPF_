@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowLeft, Plus, Pencil, Trash2, Eye, EyeOff, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import AdminSidebar from '@/components/layout/AdminSidebar'
 import api from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -47,16 +48,18 @@ export default function AdminBeritaPage() {
   const set = (k: string) => (e: any) => setForm(f => ({ ...f, [k]: e.target.value }))
 
   return (
-    <div className="min-h-screen bg-slate-50 ml-60 p-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <Link href="/admin" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-600 mb-2"><ArrowLeft size={14} /> Dashboard</Link>
-          <h1 className="text-2xl font-extrabold text-slate-900">Kelola Berita</h1>
+    <div className="flex min-h-screen bg-slate-50">
+      <AdminSidebar />
+      <div className="flex-1 lg:ml-64 ml-0 w-full min-w-0 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <Link href="/admin" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-600 mb-2"><ArrowLeft size={14} /> Dashboard</Link>
+            <h1 className="text-2xl font-extrabold text-slate-900">Kelola Berita</h1>
+          </div>
+          <button onClick={openNew} className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">
+            <Plus size={16} /> Tulis Berita
+          </button>
         </div>
-        <button onClick={openNew} className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">
-          <Plus size={16} /> Tulis Berita
-        </button>
-      </div>
 
       {/* Form Modal */}
       {showForm && (
@@ -108,44 +111,47 @@ export default function AdminBeritaPage() {
       )}
 
       {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 border-b border-slate-200">
-            <tr className="text-xs text-slate-500">
-              {['Judul', 'Kategori', 'Status', 'Views', 'Tanggal', 'Aksi'].map(h => (
-                <th key={h} className="text-left px-5 py-3.5 font-semibold">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50">
-            {loading ? (
-              Array.from({ length: 5 }).map((_, i) => <tr key={i}><td colSpan={6}><div className="h-10 bg-slate-100 animate-pulse m-2 rounded" /></td></tr>)
-            ) : data.length === 0 ? (
-              <tr><td colSpan={6} className="text-center py-16 text-slate-400">Belum ada berita.</td></tr>
-            ) : data.map((item: any) => (
-              <tr key={item.id} className="hover:bg-slate-50">
-                <td className="px-5 py-3.5 font-semibold text-slate-800 max-w-xs">
-                  <p className="truncate">{item.judul}</p>
-                  <p className="text-xs font-mono text-slate-400 mt-0.5">/berita/{item.slug}</p>
-                </td>
-                <td className="px-5 py-3.5 capitalize text-slate-500">{item.kategori}</td>
-                <td className="px-5 py-3.5">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${item.is_published ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                    {item.is_published ? 'Published' : 'Draft'}
-                  </span>
-                </td>
-                <td className="px-5 py-3.5 text-slate-500">{item.view_count || 0}</td>
-                <td className="px-5 py-3.5 text-slate-500">{item.created_at ? formatDate(item.created_at) : '-'}</td>
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => openEdit(item)} className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg"><Pencil size={14} /></button>
-                    <button onClick={() => handleDelete(item.id)} className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
-                  </div>
-                </td>
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm min-w-[650px]">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr className="text-xs text-slate-500">
+                {['Judul', 'Kategori', 'Status', 'Views', 'Tanggal', 'Aksi'].map(h => (
+                  <th key={h} className="text-left px-5 py-3.5 font-semibold">{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {loading ? (
+                Array.from({ length: 5 }).map((_, i) => <tr key={i}><td colSpan={6}><div className="h-10 bg-slate-100 animate-pulse m-2 rounded" /></td></tr>)
+              ) : data.length === 0 ? (
+                <tr><td colSpan={6} className="text-center py-16 text-slate-400">Belum ada berita.</td></tr>
+              ) : data.map((item: any) => (
+                <tr key={item.id} className="hover:bg-slate-50">
+                  <td className="px-5 py-3.5 font-semibold text-slate-800 max-w-xs">
+                    <p className="truncate">{item.judul}</p>
+                    <p className="text-xs font-mono text-slate-400 mt-0.5">/berita/{item.slug}</p>
+                  </td>
+                  <td className="px-5 py-3.5 capitalize text-slate-500">{item.kategori}</td>
+                  <td className="px-5 py-3.5">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${item.is_published ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                      {item.is_published ? 'Published' : 'Draft'}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3.5 text-slate-500">{item.view_count || 0}</td>
+                  <td className="px-5 py-3.5 text-slate-500">{item.created_at ? formatDate(item.created_at) : '-'}</td>
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => openEdit(item)} className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg min-w-[36px] min-h-[36px] flex items-center justify-center"><Pencil size={15} /></button>
+                      <button onClick={() => handleDelete(item.id)} className="p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg min-w-[36px] min-h-[36px] flex items-center justify-center"><Trash2 size={15} /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
       </div>
     </div>
   )
