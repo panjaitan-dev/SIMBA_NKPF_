@@ -25,10 +25,15 @@ export default function NasabahSidebar() {
 
   const handleLogout = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('simba_token')
+        localStorage.removeItem('simba_user')
+        localStorage.removeItem('simba_role')
+      }
       const supabase = createClient()
-      await supabase.auth.signOut()
+      await supabase.auth.signOut().catch(() => {})
     } catch {}
-    router.push('/')
+    router.push('/login')
   }
 
   return (

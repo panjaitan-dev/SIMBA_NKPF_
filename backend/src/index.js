@@ -30,15 +30,20 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(compression());
 
-// CORS
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',').map((s) => s.trim());
+// CORS (Support localhost, Vercel production & preview deployments)
+const rawCors = process.env.CORS_ORIGIN || 'http://localhost:3000';
+const configuredOrigins = rawCors.split(',').map((s) => s.trim().replace(/\/$/, ''));
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    if (!origin) return callback(null, true);
+    if (configuredOrigins.includes(origin)) return callback(null, true);
+    // Allow localhost & 127.0.0.1 on any port
+    if (/^http:\/\/localhost(:\d+)?$/.test(origin)) return callback(null, true);
+    if (/^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)) return callback(null, true);
+    // Allow all Vercel deployments (production & preview)
+    if (/^https:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true);
+    return callback(null, false);
   },
   credentials: true,
 }));
@@ -60,14 +65,58 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({
-    success: true,
-    message: 'SIMBA API Server berjalan dengan baik',
+// Health check — Memeriksa koneksi database nyata dengan timeout
+app.get('/api/health', async (req, res) => {
+  const start = Date.now();
+  let dbStatus = 'disconnected';
+  let dbLatencyMs = null;
+  let dbDetails = null;
+
+  try {
+    const supabase = require('./lib/supabase');
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('DB healthcheck timeout (3000ms)')), 3000)
+    );
+    const dbPromise = supabase.from('unit_bank_sampah').select('id').limit(1);
+    const { error } = await Promise.race([dbPromise, timeoutPromise]);
+
+    if (!error) {
+      dbStatus = 'connected';
+      dbLatencyMs = Date.now() - start;
+      dbDetails = 'Database PostgreSQL aktif dan merespons';
+    } else {
+      dbStatus = 'error';
+      dbDetails = error.message;
+    }
+  } catch (err) {
+    dbStatus = 'unreachable';
+    dbDetails = err.message || 'Gagal terhubung ke database Supabase';
+  }
+
+  const isHealthy = dbStatus === 'connected';
+  const responseData = {
+    success: isHealthy,
+    status: isHealthy ? 'healthy' : 'degraded',
+    message: isHealthy
+      ? 'SIMBA API Server dan database berjalan dengan baik'
+      : 'SIMBA API Server berjalan, namun koneksi database mengalami kendala',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
-  });
+    uptime: Math.floor(process.uptime()),
+    database: {
+      status: dbStatus,
+      latency_ms: dbLatencyMs,
+      details: dbDetails,
+      provider: 'Supabase PostgreSQL',
+    },
+    keep_alive_info: {
+      note: 'Untuk menjaga backend (Render/Railway) dan Supabase free tier tetap aktif tanpa tertidur (cold start), jalankan HTTP ping berkala setiap 5-10 menit.',
+      cron_example: '*/10 * * * * curl -s https://your-backend.onrender.com/api/health > /dev/null',
+      interval_recommended: '5-10 menit',
+    },
+  };
+
+  res.status(isHealthy ? 200 : 503).json(responseData);
 });
 
 // Routes

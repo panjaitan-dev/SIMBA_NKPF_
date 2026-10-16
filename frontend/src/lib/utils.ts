@@ -21,9 +21,20 @@ export function formatDate(dateString: string): string {
   }).format(new Date(dateString))
 }
 
-export function formatWeight(kg: number): string {
-  if (kg >= 1000) return `${(kg / 1000).toFixed(2)} ton`
-  return `${kg.toFixed(3)} kg`
+export function formatNumberId(value: number, minDec: number = 0, maxDec: number = 2): string {
+  if (isNaN(value) || value === null || value === undefined) return '0'
+  return new Intl.NumberFormat('id-ID', {
+    minimumFractionDigits: minDec,
+    maximumFractionDigits: maxDec,
+  }).format(value)
+}
+
+export function formatWeight(kg: number, forceUnit?: 'kg' | 'ton'): string {
+  const num = typeof kg === 'number' ? kg : parseFloat(kg) || 0
+  if (forceUnit === 'ton' || (!forceUnit && num >= 1000)) {
+    return `${formatNumberId(num / 1000, 2, 2)} ton`
+  }
+  return `${formatNumberId(num, 0, 2)} kg`
 }
 
 export function truncate(text: string, length: number = 120): string {

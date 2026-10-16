@@ -70,15 +70,37 @@ export default function AdminKlienPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    const { normalizePhone } = require('@/lib/validation')
+    const cleanHp = normalizePhone(form.nomor_hp)
+    if (!cleanHp || !/^628[1-9][0-9]{7,10}$/.test(cleanHp)) {
+      toast.error('Nomor telepon klien harus berupa nomor seluler Indonesia yang valid (contoh: 081234567890)')
+      return
+    }
+
+    if (!form.nama_client.trim() || form.nama_client.trim().length < 3) {
+      toast.error('Nama klien minimal 3 karakter')
+      return
+    }
+
+    if (!form.alamat.trim() || form.alamat.trim().length < 5) {
+      toast.error('Alamat klien minimal 5 karakter')
+      return
+    }
+
     setSaving(true)
+    const payload = {
+      ...form,
+      nomor_hp: cleanHp,
+    }
 
     try {
       if (editItem) {
         try {
-          await api.put(`/klien/${editItem.id}`, form)
+          await api.put(`/klien/${editItem.id}`, payload)
         } catch {}
         setClients((prev) =>
-          prev.map((c) => (c.id === editItem.id ? { ...c, ...form } : c))
+          prev.map((c) => (c.id === editItem.id ? { ...c, ...payload } : c))
         )
         toast.success(`Data klien "${form.nama_client}" berhasil diperbarui`)
       } else {

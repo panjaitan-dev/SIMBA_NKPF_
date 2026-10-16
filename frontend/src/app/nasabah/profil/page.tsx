@@ -58,27 +58,48 @@ export default function ProfilNasabahPage() {
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validasi Zod
+    const { namaLengkapSchema, nomorHpSchema, alamatSchema } = require('@/lib/validation')
+    const vNama = namaLengkapSchema.safeParse(form.nama_lengkap)
+    if (!vNama.success) {
+      toast.error(vNama.error.errors[0]?.message || 'Nama lengkap tidak valid')
+      return
+    }
+    const vHp = nomorHpSchema.safeParse(form.nomor_hp)
+    if (!vHp.success) {
+      toast.error(vHp.error.errors[0]?.message || 'Nomor HP tidak valid')
+      return
+    }
+    const vAlamat = alamatSchema.safeParse(form.alamat)
+    if (!vAlamat.success) {
+      toast.error(vAlamat.error.errors[0]?.message || 'Alamat tidak valid')
+      return
+    }
+
     setSaving(true)
     try {
-      // Simpan perubahan profil
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-
-      if (user) {
-        await supabase
-          .from('profiles')
-          .update({
-            nama_lengkap: form.nama_lengkap,
-            nomor_hp: form.nomor_hp,
-            alamat: form.alamat,
-          })
-          .eq('id', user.id)
+      // Simpan perubahan profil via API atau Supabase
+      const payload = {
+        nama_lengkap: vNama.data,
+        nomor_hp: vHp.data,
+        alamat: vAlamat.data,
       }
 
-      setProfile((prev: any) => ({ ...prev, ...form }))
+      await api.put('/auth/profile', payload).catch(async () => {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          await supabase.from('profiles').update(payload).eq('id', user.id)
+        }
+      })
+
+      // Update state lokal
+      setProfile((prev: any) => ({ ...prev, ...payload }))
+      setForm((prev) => ({ ...prev, ...payload }))
       toast.success('Profil berhasil diperbarui')
     } catch (err: any) {
-      toast.error(err.message || 'Gagal memperbarui profil')
+      toast.error(err.response?.data?.message || err.message || 'Gagal memperbarui profil')
     } finally {
       setSaving(false)
     }

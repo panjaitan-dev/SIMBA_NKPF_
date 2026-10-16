@@ -75,9 +75,14 @@ export default function RiwayatPenarikanNasabahPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const jumlahNum = parseFloat(amount)
-    if (!jumlahNum || jumlahNum <= 0) {
+    const { parseIndonesianDecimal } = require('@/lib/validation')
+    const jumlahNum = parseIndonesianDecimal(amount)
+    if (isNaN(jumlahNum) || jumlahNum <= 0) {
       toast.error('Masukkan jumlah nominal yang valid')
+      return
+    }
+    if (jumlahNum < 10000) {
+      toast.error('Minimal penarikan saldo adalah Rp 10.000')
       return
     }
     if (jumlahNum > saldo) {

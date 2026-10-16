@@ -56,8 +56,9 @@ export default function PetugasDashboard() {
     fetchStats()
   }, [fetchStats])
 
-  const totalNilai = items.reduce((s, item) => s + (parseFloat(item.berat_kg) || 0) * item.harga_satuan, 0)
-  const totalBerat = items.reduce((s, item) => s + (parseFloat(item.berat_kg) || 0), 0)
+  const { parseIndonesianDecimal } = require('@/lib/validation')
+  const totalNilai = items.reduce((s, item) => s + (parseIndonesianDecimal(item.berat_kg) || 0) * item.harga_satuan, 0)
+  const totalBerat = items.reduce((s, item) => s + (parseIndonesianDecimal(item.berat_kg) || 0), 0)
 
   const addItem = () => setItems(prev => [...prev, { jenis_sampah_id: '', nama: '', kode: '', satuan: 'kg', berat_kg: '', harga_satuan: 0 }])
   const removeItem = (i: number) => setItems(prev => prev.filter((_, idx) => idx !== i))
@@ -87,9 +88,12 @@ export default function PetugasDashboard() {
       toast.error('Pilih nasabah terlebih dahulu')
       return 
     }
-    const validItems = items.filter(i => i.jenis_sampah_id && parseFloat(i.berat_kg) > 0)
+    const validItems = items
+      .map((i) => ({ ...i, beratNum: parseIndonesianDecimal(i.berat_kg) }))
+      .filter((i) => i.jenis_sampah_id && !isNaN(i.beratNum) && i.beratNum > 0 && i.beratNum <= 10000)
+
     if (!validItems.length) { 
-      toast.error('Tambahkan minimal 1 jenis sampah dengan berat > 0')
+      toast.error('Tambahkan minimal 1 jenis sampah dengan berat valid (0 < berat <= 10.000 kg)')
       return 
     }
     
@@ -97,7 +101,7 @@ export default function PetugasDashboard() {
     try {
       const r = await api.post('/stats/petugas/setoran', {
         nasabah_id: selectedNasabahId,
-        items: validItems.map(i => ({ ...i, berat_kg: parseFloat(i.berat_kg) })),
+        items: validItems.map(i => ({ ...i, berat_kg: i.beratNum })),
         metode_pembayaran: metode,
         catatan,
       })
@@ -152,9 +156,14 @@ export default function PetugasDashboard() {
 
   const handleLogout = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('simba_token')
+        localStorage.removeItem('simba_user')
+        localStorage.removeItem('simba_role')
+      }
       const supabase = createClient()
-      await supabase.auth.signOut()
-      router.push('/')
+      await supabase.auth.signOut().catch(() => {})
+      router.push('/login')
     } catch {}
   }
 

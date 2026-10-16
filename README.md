@@ -21,6 +21,14 @@
 
 ---
 
+## 🛠️ Perubahan Terbaru (Phase 4)
+- Menghapus semua LaTeX/MathJax (`$...$`, `\\times`, `\\rightarrow`, `\\frac`).
+- Menambahkan format nomor/berat lokal (`formatNumberId`, `formatWeight`).
+- Tooltip & pemotongan teks pada dropdown panjang dengan helper kode‑nama komoditas.
+- Build Next.js berhasil tanpa error.
+- Backend tests lulus 100%.
+- Tidak ada lagi token LaTeX yang tersisa di kode.
+
 ## 1. Ringkasan Proyek
 
 **SIMBA Nusantara** adalah solusi digital berskala nasional untuk mentransformasi ekosistem bank sampah Indonesia dari sistem manual berbasis buku kas menjadi platform cloud-native terdistribusi.

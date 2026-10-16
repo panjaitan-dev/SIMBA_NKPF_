@@ -1,7 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
+const { verifyLocalToken, getDemoAccountByEmail } = require('../lib/auth-utils');
 
 /**
- * Middleware: Verifikasi JWT dari Supabase Auth
+ * Middleware: Verifikasi JWT dari Supabase Auth atau Local Proxy Token
  * Tambahkan header: Authorization: Bearer <access_token>
  */
 const authMiddleware = async (req, res, next) => {
@@ -13,6 +14,24 @@ const authMiddleware = async (req, res, next) => {
 
   const token = authHeader.split(' ')[1];
 
+  // 1. Verifikasi local signed token (cepat, andal, tanpa ketergantungan jaringan eksternal)
+  const localPayload = verifyLocalToken(token);
+  if (localPayload) {
+    const demo = getDemoAccountByEmail(localPayload.email);
+    req.user = {
+      id: localPayload.id,
+      email: localPayload.email,
+      role: localPayload.role,
+      profile: demo?.profile || {
+        id: localPayload.id,
+        role: localPayload.role,
+        nama_lengkap: localPayload.nama_lengkap || localPayload.email,
+      },
+    };
+    return next();
+  }
+
+  // 2. Verifikasi Supabase token
   try {
     const supabase = createClient(
       process.env.SUPABASE_URL,
@@ -33,7 +52,7 @@ const authMiddleware = async (req, res, next) => {
       .eq('id', user.id)
       .single();
 
-    req.user = { ...user, profile };
+    req.user = { ...user, role: profile?.role || 'nasabah', profile };
     next();
   } catch (err) {
     return res.status(401).json({ success: false, message: 'Autentikasi gagal' });

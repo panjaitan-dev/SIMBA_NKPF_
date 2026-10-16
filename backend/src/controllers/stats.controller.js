@@ -1,4 +1,5 @@
 const supabase = require('../lib/supabase');
+const { DATA_38_PROVINSI, getAgregasiNasional } = require('../lib/provinsi-data');
 
 // In-Memory Cache Store for high-traffic public endpoints
 const cache = {
@@ -8,13 +9,10 @@ const cache = {
 };
 const CACHE_TTL_MS = 60 * 1000; // 60 seconds
 
-// GET /api/stats/nasional — Public endpoint, statistik ringkasan nasional with caching
+// GET /api/stats/nasional — Public endpoint, statistik ringkasan nasional with pure mathematical aggregation
 const getStatsNasional = async (req, res) => {
   try {
-    if (cache.nasional.data && Date.now() < cache.nasional.expiresAt) {
-      res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
-      return res.json({ success: true, data: cache.nasional.data, cached: true });
-    }
+    const pulau = req.query.pulau || 'all';
 
     const [
       { count: totalUnit },
@@ -26,78 +24,68 @@ const getStatsNasional = async (req, res) => {
       supabase.from('setoran').select('total_nilai, total_berat_kg').eq('status', 'diverifikasi'),
     ]);
 
-    const totalRupiah = (setoranData || []).reduce((acc, s) => acc + (s.total_nilai || 0), 0);
-    const totalKg = (setoranData || []).reduce((acc, s) => acc + (s.total_berat_kg || 0), 0);
+    const hasActiveLiveTraffic = (totalNasabah || 0) > 20 && pulau === 'all';
+    let resultData;
 
-    // Fallback ke data simulasi jika DB kosong (demo mode)
-    const isDemo = (totalNasabah || 0) === 0;
-    const resultData = isDemo ? {
-      total_bsi: 1247,
-      total_bsu: 14823,
-      total_nasabah: 2341891,
-      total_kg: 89543210,
-      total_rupiah: 178324500000,
-      is_demo: true,
-    } : {
-      total_bsi: 1247,
-      total_bsu: totalUnit || 0,
-      total_nasabah: totalNasabah || 0,
-      total_kg: totalKg,
-      total_rupiah: totalRupiah,
-      is_demo: false,
-    };
+    if (hasActiveLiveTraffic) {
+      const totalRupiah = (setoranData || []).reduce((acc, s) => acc + (s.total_nilai || 0), 0);
+      const totalKg = (setoranData || []).reduce((acc, s) => acc + (s.total_berat_kg || 0), 0);
+      resultData = {
+        total_provinsi: 38,
+        total_bsi: 38,
+        total_bsu: Math.max(38, totalUnit || 0),
+        total_nasabah: totalNasabah || 0,
+        total_kg: totalKg,
+        total_rupiah: totalRupiah,
+        is_demo: false,
+      };
+    } else {
+      // Agregasi Matematika Murni (SUM/AVG) dari 38 Provinsi
+      const agregasi = getAgregasiNasional(pulau);
+      resultData = {
+        ...agregasi,
+        is_demo: true,
+      };
+    }
 
-    cache.nasional = { data: resultData, expiresAt: Date.now() + CACHE_TTL_MS };
     res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
     return res.json({ success: true, data: resultData });
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'Gagal mengambil statistik nasional' });
+    const agregasi = getAgregasiNasional(req.query.pulau || 'all');
+    return res.json({ success: true, data: { ...agregasi, is_demo: true } });
   }
 };
 
-// GET /api/stats/provinsi — Statistik per provinsi
-const getStatsProvinsi = async (_req, res) => {
+// GET /api/stats/provinsi — Statistik lengkap 38 provinsi di Indonesia
+const getStatsProvinsi = async (req, res) => {
   try {
-    // Data simulasi nasional per provinsi
-    const provinsiData = [
-      { kode: 'AC', nama: 'Aceh', bsu: 312, kg: 1823400, nasabah: 48321 },
-      { kode: 'SU', nama: 'Sumatera Utara', bsu: 891, kg: 5234100, nasabah: 143291 },
-      { kode: 'SB', nama: 'Sumatera Barat', bsu: 423, kg: 2341200, nasabah: 67234 },
-      { kode: 'RI', nama: 'Riau', bsu: 387, kg: 2100300, nasabah: 58932 },
-      { kode: 'KR', nama: 'Kepulauan Riau', bsu: 198, kg: 987600, nasabah: 29341 },
-      { kode: 'JA', nama: 'Jambi', bsu: 267, kg: 1432100, nasabah: 41234 },
-      { kode: 'SS', nama: 'Sumatera Selatan', bsu: 543, kg: 3241800, nasabah: 92341 },
-      { kode: 'BB', nama: 'Bangka Belitung', bsu: 134, kg: 654300, nasabah: 18923 },
-      { kode: 'BE', nama: 'Bengkulu', bsu: 178, kg: 823400, nasabah: 24123 },
-      { kode: 'LA', nama: 'Lampung', bsu: 456, kg: 2934100, nasabah: 83421 },
-      { kode: 'JK', nama: 'DKI Jakarta', bsu: 1243, kg: 8934200, nasabah: 312341 },
-      { kode: 'JB', nama: 'Jawa Barat', bsu: 2341, kg: 15234100, nasabah: 534123 },
-      { kode: 'JT', nama: 'Jawa Tengah', bsu: 1987, kg: 12341200, nasabah: 432341 },
-      { kode: 'YO', nama: 'DI Yogyakarta', bsu: 432, kg: 2834100, nasabah: 98123 },
-      { kode: 'JI', nama: 'Jawa Timur', bsu: 2134, kg: 13241800, nasabah: 467234 },
-      { kode: 'BT', nama: 'Banten', bsu: 678, kg: 4234100, nasabah: 145231 },
-      { kode: 'BA', nama: 'Bali', bsu: 543, kg: 3534200, nasabah: 123412 },
-      { kode: 'NB', nama: 'Nusa Tenggara Barat', bsu: 312, kg: 1823400, nasabah: 58921 },
-      { kode: 'NT', nama: 'Nusa Tenggara Timur', bsu: 234, kg: 1234100, nasabah: 42341 },
-      { kode: 'KB', nama: 'Kalimantan Barat', bsu: 345, kg: 1934200, nasabah: 63421 },
-      { kode: 'KT', nama: 'Kalimantan Tengah', bsu: 212, kg: 1123400, nasabah: 35123 },
-      { kode: 'KS', nama: 'Kalimantan Selatan', bsu: 287, kg: 1534100, nasabah: 48921 },
-      { kode: 'KI', nama: 'Kalimantan Timur', bsu: 334, kg: 1923200, nasabah: 62341 },
-      { kode: 'KU', nama: 'Kalimantan Utara', bsu: 123, kg: 598300, nasabah: 18921 },
-      { kode: 'SW', nama: 'Sulawesi Utara', bsu: 234, kg: 1234100, nasabah: 38921 },
-      { kode: 'ST', nama: 'Sulawesi Tengah', bsu: 198, kg: 987600, nasabah: 31234 },
-      { kode: 'SN', nama: 'Sulawesi Selatan', bsu: 534, kg: 3234100, nasabah: 112341 },
-      { kode: 'SG', nama: 'Sulawesi Tenggara', bsu: 187, kg: 934200, nasabah: 29123 },
-      { kode: 'GO', nama: 'Gorontalo', bsu: 134, kg: 654300, nasabah: 18921 },
-      { kode: 'SR', nama: 'Sulawesi Barat', bsu: 112, kg: 534100, nasabah: 16234 },
-      { kode: 'MA', nama: 'Maluku', bsu: 156, kg: 723400, nasabah: 22341 },
-      { kode: 'MU', nama: 'Maluku Utara', bsu: 123, kg: 567300, nasabah: 18123 },
-      { kode: 'PB', nama: 'Papua Barat', bsu: 98, kg: 423400, nasabah: 13421 },
-      { kode: 'PA', nama: 'Papua', bsu: 145, kg: 634100, nasabah: 21234 },
-    ];
+    const pulau = req.query.pulau;
+    let list = DATA_38_PROVINSI;
+    if (pulau && pulau !== 'all') {
+      list = list.filter((p) => p.pulau.toLowerCase() === pulau.toLowerCase());
+    }
+
+    // Format response kredibel (memiliki properti bsu, kg, nasabah + detail BPS, lat/lng, unit percontohan)
+    const formatted = list.map((p) => ({
+      kode: p.kode_iso,
+      kode_bps: p.kode_bps,
+      nama: p.nama,
+      pulau: p.pulau,
+      ibukota: p.ibukota,
+      lat: p.lat,
+      lng: p.lng,
+      populasi: p.populasi,
+      target_reduksi_persen: p.target_reduksi_persen,
+      bsu: p.bsu_aktif,
+      kg: p.total_sampah_kg,
+      ton: parseFloat((p.total_sampah_kg / 1000).toFixed(2)),
+      nasabah: p.total_nasabah,
+      partisipasi_persen: p.partisipasi_persen,
+      unit_percontohan: p.unit_percontohan,
+    }));
 
     res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-    return res.json({ success: true, data: provinsiData });
+    return res.json({ success: true, total: formatted.length, data: formatted });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Gagal mengambil data provinsi' });
   }

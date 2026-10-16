@@ -8,7 +8,7 @@ import AdminSidebar from '@/components/layout/AdminSidebar'
 import NotaTransaksiModal, { NotaData } from '@/components/NotaTransaksiModal'
 import { DEFAULT_JENIS_SAMPAH, DEFAULT_NASABAH } from '@/lib/constants'
 import api from '@/lib/api'
-import { formatRupiah } from '@/lib/utils'
+import { formatRupiah, formatNumberId, formatWeight } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 
@@ -108,13 +108,15 @@ export default function InputSetoranPage() {
     })
   }
 
+  const { parseIndonesianDecimal } = require('@/lib/validation')
+
   const totalNilai = items.reduce((acc, it) => {
-    const qty = parseFloat(it.berat_kg) || 0
+    const qty = parseIndonesianDecimal(it.berat_kg) || 0
     return acc + qty * it.harga_satuan
   }, 0)
 
   const totalBerat = items.reduce((acc, it) => {
-    return acc + (parseFloat(it.berat_kg) || 0)
+    return acc + (parseIndonesianDecimal(it.berat_kg) || 0)
   }, 0)
 
   const selectedNasabah = nasabahList.find((n) => n.id === nasabahId)
@@ -125,9 +127,12 @@ export default function InputSetoranPage() {
       return
     }
 
-    const validItems = items.filter((i) => i.jenis_sampah_id && parseFloat(i.berat_kg) > 0)
+    const validItems = items
+      .map((i) => ({ ...i, beratNum: parseIndonesianDecimal(i.berat_kg) }))
+      .filter((i) => i.jenis_sampah_id && !isNaN(i.beratNum) && i.beratNum > 0 && i.beratNum <= 10000)
+
     if (!validItems.length) {
-      toast.error('Masukkan kuantitas timbangan berat (kg) yang valid')
+      toast.error('Masukkan kuantitas timbangan berat yang valid (0 < berat <= 10.000 kg)')
       return
     }
 
@@ -206,7 +211,7 @@ export default function InputSetoranPage() {
                 Pencatatan Transaksi Pembelian (Setoran Masuk)
               </h1>
               <p className="text-slate-500 text-sm mt-0.5">
-                Kasir timbangan sampah dari nasabah: hitung otomatis kuantitas $\times$ harga beli per kg.
+                Kasir timbangan sampah dari nasabah: hitung otomatis kuantitas × harga beli per kg.
               </p>
             </div>
           </div>
@@ -293,14 +298,18 @@ export default function InputSetoranPage() {
                         <select
                           value={item.jenis_sampah_id}
                           onChange={(e) => updateItem(idx, 'jenis_sampah_id', e.target.value)}
-                          className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-800 outline-none"
+                          title={`${item.kode} - ${item.nama} (${formatRupiah(item.harga_satuan)}/${item.satuan || 'kg'})`}
+                          className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-800 outline-none truncate"
                         >
                           {jenisList.map((j) => (
-                            <option key={j.id} value={j.id}>
+                            <option key={j.id} value={j.id} title={`${j.kode} - ${j.nama} (${formatRupiah(j.harga_beli)}/${j.satuan || 'kg'})`}>
                               {j.kode} - {j.nama} ({formatRupiah(j.harga_beli)}/{j.satuan || 'kg'})
                             </option>
                           ))}
                         </select>
+                        <div className="text-[10px] text-slate-500 font-medium truncate mt-1 px-1" title={`${item.kode} - ${item.nama}`}>
+                          {item.kode} — {item.nama}
+                        </div>
                       </div>
 
                       <div className="col-span-6 sm:col-span-3">

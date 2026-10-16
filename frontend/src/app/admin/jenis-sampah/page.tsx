@@ -88,16 +88,30 @@ export default function AdminJenisSampahPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSaving(true)
+    const { parseIndonesianDecimal } = require('@/lib/validation')
+    const hBeli = parseIndonesianDecimal(form.harga_beli)
+    const hJual = parseIndonesianDecimal(form.harga_jual)
+
+    if (isNaN(hBeli) || hBeli <= 0) {
+      toast.error('Harga beli nasabah harus lebih besar dari Rp 0')
+      setSaving(false)
+      return
+    }
+
+    if (isNaN(hJual) || hJual <= 0) {
+      toast.error('Harga jual offtaker harus lebih besar dari Rp 0')
+      setSaving(false)
+      return
+    }
 
     const payload = {
-      nama: form.nama,
-      kode: form.kode.toUpperCase(),
+      nama: form.nama.trim(),
+      kode: form.kode.trim().toUpperCase(),
       kategori: form.kategori,
-      satuan: form.satuan,
-      harga_beli: parseFloat(form.harga_beli) || 0,
-      harga_jual: parseFloat(form.harga_jual) || 0,
-      harga_per_satuan: parseFloat(form.harga_beli) || 0,
+      satuan: form.satuan || 'kg',
+      harga_beli: hBeli,
+      harga_jual: hJual,
+      harga_per_satuan: hBeli,
       deskripsi: form.deskripsi,
     }
 

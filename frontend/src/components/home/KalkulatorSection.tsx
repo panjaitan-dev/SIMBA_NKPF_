@@ -1,5 +1,17 @@
 'use client'
-import { useState, useCallback } from 'react'
+
+import { useState, useCallback, useMemo } from 'react'
+import {
+  ArrowRight,
+  TrendingUp,
+  Sparkles,
+  TreePine,
+  DollarSign,
+  CloudSun,
+  Weight,
+  CheckCircle2,
+  ChevronRight,
+} from 'lucide-react'
 
 const JENIS_SAMPAH = [
   { id: 'pet', nama: 'Botol PET Bening', harga: 4800, co2PerKg: 2.1, satuan: 'kg', kategori: 'Plastik' },
@@ -15,188 +27,309 @@ const JENIS_SAMPAH = [
 
 const POHON_CO2_PER_TAHUN = 21 // kg CO2 per pohon per tahun
 
-const formatRupiah = (n: number) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n)
+// Format Rupiah Indonesia Standar: "Rp 125.000"
+const formatRupiah = (n: number) => `Rp ${Math.round(n).toLocaleString('id-ID')}`
+
+// Format Desimal Indonesia Standar (koma EYD): "2,5 kg"
+const formatDesimalId = (n: number, maxDec = 1) =>
+  n.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: maxDec })
 
 export default function KalkulatorSection() {
-  const [selected, setSelected] = useState<Record<string, boolean>>({})
-  const [berat, setBerat] = useState<Record<string, string>>({})
+  const [selected, setSelected] = useState<Record<string, boolean>>({ pet: true, kardus: true })
+  const [berat, setBerat] = useState<Record<string, string>>({ pet: '5', kardus: '10' })
 
   const toggleItem = (id: string) => {
     setSelected((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
   const setBobotItem = useCallback((id: string, val: string) => {
-    setBerat((prev) => ({ ...prev, [id]: val }))
+    // Dukung input koma maupun titik dari pengguna Indonesia
+    const clean = val.replace(',', '.')
+    setBerat((prev) => ({ ...prev, [id]: clean }))
   }, [])
 
-  const selectedItems = JENIS_SAMPAH.filter((j) => selected[j.id])
-
-  const results = selectedItems.reduce(
-    (acc, item) => {
-      const kg = parseFloat(berat[item.id] || '0') || 0
-      acc.rupiah += kg * item.harga
-      acc.co2 += kg * item.co2PerKg
-      acc.beratTotal += kg
-      return acc
-    },
-    { rupiah: 0, co2: 0, beratTotal: 0 }
+  const selectedItems = useMemo(
+    () => JENIS_SAMPAH.filter((j) => selected[j.id]),
+    [selected]
   )
 
-  const pohon = Math.round(results.co2 / POHON_CO2_PER_TAHUN * 10) / 10
+  const results = useMemo(() => {
+    return selectedItems.reduce(
+      (acc, item) => {
+        const kg = parseFloat(berat[item.id] || '0') || 0
+        acc.rupiah += kg * item.harga
+        acc.co2 += kg * item.co2PerKg
+        acc.beratTotal += kg
+        return acc
+      },
+      { rupiah: 0, co2: 0, beratTotal: 0 }
+    )
+  }, [selectedItems, berat])
 
-  const kategoriList = [...new Set(JENIS_SAMPAH.map((j) => j.kategori))]
+  const pohon = useMemo(
+    () => Math.round((results.co2 / POHON_CO2_PER_TAHUN) * 10) / 10,
+    [results.co2]
+  )
+
+  const kategoriList = useMemo(() => [...new Set(JENIS_SAMPAH.map((j) => j.kategori))], [])
 
   return (
-    <section id="kalkulator" className="py-24 bg-white">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="kalkulator" className="py-20 sm:py-24 bg-slate-50 border-y border-slate-200/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-14">
-          <span className="text-emerald-600 font-semibold tracking-widest text-xs uppercase mb-3 block">Kalkulator Setoran</span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Berapa Nilai <span className="text-emerald-600">Sampahmu?</span>
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-emerald-700 font-bold tracking-widest text-xs uppercase mb-2 block">
+            Kalkulator Dampak Ekonomi & Lingkungan
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Berapa Nilai Tabungan dari <span className="text-emerald-600">Sampah Rumah Tanggamu?</span>
           </h2>
-          <p className="text-slate-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-            Pilih jenis sampah, isi berat, dan lihat estimasi rupiah yang akan kamu dapatkan beserta dampak lingkungannya.
+          <p className="text-slate-600 mt-3 text-sm sm:text-base leading-relaxed">
+            Pilih komoditas sampah terpilah di rumah Anda, isi taksiran berat, dan amati langsung konversi
+            rupiah ke buku tabungan serta kontribusi pengurangan jejak karbon bumi.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Pilihan Jenis Sampah */}
-          <div className="lg:col-span-2 space-y-6">
+        {/* DIAGRAM ALIR HORIZONTAL DAMPAK LINGKUNGAN HIDUP (PENGGANTI RUMUS LATEX) */}
+        <div className="bg-white rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <Sparkles size={14} className="text-emerald-600" />
+              Alur Manfaat Ekonomi Sirkular (Siklus Daur Ulang)
+            </span>
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+              Kalkulasi Dinamis
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 relative">
+            {/* Step 1: Berat Sampah */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 flex flex-col justify-between relative group hover:border-emerald-300 transition-colors">
+              <div className="flex items-center justify-between text-slate-500 mb-3">
+                <span className="text-xs font-semibold">1. Sampah Terpilah</span>
+                <Weight size={18} className="text-slate-700" />
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900">
+                  {formatDesimalId(results.beratTotal)}{' '}
+                  <span className="text-xs font-normal text-slate-500">kg</span>
+                </div>
+                <p className="text-xs text-slate-500 mt-1">Material siap setor</p>
+              </div>
+              <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-slate-300">
+                <ChevronRight size={22} />
+              </div>
+            </div>
+
+            {/* Step 2: Saldo Rupiah */}
+            <div className="bg-emerald-50/70 rounded-2xl p-4 border border-emerald-200 flex flex-col justify-between relative group hover:border-emerald-400 transition-colors">
+              <div className="flex items-center justify-between text-emerald-800 mb-3">
+                <span className="text-xs font-semibold">2. Nilai Saldo Kas</span>
+                <DollarSign size={18} className="text-emerald-700" />
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-emerald-800">
+                  {formatRupiah(results.rupiah)}
+                </div>
+                <p className="text-xs text-emerald-700 mt-1">Langsung masuk tabungan</p>
+              </div>
+              <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-emerald-300">
+                <ChevronRight size={22} />
+              </div>
+            </div>
+
+            {/* Step 3: Emisi CO2 Dicegah */}
+            <div className="bg-blue-50/70 rounded-2xl p-4 border border-blue-200 flex flex-col justify-between relative group hover:border-blue-400 transition-colors">
+              <div className="flex items-center justify-between text-blue-800 mb-3">
+                <span className="text-xs font-semibold">3. Emisi Karbon Dicegah</span>
+                <CloudSun size={18} className="text-blue-700" />
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-blue-900">
+                  {formatDesimalId(results.co2)}{' '}
+                  <span className="text-xs font-normal text-blue-600">kg CO₂</span>
+                </div>
+                <p className="text-xs text-blue-700 mt-1">Mencegah efek rumah kaca</p>
+              </div>
+              <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-blue-300">
+                <ChevronRight size={22} />
+              </div>
+            </div>
+
+            {/* Step 4: Setara Pohon Ditanam */}
+            <div className="bg-amber-50/70 rounded-2xl p-4 border border-amber-200 flex flex-col justify-between group hover:border-amber-400 transition-colors">
+              <div className="flex items-center justify-between text-amber-800 mb-3">
+                <span className="text-xs font-semibold">4. Daya Serap Pohon</span>
+                <TreePine size={18} className="text-amber-700" />
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-black text-amber-900">
+                  {formatDesimalId(pohon)}{' '}
+                  <span className="text-xs font-normal text-amber-700">Pohon</span>
+                </div>
+                <p className="text-xs text-amber-700 mt-1">Setara serapan pohon / tahun</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Input Selector & Kotak Ringkasan */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Pilihan Komoditas Sampah (Kolom Kiri) */}
+          <div className="lg:col-span-7 space-y-6">
             {kategoriList.map((kategori) => (
-              <div key={kategori}>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                  <span className="h-px flex-1 bg-slate-100" />
-                  {kategori}
-                  <span className="h-px flex-1 bg-slate-100" />
+              <div key={kategori} className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm">
+                <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center justify-between">
+                  <span>Kategori {kategori}</span>
+                  <span className="text-[11px] text-slate-500 font-normal">
+                    Pilih & tentukan berat (kg/liter)
+                  </span>
                 </h3>
-                <div className="space-y-2">
-                  {JENIS_SAMPAH.filter((j) => j.kategori === kategori).map((item) => (
-                    <div
-                      key={item.id}
-                      className={`border rounded-xl transition-all ${
-                        selected[item.id]
-                          ? 'border-emerald-400 bg-emerald-50'
-                          : 'border-slate-200 hover:border-emerald-200 bg-white'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4 p-4">
-                        <button
-                          onClick={() => toggleItem(item.id)}
-                          className={`w-5 h-5 rounded flex-shrink-0 border-2 flex items-center justify-center transition-colors ${
-                            selected[item.id]
-                              ? 'bg-emerald-600 border-emerald-600'
-                              : 'border-slate-300'
-                          }`}
-                        >
-                          {selected[item.id] && (
-                            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                              <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          )}
-                        </button>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-slate-800 text-sm">{item.nama}</p>
-                          <p className="text-xs text-amber-600 font-bold mt-0.5">
-                            {formatRupiah(item.harga)}/{item.satuan}
-                          </p>
+
+                <div className="space-y-3">
+                  {JENIS_SAMPAH.filter((j) => j.kategori === kategori).map((item) => {
+                    const isChecked = Boolean(selected[item.id])
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => toggleItem(item.id)}
+                        className={`rounded-xl border p-3.5 transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                          isChecked
+                            ? 'border-emerald-500 bg-emerald-50/50 shadow-sm'
+                            : 'border-slate-200 hover:border-slate-300 bg-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleItem(item.id)
+                            }}
+                            className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
+                              isChecked
+                                ? 'bg-emerald-600 border-emerald-600 text-white'
+                                : 'border-slate-300 bg-white'
+                            }`}
+                          >
+                            {isChecked && <CheckCircle2 size={16} />}
+                          </button>
+                          <div className="truncate">
+                            <p className="font-semibold text-slate-900 text-sm truncate">{item.nama}</p>
+                            <p className="text-xs text-emerald-700 font-bold">
+                              {formatRupiah(item.harga)} / {item.satuan}
+                            </p>
+                          </div>
                         </div>
-                        {selected[item.id] && (
-                          <div className="flex items-center gap-2">
+
+                        {isChecked && (
+                          <div
+                            className="flex items-center gap-2 flex-shrink-0"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <label className="sr-only" htmlFor={`input-berat-${item.id}`}>
+                              Berat {item.nama}
+                            </label>
                             <input
+                              id={`input-berat-${item.id}`}
                               type="number"
+                              min="0"
+                              step="0.5"
                               value={berat[item.id] || ''}
                               onChange={(e) => setBobotItem(item.id, e.target.value)}
                               placeholder="0"
-                              min="0"
-                              step="0.1"
-                              className="w-24 px-3 py-1.5 border border-emerald-300 rounded-lg text-sm text-right outline-none focus:border-emerald-500 bg-white"
-                              onClick={(e) => e.stopPropagation()}
+                              className="w-20 px-3 py-1.5 text-right font-bold text-slate-800 bg-white border border-emerald-400 rounded-lg text-sm focus:ring-2 focus:ring-emerald-200 outline-none"
                             />
-                            <span className="text-xs text-slate-500 w-8">{item.satuan}</span>
+                            <span className="text-xs text-slate-500 font-medium w-6">{item.satuan}</span>
                           </div>
                         )}
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Hasil Kalkulasi */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <div className="bg-gradient-to-br from-emerald-900 to-slate-900 rounded-2xl p-6 text-white">
-                <h3 className="text-sm font-semibold text-emerald-300 uppercase tracking-widest mb-6">Estimasi Setoran</h3>
-
-                {selectedItems.length === 0 ? (
-                  <div className="text-center py-8">
-                    <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-400">
-                        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/>
-                      </svg>
-                    </div>
-                    <p className="text-slate-400 text-sm">Pilih jenis sampah dan isi berat untuk melihat estimasi.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-5">
-                    {/* Total Rupiah */}
-                    <div className="bg-amber-500/20 border border-amber-500/30 rounded-xl p-4">
-                      <p className="text-xs text-amber-300 font-semibold mb-1">💰 Estimasi Rupiah</p>
-                      <p className="text-3xl font-extrabold text-amber-400 tabular-nums">
-                        {formatRupiah(results.rupiah)}
-                      </p>
-                    </div>
-
-                    {/* CO2 */}
-                    <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4">
-                      <p className="text-xs text-emerald-300 font-semibold mb-1">🌿 CO₂ Dihemat</p>
-                      <p className="text-2xl font-extrabold text-emerald-300 tabular-nums">
-                        {results.co2.toFixed(1)} <span className="text-sm font-normal">kg CO₂</span>
-                      </p>
-                    </div>
-
-                    {/* Pohon */}
-                    <div className="bg-white/10 border border-white/20 rounded-xl p-4">
-                      <p className="text-xs text-slate-300 font-semibold mb-1">🌳 Setara Pohon</p>
-                      <p className="text-2xl font-extrabold tabular-nums">
-                        {pohon} <span className="text-sm font-normal text-slate-400">pohon/tahun</span>
-                      </p>
-                    </div>
-
-                    {/* Detail per jenis */}
-                    <div className="border-t border-white/10 pt-4 space-y-2">
-                      {selectedItems.map((item) => {
-                        const kg = parseFloat(berat[item.id] || '0') || 0
-                        return (
-                          <div key={item.id} className="flex justify-between text-xs">
-                            <span className="text-slate-400 truncate max-w-[140px]">{item.nama}</span>
-                            <span className="text-white font-semibold ml-2">{formatRupiah(kg * item.harga)}</span>
-                          </div>
-                        )
-                      })}
-                      <div className="flex justify-between text-sm font-bold border-t border-white/10 pt-2 mt-2">
-                        <span className="text-slate-300">Total Berat</span>
-                        <span className="text-white">{results.beratTotal.toFixed(1)} kg</span>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-slate-500 leading-relaxed">
-                      * Harga estimasi berdasarkan harga beli rata-rata bank sampah. Harga aktual dapat berbeda sesuai kondisi sampah.
-                    </p>
-                  </div>
-                )}
+          {/* Rincian Finansial & Dampak (Kolom Kanan) */}
+          <div className="lg:col-span-5 sticky top-24">
+            <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-7 shadow-xl border border-slate-800">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
+                <div>
+                  <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider block">
+                    Buku Rekening Simulasi
+                  </span>
+                  <h3 className="text-xl font-black text-white">Ringkasan Nilai Sampah</h3>
+                </div>
+                <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <TrendingUp size={20} />
+                </div>
               </div>
 
-              {results.rupiah > 0 && (
-                <a
-                  href="/register"
-                  className="mt-4 flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-colors text-sm"
-                >
-                  Daftar Sekarang & Mulai Menabung
-                </a>
+              {selectedItems.length === 0 ? (
+                <div className="py-10 text-center text-slate-400">
+                  <p className="text-sm">Silakan pilih minimal 1 jenis sampah di samping untuk melihat taksiran rupiah.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Estimasi Saldo Kasir */}
+                  <div className="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-4">
+                    <span className="text-xs text-emerald-300 font-semibold block mb-1">
+                      Estimasi Nilai Tukar Tunai / Tabungan
+                    </span>
+                    <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">
+                      {formatRupiah(results.rupiah)}
+                    </div>
+                    <span className="text-[11px] text-slate-400 mt-1 block">
+                      Dihitung dari {formatDesimalId(results.beratTotal)} kg komoditas terpilah
+                    </span>
+                  </div>
+
+                  {/* List Item Rincian */}
+                  <div className="space-y-2 border-y border-slate-800 py-3 max-h-48 overflow-y-auto pr-1">
+                    {selectedItems.map((item) => {
+                      const kg = parseFloat(berat[item.id] || '0') || 0
+                      const subtotal = kg * item.harga
+                      return (
+                        <div key={item.id} className="flex items-center justify-between text-xs py-1">
+                          <span className="text-slate-300 truncate max-w-[170px]">
+                            {item.nama} ({formatDesimalId(kg)} {item.satuan})
+                          </span>
+                          <span className="font-bold text-slate-100 ml-2">
+                            {formatRupiah(subtotal)}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Metrik Emisi & Pohon */}
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
+                      <span className="text-[11px] text-slate-400 block mb-0.5">Emisi Dicegah:</span>
+                      <span className="font-bold text-blue-400 text-sm">
+                        {formatDesimalId(results.co2)} kg CO₂
+                      </span>
+                    </div>
+                    <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
+                      <span className="text-[11px] text-slate-400 block mb-0.5">Setara Serapan:</span>
+                      <span className="font-bold text-amber-400 text-sm">
+                        {formatDesimalId(pohon)} Pohon/Thn
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* CTA Link Pendaftaran */}
+                  <div className="pt-2">
+                    <a
+                      href="/register"
+                      className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-900/40"
+                    >
+                      <span>Buka Tabungan & Setor Sekarang</span>
+                      <ArrowRight size={16} />
+                    </a>
+                  </div>
+                </div>
               )}
             </div>
           </div>

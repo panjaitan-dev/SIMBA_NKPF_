@@ -24,9 +24,16 @@ export default function NasabahDashboard() {
   }, [])
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/')
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('simba_token')
+        localStorage.removeItem('simba_user')
+        localStorage.removeItem('simba_role')
+      }
+      const supabase = createClient()
+      await supabase.auth.signOut().catch(() => {})
+    } catch {}
+    router.push('/login')
   }
 
   const handlePenarikan = async () => {

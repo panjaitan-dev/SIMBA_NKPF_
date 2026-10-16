@@ -26,16 +26,30 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
+    // Cek sesi dari localStorage (proxy auth)
+    if (typeof window !== 'undefined') {
+      try {
+        const storedUser = localStorage.getItem('simba_user')
+        const storedRole = localStorage.getItem('simba_role')
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser)
+          setUser({ ...parsed, role: storedRole || parsed.role })
+          return
+        }
+      } catch {}
+    }
+
     const supabase = createClient()
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) setUser(session.user.user_metadata)
-    })
+    }).catch(() => {})
   }, [])
 
   const getDashboardHref = () => {
     if (!user) return '/login'
     const role = (user as any)?.role
     if (role === 'admin') return '/admin'
+    if (role === 'admin_klh') return '/admin/klh'
     if (role === 'petugas') return '/petugas'
     return '/nasabah'
   }
@@ -115,29 +129,32 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/lapor"
-            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg"
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 min-h-[44px] rounded-xl transition-colors shadow-sm"
           >
             <Leaf size={14} /> Lapor
           </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className={cn('p-2 rounded-lg transition-colors', scrolled ? 'text-slate-700 hover:bg-slate-100' : 'text-white hover:bg-white/10')}
-            aria-label="Toggle menu"
+            className={cn(
+              'min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors',
+              scrolled ? 'text-slate-800 hover:bg-slate-100' : 'text-white hover:bg-white/10'
+            )}
+            aria-label="Toggle navigation menu"
           >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-1 shadow-lg">
+        <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-slate-100 px-6 py-4 space-y-1 shadow-xl animate-in slide-in-from-top-2 duration-200">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+              className="flex items-center min-h-[44px] px-4 rounded-xl text-sm font-semibold text-slate-800 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
             >
               {link.label}
             </Link>
@@ -146,9 +163,9 @@ export default function Navbar() {
             <Link
               href={user ? getDashboardHref() : '/login'}
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-slate-700"
+              className="flex items-center gap-2 min-h-[44px] px-4 rounded-xl text-sm font-bold text-emerald-700 hover:bg-emerald-50 transition-colors"
             >
-              <LogIn size={16} /> {user ? 'Dashboard' : 'Login'}
+              <LogIn size={16} /> {user ? 'Buka Dashboard' : 'Masuk / Login Akun'}
             </Link>
           </div>
         </div>
