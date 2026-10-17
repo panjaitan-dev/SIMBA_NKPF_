@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
+const plusJakarta = localFont({
+  src: './fonts/plus-jakarta-sans.woff2',
   variable: '--font-plus-jakarta',
   display: 'swap',
 })

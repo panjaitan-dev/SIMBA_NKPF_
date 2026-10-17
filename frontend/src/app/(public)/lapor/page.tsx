@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import {
   Loader2,
   MapPin,
@@ -223,9 +222,6 @@ export default function LaporPage() {
             >
               Buat Laporan Baru
             </button>
-
-              ← Kembali ke Beranda
-            </Link>
           </div>
         </div>
       </div>
