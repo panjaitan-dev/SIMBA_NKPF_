@@ -288,11 +288,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <p className="text-center mt-6">
-          <Link href="/" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
-            ← Kembali ke Beranda
-          </Link>
-        </p>
+
       </div>
     </div>
   )

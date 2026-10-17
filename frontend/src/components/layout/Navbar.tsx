@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 
 const navLinks = [
+  { href: '/', label: 'Beranda' },
   { href: '#tentang', label: 'Tentang' },
   { href: '#bank-sampah', label: 'Bank Sampah' },
   { href: '/berita', label: 'Berita' },

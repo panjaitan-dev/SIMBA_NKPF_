@@ -223,7 +223,7 @@ export default function LaporPage() {
             >
               Buat Laporan Baru
             </button>
-            <Link href="/" className="text-xs text-slate-400 hover:text-emerald-600 mt-2">
+
               ← Kembali ke Beranda
             </Link>
           </div>

@@ -1,7 +1,6 @@
 /**
  * SUMBER KEBENARAN TUNGGAL — Batas input seluruh field SIMBA Nusantara
  * Mirror dari frontend/src/lib/limits.ts
- * Dipakai oleh: skema Zod backend, multer config, CHECK constraint DB
  */
 
 module.exports = {
@@ -32,4 +31,4 @@ module.exports = {
   FOTO_MAX_SIZE_BYTES: 2 * 1024 * 1024,
   FOTO_MAX_TOTAL_BYTES: 8 * 1024 * 1024,
   FOTO_ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
-}
+};
