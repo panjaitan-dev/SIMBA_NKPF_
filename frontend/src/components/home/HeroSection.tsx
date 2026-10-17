@@ -133,14 +133,6 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-        <span className="text-xs text-slate-500 font-medium">Scroll untuk menjelajahi</span>
-        <div className="w-5 h-8 border border-slate-600 rounded-full flex justify-center pt-1.5">
-          <div className="w-1 h-2 bg-emerald-500 rounded-full animate-bounce" />
-        </div>
-      </div>
     </header>
   )
 }
