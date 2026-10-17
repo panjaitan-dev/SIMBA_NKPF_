@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   nama_lengkap TEXT NOT NULL CHECK (char_length(trim(nama_lengkap)) >= 3 AND char_length(nama_lengkap) <= 100),
   nomor_hp TEXT CHECK (nomor_hp IS NULL OR char_length(nomor_hp) >= 10),
   avatar_url TEXT,
-  alamat TEXT CHECK (alamat IS NULL OR char_length(alamat) <= 500),
+  alamat TEXT CHECK (alamat IS NULL OR char_length(alamat) <= 255),
   nik TEXT UNIQUE CHECK (nik IS NULL OR (char_length(nik) = 16 AND nik ~ '^[0-9]{16}$')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -207,12 +207,13 @@ CREATE TABLE IF NOT EXISTS public.galeri_foto (
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.laporan_lingkungan (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nomor_tiket TEXT UNIQUE,
   pelapor_id UUID REFERENCES public.profiles(id),
-  nama_pelapor TEXT,
+  nama_pelapor TEXT CHECK (nama_pelapor IS NULL OR char_length(nama_pelapor) <= 100),
   nomor_hp TEXT,
-  judul TEXT NOT NULL,
-  deskripsi TEXT NOT NULL,
-  lokasi TEXT NOT NULL,
+  judul TEXT NOT NULL CHECK (char_length(trim(judul)) >= 5 AND char_length(judul) <= 100),
+  deskripsi TEXT NOT NULL CHECK (char_length(trim(deskripsi)) >= 20 AND char_length(deskripsi) <= 1000),
+  lokasi TEXT NOT NULL CHECK (char_length(trim(lokasi)) >= 5 AND char_length(lokasi) <= 200),
   koordinat_lat DECIMAL(10, 8),
   koordinat_lng DECIMAL(11, 8),
   foto_urls TEXT[],
@@ -571,7 +572,8 @@ ON CONFLICT (kode_client) DO NOTHING;
 -- ============================================================
 CREATE INDEX IF NOT EXISTS idx_nasabah_unit_id ON public.nasabah(unit_id);
 CREATE INDEX IF NOT EXISTS idx_nasabah_nomor ON public.nasabah(nomor_nasabah);
-CREATE INDEX IF NOT EXISTS idx_nasabah_nama ON public.nasabah(nama_lengkap);
+CREATE INDEX IF NOT EXISTS idx_profiles_nama ON public.profiles(nama_lengkap);
+CREATE INDEX IF NOT EXISTS idx_laporan_nomor_tiket ON public.laporan_lingkungan(nomor_tiket);
 CREATE INDEX IF NOT EXISTS idx_setoran_nasabah_id ON public.setoran(nasabah_id);
 CREATE INDEX IF NOT EXISTS idx_setoran_unit_id ON public.setoran(unit_id);
 CREATE INDEX IF NOT EXISTS idx_setoran_status ON public.setoran(status);

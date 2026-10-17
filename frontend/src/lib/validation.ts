@@ -1,4 +1,11 @@
 import { z } from 'zod'
+import {
+  NAMA_MIN, NAMA_MAX, EMAIL_MAX, PASSWORD_MIN, PASSWORD_MAX,
+  ALAMAT_MAX, PHONE_MIN, PHONE_MAX,
+  LAPOR_JUDUL_MIN, LAPOR_JUDUL_MAX, LAPOR_DESKRIPSI_MIN, LAPOR_DESKRIPSI_MAX,
+  LAPOR_LOKASI_MIN, LAPOR_LOKASI_MAX, LAPOR_NAMA_MIN, LAPOR_NAMA_MAX,
+  LAPOR_TIKET_LENGTH,
+} from './limits'
 
 // Daftar resmi 38 Kode Wilayah Provinsi Indonesia (Kemendagri / BPS)
 export const VALID_PROVINCE_CODES = [
@@ -92,6 +99,13 @@ export function formatPhoneDisplay(phone: string): string {
   return `${norm.slice(0, 4)}-${norm.slice(4, 8)}-${norm.slice(8)}`
 }
 
+/** Strip non-digit, convert +62/62 → 0, hard stop at 13 digits */
+export function cleanPhoneInput(raw: string): string {
+  let clean = raw.replace(/\D/g, '')
+  if (clean.startsWith('62') && clean.length > 2) clean = '0' + clean.slice(2)
+  return clean.slice(0, 13)
+}
+
 /**
  * Parsing angka desimal format Indonesia (mendukung koma dan titik)
  */
@@ -112,16 +126,48 @@ export function calculatePasswordStrength(password: string): {
   color: string
 } {
   if (!password) return { score: 0, label: 'Sangat Lemah', color: 'bg-slate-200 text-slate-500' }
+  
   let score = 0
-  if (password.length >= 8) score++
-  if (/[A-Z]/.test(password)) score++
-  if (/[a-z]/.test(password)) score++
-  if (/[0-9]/.test(password)) score++
-  if (/[^A-Za-z0-9]/.test(password)) score++
-
-  if (score <= 1) return { score: 1, label: 'Sangat Lemah', color: 'bg-rose-500 text-rose-700' }
-  if (score === 2) return { score: 2, label: 'Lemah', color: 'bg-amber-500 text-amber-700' }
-  if (score === 3) return { score: 3, label: 'Sedang', color: 'bg-blue-500 text-blue-700' }
+  
+  // Panjang
+  if (password.length >= 8) score += 1
+  if (password.length >= 12) score += 0.5
+  
+  // Variasi karakter
+  if (/[A-Z]/.test(password)) score += 1
+  if (/[a-z]/.test(password)) score += 1
+  if (/[0-9]/.test(password)) score += 1
+  if (/[^A-Za-z0-9]/.test(password)) score += 0.5
+  
+  // PENALTI: karakter berulang 3+ kali berturut (misal "jjjj", "1111")
+  const repeats = password.match(/(.)\1{2,}/g)
+  if (repeats) {
+    score -= repeats.length * 1.5
+  }
+  
+  // PENALTI: urutan keyboard/alfabet 3+ karakter (misal "abc", "123", "qwerty")
+  const sequences = ['abcdefghijklmnopqrstuvwxyz', '0123456789', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm']
+  const lower = password.toLowerCase()
+  for (const seq of sequences) {
+    for (let i = 0; i <= lower.length - 3; i++) {
+      const chunk = lower.slice(i, i + 3)
+      if (seq.includes(chunk)) {
+        score -= 1
+        break
+      }
+    }
+  }
+  
+  // Jumlah karakter unik
+  const uniqueChars = new Set(password).size
+  if (uniqueChars <= 3) score -= 1
+  
+  // Clamp ke 1-4
+  const finalScore = Math.max(1, Math.min(4, Math.round(score)))
+  
+  if (finalScore <= 1) return { score: 1, label: 'Sangat Lemah', color: 'bg-rose-500 text-rose-700' }
+  if (finalScore === 2) return { score: 2, label: 'Lemah', color: 'bg-amber-500 text-amber-700' }
+  if (finalScore === 3) return { score: 3, label: 'Sedang', color: 'bg-blue-500 text-blue-700' }
   return { score: 4, label: 'Kuat', color: 'bg-emerald-500 text-emerald-700' }
 }
 
@@ -132,8 +178,8 @@ export function calculatePasswordStrength(password: string): {
 export const namaLengkapSchema = z
   .string()
   .transform((v) => sanitizeText(v))
-  .refine((v) => v.length >= 3, 'Nama lengkap minimal 3 karakter')
-  .refine((v) => v.length <= 100, 'Nama lengkap maksimal 100 karakter')
+  .refine((v) => v.length >= NAMA_MIN, `Nama lengkap minimal ${NAMA_MIN} karakter`)
+  .refine((v) => v.length <= NAMA_MAX, `Nama lengkap maksimal ${NAMA_MAX} karakter`)
   .refine(
     (v) => /^[\p{L}\s'.\-]+$/u.test(v),
     'Nama lengkap hanya boleh memuat huruf, spasi, apostrof, titik, dan tanda hubung'
@@ -148,7 +194,7 @@ export const emailSchema = z
   .string()
   .transform((v) => sanitizeText(v).toLowerCase())
   .refine((v) => v.length > 0, 'Email wajib diisi')
-  .refine((v) => v.length <= 254, 'Email maksimal 254 karakter')
+  .refine((v) => v.length <= EMAIL_MAX, `Email maksimal ${EMAIL_MAX} karakter`)
   .refine((v) => emailRegex.test(v), 'Format email tidak valid')
   .refine((v) => {
     const parts = v.split('@')
@@ -180,8 +226,8 @@ export const nomorHpSchema = z
 
 export const passwordSchema = z
   .string()
-  .min(8, 'Password minimal 8 karakter')
-  .max(128, 'Password maksimal 128 karakter')
+  .min(PASSWORD_MIN, 'Password minimal 8 karakter')
+  .max(PASSWORD_MAX, 'Password maksimal 64 karakter')
   .refine((v) => /[A-Z]/.test(v), 'Password harus memuat minimal 1 huruf besar (A-Z)')
   .refine((v) => /[a-z]/.test(v), 'Password harus memuat minimal 1 huruf kecil (a-z)')
   .refine((v) => /[0-9]/.test(v), 'Password harus memuat minimal 1 angka (0-9)')
@@ -191,7 +237,7 @@ export const alamatSchema = z
   .optional()
   .or(z.literal(''))
   .transform((v) => sanitizeText(v || ''))
-  .refine((v) => !v || v.length <= 500, 'Alamat maksimal 500 karakter')
+  .refine((v) => !v || v.length <= ALAMAT_MAX, `Alamat maksimal ${ALAMAT_MAX} karakter`)
 
 export const registerSchema = z.object({
   nama_lengkap: namaLengkapSchema,
@@ -202,3 +248,42 @@ export const registerSchema = z.object({
   alamat: alamatSchema,
   unit_id: z.string().optional().or(z.literal('')),
 })
+
+export const laporJudulSchema = z
+  .string()
+  .transform((v) => sanitizeText(v))
+  .refine((v) => v.length >= LAPOR_JUDUL_MIN, `Judul laporan minimal ${LAPOR_JUDUL_MIN} karakter`)
+  .refine((v) => v.length <= LAPOR_JUDUL_MAX, `Judul laporan maksimal ${LAPOR_JUDUL_MAX} karakter`)
+
+export const laporDeskripsiSchema = z
+  .string()
+  .transform((v) => sanitizeText(v))
+  .refine((v) => v.length >= LAPOR_DESKRIPSI_MIN, `Deskripsi minimal ${LAPOR_DESKRIPSI_MIN} karakter`)
+  .refine((v) => v.length <= LAPOR_DESKRIPSI_MAX, `Deskripsi maksimal ${LAPOR_DESKRIPSI_MAX} karakter`)
+
+export const laporLokasiSchema = z
+  .string()
+  .transform((v) => sanitizeText(v))
+  .refine((v) => v.length >= LAPOR_LOKASI_MIN, `Lokasi minimal ${LAPOR_LOKASI_MIN} karakter`)
+  .refine((v) => v.length <= LAPOR_LOKASI_MAX, `Lokasi maksimal ${LAPOR_LOKASI_MAX} karakter`)
+
+export const laporNamaSchema = z
+  .string()
+  .optional()
+  .or(z.literal(''))
+  .transform((v) => sanitizeText(v || ''))
+  .refine((v) => !v || v.length >= LAPOR_NAMA_MIN, `Nama pelapor minimal ${LAPOR_NAMA_MIN} karakter`)
+  .refine((v) => !v || v.length <= LAPOR_NAMA_MAX, `Nama pelapor maksimal ${LAPOR_NAMA_MAX} karakter`)
+  .refine(
+    (v) => !v || /^[\p{L}\s'.\-]+$/u.test(v),
+    'Nama pelapor hanya boleh memuat huruf, spasi, apostrof, titik, dan tanda hubung'
+  )
+
+export const laporSchema = z.object({
+  judul: laporJudulSchema,
+  deskripsi: laporDeskripsiSchema,
+  lokasi: laporLokasiSchema,
+  nama_pelapor: laporNamaSchema,
+  nomor_hp: nomorHpSchema,
+})
+

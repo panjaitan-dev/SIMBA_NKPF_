@@ -10,8 +10,9 @@ const {
  * Utility: Upload file ke Supabase Storage
  */
 const uploadToStorage = async (file, bucket, folder = '') => {
-  const ext = file.originalname.split('.').pop();
-  const filename = `${folder ? folder + '/' : ''}${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+  const ext = (file.originalname || 'file.jpg').split('.').pop();
+  const randomHex = require('crypto').randomBytes(16).toString('hex');
+  const filename = `${folder ? folder + '/' : ''}${Date.now()}-${randomHex}.${ext}`;
 
   const { data, error } = await supabase.storage
     .from(bucket)
@@ -229,7 +230,7 @@ const register = async (req, res) => {
       id: userId,
       role: 'nasabah',
       nama_lengkap,
-      nomor_hp: nomorHp || null,
+      nomor_hp: nomor_hp || null,
       alamat: alamat || null,
       nik: nik || null,
     });

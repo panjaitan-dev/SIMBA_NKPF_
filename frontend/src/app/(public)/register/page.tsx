@@ -7,9 +7,18 @@ import { Leaf, Eye, EyeOff, Loader2, Building2, AlertCircle, CheckCircle2, Shiel
 import api from '@/lib/api'
 import toast from 'react-hot-toast'
 import {
+  NAMA_MAX,
+  EMAIL_MAX,
+  NIK_LENGTH,
+  PHONE_MAX,
+  ALAMAT_MAX,
+  PASSWORD_MAX,
+} from '@/lib/limits'
+import {
   registerSchema,
   calculatePasswordStrength,
   formatPhoneDisplay,
+  cleanPhoneInput,
   maskNik,
 } from '@/lib/validation'
 
@@ -102,13 +111,13 @@ export default function RegisterPage() {
 
   // Input change handlers
   const handleNamaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.slice(0, 100)
+    const val = e.target.value.slice(0, NAMA_MAX)
     setForm((f) => ({ ...f, nama_lengkap: val }))
     if (touched.nama_lengkap) validateField('nama_lengkap', val)
   }
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.trim().toLowerCase()
+    const val = e.target.value.trim().toLowerCase().slice(0, EMAIL_MAX)
     setForm((f) => ({ ...f, email: val }))
     if (touched.email) validateField('email', val)
   }
@@ -124,23 +133,20 @@ export default function RegisterPage() {
   }
 
   const handleNikChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Buang non-digit saat ketik & paste, maks 16
-    const clean = e.target.value.replace(/\D/g, '').slice(0, 16)
+    // Buang non-digit saat ketik & paste, maks NIK_LENGTH
+    const clean = e.target.value.replace(/\D/g, '').slice(0, NIK_LENGTH)
     setForm((f) => ({ ...f, nik: clean }))
     if (touched.nik) validateField('nik', clean)
   }
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Hanya angka dan tanda plus di awal
-    const raw = e.target.value
-    let clean = raw.replace(/[^\d+]/g, '')
-    if (clean.indexOf('+') > 0) clean = clean.replace(/\+/g, '')
+    const clean = cleanPhoneInput(e.target.value)
     setForm((f) => ({ ...f, nomor_hp: clean }))
     if (touched.nomor_hp) validateField('nomor_hp', clean)
   }
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value
+    const val = e.target.value.slice(0, PASSWORD_MAX)
     setForm((f) => ({ ...f, password: val }))
     if (touched.password) validateField('password', val)
   }
@@ -184,7 +190,10 @@ export default function RegisterPage() {
 
     setLoading(true)
     try {
-      const payload = parseResult.data
+      const payload = {
+        ...parseResult.data,
+        nomor_hp: parseResult.data.nomor_hp || form.nomor_hp,
+      }
       const res = await api.post('/auth/register', payload)
 
       toast.success(res.data?.message || 'Pendaftaran berhasil! Silakan masuk.')
@@ -231,14 +240,14 @@ export default function RegisterPage() {
                     Nama Lengkap <span className="text-rose-500">*</span>
                   </label>
                   <span className="text-[11px] text-slate-400 font-mono">
-                    {form.nama_lengkap.length}/100
+                    {form.nama_lengkap.length}/{NAMA_MAX}
                   </span>
                 </div>
                 <input
                   id="reg-nama"
                   ref={fieldRefs.nama_lengkap}
                   type="text"
-                  required
+                  required maxLength={NAMA_MAX}
                   value={form.nama_lengkap}
                   onChange={handleNamaChange}
                   onBlur={handleBlur('nama_lengkap')}
@@ -251,6 +260,11 @@ export default function RegisterPage() {
                       : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100'
                   }`}
                 />
+                  {form.nama_lengkap.length >= NAMA_MAX && (
+                    <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">
+                      Batas {NAMA_MAX} karakter tercapai
+                    </span>
+                  )}
                 {errors.nama_lengkap ? (
                   <p id="err-nama" className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium">
                     <AlertCircle size={13} className="shrink-0" /> {errors.nama_lengkap}
@@ -272,8 +286,12 @@ export default function RegisterPage() {
                   ref={fieldRefs.email}
                   type="email"
                   required
+                  maxLength={EMAIL_MAX}
                   value={form.email}
-                  onChange={handleEmailChange}
+                  onChange={(e) => {
+                    const val = e.target.value.trim().toLowerCase().slice(0, EMAIL_MAX)
+                    setForm((f) => ({ ...f, email: val }))
+                  }}
                   onBlur={handleBlur('email')}
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? 'err-email' : 'help-email'}
@@ -284,13 +302,34 @@ export default function RegisterPage() {
                       : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100'
                   }`}
                 />
+                {form.email.length >= EMAIL_MAX && (
+                  <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">
+                    Batas {EMAIL_MAX} karakter tercapai
+                  </span>
+                )
 
-                {/* Chip Saran Domain (Opsional & Dapat Diklik) */}
+                
                 {emailHasNoDomain && (
-                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                    <span className="text-[11px] text-slate-500">Pilih domain:</span>
-                    {DOMAIN_SUGGESTIONS.map((dom) => (
-                      <button
+  <>
+    <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+      <span className="text-[11px] text-slate-500">Pilih domain:</span>
+      {DOMAIN_SUGGESTIONS.map((dom) => (
+        <button
+          key={dom}
+          type="button"
+          onClick={() => handleChipClick(dom)}
+          className="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 border border-slate-200 rounded-lg text-xs font-mono text-slate-600 transition-colors"
+        >
+          @{dom}
+        </button>
+      ))}
+    </div>
+  </>
+)}
+                  
+
+
+                      
                         key={dom}
                         type="button"
                         onClick={() => handleChipClick(dom)}
@@ -347,6 +386,11 @@ export default function RegisterPage() {
                       : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100'
                   }`}
                 />
+                 {form.nik.length >= NIK_LENGTH && (
+                   <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">
+                     Batas {NIK_LENGTH} digit tercapai
+                   </span>
+                 )}
                 {errors.nik ? (
                   <p id="err-nik" className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium">
                     <AlertCircle size={13} className="shrink-0" /> {errors.nik}
@@ -366,8 +410,8 @@ export default function RegisterPage() {
                 <input
                   id="reg-hp"
                   ref={fieldRefs.nomor_hp}
-                  type="tel"
-                  inputMode="tel"
+                  type="text"
+                  inputMode="numeric" maxLength={PHONE_MAX}
                   value={form.nomor_hp ? formatPhoneDisplay(form.nomor_hp) : ''}
                   onChange={handlePhoneChange}
                   onBlur={handleBlur('nomor_hp')}
@@ -380,6 +424,11 @@ export default function RegisterPage() {
                       : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100'
                   }`}
                 />
+                 {form.nomor_hp.length >= PHONE_MAX && (
+                   <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">
+                     Batas {PHONE_MAX} digit tercapai
+                   </span>
+                 )}
                 {errors.nomor_hp ? (
                   <p id="err-hp" className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium">
                     <AlertCircle size={13} className="shrink-0" /> {errors.nomor_hp}
@@ -418,22 +467,26 @@ export default function RegisterPage() {
 
               {/* Alamat */}
               <div className="md:col-span-2">
-                <label htmlFor="reg-alamat" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                <label htmlFor="reg-alamat" className="flex justify-between items-center mb-1.5">
                   Alamat Tempat Tinggal
+                  <span className="text-[11px] text-slate-400 font-mono">{form.alamat.length}/{ALAMAT_MAX}</span>
                 </label>
                 <textarea
                   id="reg-alamat"
                   ref={fieldRefs.alamat}
                   rows={2}
-                  maxLength={500}
+                  maxLength={ALAMAT_MAX}
                   value={form.alamat}
-                  onChange={(e) => setForm((f) => ({ ...f, alamat: e.target.value }))}
+                  onChange={(e) => setForm((f) => ({ ...f, alamat: e.target.value.slice(0, ALAMAT_MAX) }))}
                   onBlur={handleBlur('alamat')}
                   aria-invalid={!!errors.alamat}
                   aria-describedby={errors.alamat ? 'err-alamat' : undefined}
                   placeholder="Alamat lengkap (RT/RW, Kelurahan, Kecamatan, Kota/Kabupaten)"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none text-sm resize-none"
                 />
+                {form.alamat.length >= ALAMAT_MAX && (
+                  <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">Batas {ALAMAT_MAX} karakter tercapai</span>
+                )}
                 {errors.alamat && (
                   <p id="err-alamat" className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium">
                     <AlertCircle size={13} className="shrink-0" /> {errors.alamat}
@@ -443,15 +496,16 @@ export default function RegisterPage() {
 
               {/* Password */}
               <div className="md:col-span-2">
-                <label htmlFor="reg-password" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                <label htmlFor="reg-password" className="flex justify-between items-center mb-1.5">
                   Password <span className="text-rose-500">*</span>
+                  <span className="text-[11px] text-slate-400 font-mono">{form.password.length}/{PASSWORD_MAX}</span>
                 </label>
                 <div className="relative">
                   <input
                     id="reg-password"
                     ref={fieldRefs.password}
                     type={showPw ? 'text' : 'password'}
-                    required
+                    required maxLength={PASSWORD_MAX}
                     value={form.password}
                     onChange={handlePasswordChange}
                     onBlur={handleBlur('password')}

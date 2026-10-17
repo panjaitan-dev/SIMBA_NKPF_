@@ -1,4 +1,5 @@
 const { z } = require('zod');
+const limits = require('../config/limits');
 
 // Daftar resmi 38 Kode Wilayah Provinsi Indonesia (Kemendagri / BPS)
 const VALID_PROVINCE_CODES = [
@@ -81,6 +82,16 @@ function normalizePhone(phone) {
 }
 
 /**
+ * Strip non-digit, convert +62/62 -> 0, hard stop at 13 digits
+ */
+function cleanPhoneInput(raw) {
+  if (!raw || typeof raw !== 'string') return '';
+  let clean = raw.replace(/\D/g, '');
+  if (clean.startsWith('62') && clean.length > 2) clean = '0' + clean.slice(2);
+  return clean.slice(0, 13);
+}
+
+/**
  * Format nomor HP untuk tampilan UI (0812-3456-7890)
  */
 function formatPhoneDisplay(phone) {
@@ -112,8 +123,8 @@ function parseIndonesianDecimal(val) {
 const namaLengkapSchema = z
   .string({ required_error: 'Nama lengkap wajib diisi' })
   .transform((v) => sanitizeText(v))
-  .refine((v) => v.length >= 3, 'Nama lengkap minimal 3 karakter')
-  .refine((v) => v.length <= 100, 'Nama lengkap maksimal 100 karakter')
+  .refine((v) => v.length >= limits.NAMA_MIN, `Nama lengkap minimal ${limits.NAMA_MIN} karakter`)
+  .refine((v) => v.length <= limits.NAMA_MAX, `Nama lengkap maksimal ${limits.NAMA_MAX} karakter`)
   .refine(
     (v) => /^[\p{L}\s'.\-]+$/u.test(v),
     'Nama lengkap hanya boleh memuat huruf, spasi, apostrof, titik, dan tanda hubung'
@@ -123,13 +134,13 @@ const namaLengkapSchema = z
     'Nama lengkap tidak boleh memuat karakter berulang 5 kali atau lebih berturut-turut'
   );
 
-// Email: wajib, trim, lowercase, maks 254, format TLD ketat
+// Email: wajib, trim, lowercase, maks 100, format TLD ketat
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 const emailSchema = z
   .string({ required_error: 'Email wajib diisi' })
   .transform((v) => sanitizeText(v).toLowerCase())
   .refine((v) => v.length > 0, 'Email wajib diisi')
-  .refine((v) => v.length <= 254, 'Email maksimal 254 karakter')
+  .refine((v) => v.length <= limits.EMAIL_MAX, `Email maksimal ${limits.EMAIL_MAX} karakter`)
   .refine((v) => emailRegex.test(v), 'Format email tidak valid')
   .refine((v) => {
     const parts = v.split('@');
@@ -162,11 +173,11 @@ const nomorHpSchema = z
     'Nomor HP harus berupa nomor seluler Indonesia yang valid (contoh: 081234567890)'
   );
 
-// Password: min 8, ada huruf besar, huruf kecil, dan angka
+// Password: min 8, maks 64, ada huruf besar, huruf kecil, dan angka
 const passwordSchema = z
   .string({ required_error: 'Password wajib diisi' })
-  .min(8, 'Password minimal 8 karakter')
-  .max(128, 'Password maksimal 128 karakter')
+  .min(limits.PASSWORD_MIN, `Password minimal ${limits.PASSWORD_MIN} karakter`)
+  .max(limits.PASSWORD_MAX, `Password maksimal ${limits.PASSWORD_MAX} karakter`)
   .refine((v) => /[A-Z]/.test(v), 'Password harus memuat minimal 1 huruf besar (A-Z)')
   .refine((v) => /[a-z]/.test(v), 'Password harus memuat minimal 1 huruf kecil (a-z)')
   .refine((v) => /[0-9]/.test(v), 'Password harus memuat minimal 1 angka (0-9)');
@@ -177,7 +188,7 @@ const alamatSchema = z
   .optional()
   .or(z.literal(''))
   .transform((v) => sanitizeText(v))
-  .refine((v) => !v || v.length <= 500, 'Alamat maksimal 500 karakter');
+  .refine((v) => !v || v.length <= limits.ALAMAT_MAX, `Alamat maksimal ${limits.ALAMAT_MAX} karakter`);
 
 // ============================================================
 // SKEMA ENDPOINT UTAMA
@@ -197,7 +208,10 @@ const registerSchema = z.object({
 // 2. Login
 const loginSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, 'Password wajib diisi'),
+  password: z
+    .string()
+    .min(1, 'Password wajib diisi')
+    .max(limits.PASSWORD_MAX, `Password maksimal ${limits.PASSWORD_MAX} karakter`),
 });
 
 // 3. Edit Profil
@@ -318,19 +332,37 @@ const createLaporanSchema = z.object({
   judul: z
     .string({ required_error: 'Judul laporan wajib diisi' })
     .transform((v) => sanitizeText(v))
-    .refine((v) => v.length >= 3, 'Judul aduan minimal 3 karakter')
-    .refine((v) => v.length <= 150, 'Judul aduan maksimal 150 karakter'),
+    .refine((v) => v.length >= limits.LAPOR_JUDUL_MIN, `Judul aduan minimal ${limits.LAPOR_JUDUL_MIN} karakter`)
+    .refine((v) => v.length <= limits.LAPOR_JUDUL_MAX, `Judul aduan maksimal ${limits.LAPOR_JUDUL_MAX} karakter`),
   deskripsi: z
     .string({ required_error: 'Deskripsi laporan wajib diisi' })
     .transform((v) => sanitizeText(v))
-    .refine((v) => v.length >= 10, 'Deskripsi aduan minimal 10 karakter')
-    .refine((v) => v.length <= 2000, 'Deskripsi aduan maksimal 2.000 karakter'),
+    .refine((v) => v.length >= limits.LAPOR_DESKRIPSI_MIN, `Deskripsi aduan minimal ${limits.LAPOR_DESKRIPSI_MIN} karakter`)
+    .refine((v) => v.length <= limits.LAPOR_DESKRIPSI_MAX, `Deskripsi aduan maksimal ${limits.LAPOR_DESKRIPSI_MAX} karakter`),
   lokasi: z
     .string({ required_error: 'Lokasi kejadian wajib diisi' })
     .transform((v) => sanitizeText(v))
-    .refine((v) => v.length >= 3, 'Lokasi kejadian minimal 3 karakter'),
-  nama_pelapor: z.string().optional().transform((v) => sanitizeText(v)),
+    .refine((v) => v.length >= limits.LAPOR_LOKASI_MIN, `Lokasi kejadian minimal ${limits.LAPOR_LOKASI_MIN} karakter`)
+    .refine((v) => v.length <= limits.LAPOR_LOKASI_MAX, `Lokasi kejadian maksimal ${limits.LAPOR_LOKASI_MAX} karakter`),
+  nama_pelapor: z
+    .string()
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => sanitizeText(v || ''))
+    .refine((v) => !v || v.length >= limits.LAPOR_NAMA_MIN, `Nama pelapor minimal ${limits.LAPOR_NAMA_MIN} karakter`)
+    .refine((v) => !v || v.length <= limits.LAPOR_NAMA_MAX, `Nama pelapor maksimal ${limits.LAPOR_NAMA_MAX} karakter`)
+    .refine(
+      (v) => !v || /^[\p{L}\s'.\-]+$/u.test(v),
+      'Nama pelapor hanya boleh memuat huruf, spasi, apostrof, titik, dan tanda hubung'
+    ),
   nomor_hp: nomorHpSchema,
+  nomor_tiket: z
+    .string()
+    .optional()
+    .refine((v) => !v || v.length === limits.LAPOR_TIKET_LENGTH, `Nomor tiket harus ${limits.LAPOR_TIKET_LENGTH} karakter`),
+  koordinat_lat: z.any().optional(),
+  koordinat_lng: z.any().optional(),
+  website: z.string().optional(), // Honeypot
 });
 
 // 10. CMS Berita & Artikel
@@ -395,6 +427,7 @@ module.exports = {
   isValidNik,
   maskNik,
   normalizePhone,
+  cleanPhoneInput,
   formatPhoneDisplay,
   parseIndonesianDecimal,
   // Zod Schemas

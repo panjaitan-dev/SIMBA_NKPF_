@@ -7,6 +7,7 @@ import { Leaf, Eye, EyeOff, Loader2, AlertCircle, RefreshCw, Server } from 'luci
 import api from '@/lib/api'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
+import { EMAIL_MAX, PASSWORD_MAX } from '@/lib/limits'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -198,14 +199,25 @@ export default function LoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label htmlFor="login-email" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                Email
-              </label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label htmlFor="login-email" className="block text-sm font-semibold text-slate-700">
+                  Email
+                </label>
+                {email.length >= EMAIL_MAX && (
+                  <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">
+                    Batas {EMAIL_MAX} karakter tercapai
+                  </span>
+                )}
+              </div>
               <input
                 id="login-email"
                 type="email"
+                maxLength={EMAIL_MAX}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value.slice(0, EMAIL_MAX)
+                  setEmail(val)
+                }}
                 required
                 aria-invalid={!!errorMsg}
                 aria-describedby={errorMsg ? 'login-error-msg' : undefined}
@@ -215,15 +227,26 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="login-password" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                Password
-              </label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label htmlFor="login-password" className="block text-sm font-semibold text-slate-700">
+                  Password
+                </label>
+                {password.length >= PASSWORD_MAX && (
+                  <span aria-live="polite" className="text-[11px] text-amber-600 font-medium">
+                    Batas {PASSWORD_MAX} karakter tercapai
+                  </span>
+                )}
+              </div>
               <div className="relative">
                 <input
                   id="login-password"
                   type={showPw ? 'text' : 'password'}
+                  maxLength={PASSWORD_MAX}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value.slice(0, PASSWORD_MAX)
+                    setPassword(val)
+                  }}
                   required
                   aria-invalid={!!errorMsg}
                   aria-describedby={errorMsg ? 'login-error-msg' : undefined}
