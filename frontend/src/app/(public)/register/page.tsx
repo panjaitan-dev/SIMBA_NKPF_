@@ -309,27 +309,25 @@ export default function RegisterPage() {
                 )
 
                 
-                {emailHasNoDomain && (
-  <>
-    <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-      <span className="text-[11px] text-slate-500">Pilih domain:</span>
-      {DOMAIN_SUGGESTIONS.map((dom) => (
-        <button
-          key={dom}
-          type="button"
-          onClick={() => handleChipClick(dom)}
-          className="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 border border-slate-200 rounded-lg text-xs font-mono text-slate-600 transition-colors"
-        >
-          @{dom}
-        </button>
-      ))}
-    </div>
-  </>
-)}
-                  
-
-
-                      
+{emailHasNoDomain ? (
+  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+    <span className="text-[11px] text-slate-500">Pilih domain:</span>
+    {DOMAIN_SUGGESTIONS.map((dom) => (
+      <button
+        key={dom}
+        type="button"
+        onClick={() => handleChipClick(dom)}
+        className="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 border border-slate-200 rounded-lg text-xs font-mono text-slate-600 transition-colors"
+      >
+        @{dom}
+      </button>
+    ))}
+  </div>
+) : null}
+                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                    <span className="text-[11px] text-slate-500">Pilih domain:</span>
+                    {DOMAIN_SUGGESTIONS.map((dom) => (
+                      <button
                         key={dom}
                         type="button"
                         onClick={() => handleChipClick(dom)}
@@ -340,6 +338,11 @@ export default function RegisterPage() {
                     ))}
                   </div>
                 )}
+                  
+
+
+                      
+
 
                 {errors.email ? (
                   <p id="err-email" className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium">
