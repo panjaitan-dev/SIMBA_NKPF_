@@ -11,13 +11,13 @@ const DEMO_ACCOUNTS = [
     role: 'admin',
     nama_lengkap: 'Administrator BSI',
     nomor_hp: '0812-9900-1122',
-    alamat: 'Gedung Manggala Wanabakti, Jakarta Pusat',
+    alamat: 'Jl. Balai Kota No. 1, Medan, Sumatera Utara',
     profile: {
       id: 'd3b07384-d113-4001-9001-000000000001',
       role: 'admin',
       nama_lengkap: 'Administrator BSI',
       nomor_hp: '0812-9900-1122',
-      alamat: 'Gedung Manggala Wanabakti, Jakarta Pusat',
+      alamat: 'Jl. Balai Kota No. 1, Medan, Sumatera Utara',
     },
   },
   {

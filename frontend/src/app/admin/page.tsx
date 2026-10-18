@@ -423,7 +423,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center gap-3">
                   <span className="font-bold text-emerald-900">Perhitungan Cepat:</span>
                   <span className="font-mono text-slate-700">
-                    {qbBerat || 0} kg $\times$ {formatRupiah(currentQbJenis.harga_beli)}/kg
+                    {qbBerat || 0} kg × {formatRupiah(currentQbJenis.harga_beli)}/kg
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -504,7 +504,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center gap-3">
                   <span className="font-bold text-blue-900">Perhitungan Penjualan:</span>
                   <span className="font-mono text-slate-700">
-                    {qjBerat || 0} kg $\times$ {formatRupiah(currentQjJenis.harga_jual)}/kg
+                    {qjBerat || 0} kg × {formatRupiah(currentQjJenis.harga_jual)}/kg
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

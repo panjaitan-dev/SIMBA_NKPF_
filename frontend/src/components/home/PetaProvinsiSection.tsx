@@ -167,7 +167,7 @@ export default function PetaProvinsiSection() {
             <div className="text-2xl sm:text-3xl font-black text-white">
               {agregasi.total_provinsi} <span className="text-xs text-slate-500 font-normal">/ 15</span>
             </div>
-            <p className="text-[11px] text-emerald-400 mt-1">100% Terintegrasi BPS</p>
+            <p className="text-[11px] text-emerald-400 mt-1">Basis Data Terverifikasi</p>
           </div>
 
           <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm">
@@ -497,7 +497,7 @@ export default function PetaProvinsiSection() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                     <ShieldCheck size={14} />
-                    Unit Percontohan Resmi
+                    Unit Wilayah Percontohan
                   </span>
                   <span className="text-[10px] font-mono bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/20">
                     {activeProv.unit_percontohan.kode}

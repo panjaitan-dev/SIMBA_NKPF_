@@ -2,10 +2,18 @@ const router = require('express').Router();
 const supabase = require('../lib/supabase');
 const { authMiddleware, requireRole } = require('../middleware/auth.middleware');
 
-// GET /api/unit — publik
+// GET /api/unit — publik (Hanya unit non-demo dan terverifikasi sesuai R4)
 router.get('/', async (req, res) => {
   try {
-    const { data, error } = await supabase.from('unit_bank_sampah').select('*').eq('is_active', true).order('nama');
+    let query = supabase
+      .from('unit_bank_sampah')
+      .select('*')
+      .eq('is_active', true)
+      .eq('is_demo', false)
+      .eq('status_verifikasi', 'terverifikasi')
+      .order('nama');
+
+    const { data, error } = await query;
     if (error) return res.status(400).json({ success: false, message: error.message });
     return res.json({ success: true, data });
   } catch (err) {

@@ -96,21 +96,21 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Kontak */}
+          {/* Kontak & Informasi Tim */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Sekretariat Pusat</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Sekretariat Proyek</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-slate-500 shrink-0 mt-0.5" />
-                <span className="text-slate-400">Pusat Layanan Bank Sampah Indonesia, Gedung Manggala Wanabakti, Jakarta, Indonesia</span>
+                <span className="text-slate-400">Tim Pengembang SIMBA Nusantara (Pilot Sumatera Utara), Medan, Indonesia</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-slate-500 shrink-0" />
-                <a href="mailto:info@simba.id" className="text-slate-400 hover:text-emerald-400 transition-colors">info@simba.id</a>
+                <a href="mailto:kontak@simba-nusantara.id" className="text-slate-400 hover:text-emerald-400 transition-colors">kontak@simba-nusantara.id</a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} className="text-slate-500 shrink-0" />
-                <span className="text-slate-400">+62 21 5703246</span>
+                <span className="text-slate-400">+62 821-6500-2026</span>
               </li>
             </ul>
           </div>

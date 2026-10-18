@@ -8,6 +8,17 @@ const SRC_DIR = path.resolve('src');
 const PROHIBITED = [
   'Kembali ke Beranda',
   '← Kembali ke Beranda',
+  'Portal Resmi',
+  'Terintegrasi BPS',
+  'Meuraxa',
+  'Teuku Iskandar',
+  '0812-6543-1101',
+  'Scroll untuk menjelajahi',
+  '34 provinsi',
+  '$\\times$',
+  'lorem',
+  'Gedung Manggala',
+  'Unit Percontohan Resmi',
 ];
 const EXTENSIONS = new Set(['.tsx', '.ts', '.jsx', '.js', '.json']);
 

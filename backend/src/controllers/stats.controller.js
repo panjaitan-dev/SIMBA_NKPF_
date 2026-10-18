@@ -19,7 +19,12 @@ const getStatsNasional = async (req, res) => {
       { count: totalNasabah },
       { data: setoranData },
     ] = await Promise.all([
-      supabase.from('unit_bank_sampah').select('*', { count: 'exact', head: true }).eq('is_active', true),
+      supabase
+        .from('unit_bank_sampah')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('is_demo', false)
+        .eq('status_verifikasi', 'terverifikasi'),
       supabase.from('nasabah').select('*', { count: 'exact', head: true }).eq('is_active', true),
       supabase.from('setoran').select('total_nilai, total_berat_kg').eq('status', 'diverifikasi'),
     ]);

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'SIMBA — Sistem Informasi Bank Sampah Indonesia',
     template: '%s | SIMBA Indonesia',
   },
-  description: 'Portal Resmi Sistem Informasi Bank Sampah Indonesia — Platform Nasional Pengelolaan Bank Sampah dan Ekonomi Sirkular Berkelanjutan',
+  description: 'Sistem Informasi Bank Sampah Indonesia — Platform Pengelolaan Bank Sampah dan Ekonomi Sirkular Berkelanjutan (Pilot Sumatera Utara)',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -33,8 +33,6 @@ export const viewport: Viewport = {
   themeColor: '#10b981',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

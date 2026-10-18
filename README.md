@@ -1,81 +1,73 @@
 # SIMBA Nusantara — Sistem Informasi Bank Sampah Indonesia
 
-> **Platform Digital Pelayanan Publik dan Tata Kelola Bank Sampah Nasional Terintegrasi**  
+> **Prototipe Platform Digital Pelayanan Publik dan Tata Kelola Bank Sampah**  
+> **Posisi Strategis:** Pilot Sumatera Utara, arsitektur siap 38 provinsi.  
 > Mengacu pada regulasi **Permen LHK No. 14 Tahun 2021** tentang Pengelolaan Sampah pada Bank Sampah.  
-> Dikembangkan untuk **Lomba Web Development IT Fest 2026** oleh Tim **SIMBA_NKPF_**.
+> Dikembangkan untuk **Lomba Web Development IT Fest 2026** oleh Tim **SIMBA_NKPF_**.  
+> *(Catatan: Ini adalah prototipe proyek kompetisi mahasiswa, bukan situs resmi pemerintah).*
 
 ---
 
-## 📊 Status Progres & Kesiapan Produksi
+## 📊 Status Progres & Kesiapan Sistem
 
 | Aspek Penilaian | Target Lomba | Status Aktual | Keterangan |
 |-----------------|--------------|---------------|------------|
-| **Progres Keseluruhan** | 100% Siap Demo | **100% SIAP** | Seluruh modul inti, CRUD, RBAC, dan audit selesai |
-| **Desain Visual (20%)** | Orisinal, Responsif | ✅ 100% | Desain khas Pelayanan Publik Hijau, Tailwind CSS v4, WCAG AA compliant |
-| **Fungsionalitas (20%)** | CRUD Lengkap, Tanpa Bolong | ✅ 100% | CRUD 100% jalan: Setoran (void), Penarikan (cancel), Penjualan (void), Klien, Edukasi, Nasabah |
-| **Responsif & Kompatibilitas (15%)** | 375px s.d. 1440px | ✅ 100% | Drawer mobile di semua dashboard, scrollable tables, touch target min 44px |
-| **Kinerja & Skala Besar (15%)** | Skala Nasional | ✅ 100% | Server-side pagination, 23 DB index, gzip compression, 60s memory caching, seed data 1.000 nasabah & 5.000 setoran |
-| **Keamanan & Kualitas** | Hardened RBAC, 0 Secret Leak | ✅ 100% | Middleware `requireRole`, Zod validation, Multer MIME filter, sanitasi error production, 0 console.log |
-| **Automated Testing** | End-to-End Critical Flow | ✅ 100% | 8/8 Automated Flow Tests via Node.js Test Runner (`node:test`) |
-| **Deployment Ready** | Vercel & Render / Railway | ✅ 100% | `vercel.json`, `render.yaml`, `Procfile`, `.env.example` teruji |
+| **Progres Keseluruhan** | Siap Uji & Demo | **SIAP DEMO** | Modul inti warga, petugas BSU, admin BSI, dan monitoring KLH berjalan |
+| **Desain Visual (20%)** | Orisinal, Responsif | Terverifikasi | Desain khas Pelayanan Publik Hijau, Tailwind CSS v4, kontras ramah aksesibilitas |
+| **Fungsionalitas (20%)** | Alur Lengkap | Terverifikasi | Setoran sampah (auto-balancing), penarikan saldo nasabah, penjualan offtaker, direktori unit |
+| **Responsif & Kompatibilitas (15%)** | 375px s.d. 1440px | Terverifikasi | Drawer mobile di dashboard, tabel adaptif, target sentuh minimal 44px |
+| **Kinerja & Skala Besar (15%)** | Skala Siap Nasional | Terverifikasi | Server-side pagination, index database b-tree, gzip compression, caching memori |
+| **Keamanan & Kualitas** | RBAC, 0 Secret Leak | Terverifikasi | Middleware `requireRole`, Zod validation ganda (frontend & backend), sanitasi error |
+| **Automated Testing** | Unit & Flow Tests | Terverifikasi | 64 test lulus pada backend (`node:test`) dan uji regresi frontend |
+| **Deployment Ready** | Vercel & Cloud Backend | Terverifikasi | Frontend terkonfigurasi untuk Vercel; backend siap di-deploy via Docker/Procfile |
 
 ---
 
-## 🛠️ Perubahan Terbaru (Phase 4)
-- Menghapus semua LaTeX/MathJax (`$...$`, `\\times`, `\\rightarrow`, `\\frac`).
-- Menambahkan format nomor/berat lokal (`formatNumberId`, `formatWeight`).
-- Tooltip & pemotongan teks pada dropdown panjang dengan helper kode‑nama komoditas.
-- Build Next.js berhasil tanpa error.
-- Backend tests lulus 100%.
-- Tidak ada lagi token LaTeX yang tersisa di kode.
+## 1. Ringkasan Proyek & Posisi Strategis
 
-## 1. Ringkasan Proyek
-
-**SIMBA Nusantara** adalah solusi digital berskala nasional untuk mentransformasi ekosistem bank sampah Indonesia dari sistem manual berbasis buku kas menjadi platform cloud-native terdistribusi.
+**SIMBA Nusantara** berfokus pada digitalisasi bank sampah di tingkat warga dan pengelola dengan **pilot Sumatera Utara** dan pondasi arsitektur yang dirancang siap untuk mencakup 38 provinsi di Indonesia.
 
 ### Ekosistem Pengguna (4 Role Terintegrasi):
-1. **Warga / Nasabah:** Memantau saldo tabungan sampah secara real-time, melihat riwayat transaksi setoran, mengajukan pencairan saldo tabungan secara mandiri, serta mengakses modul edukasi interaktif 3R dan kalkulator jejak karbon ($CO_2$).
-2. **Petugas Unit Bank Sampah (BSU):** Menginput hasil timbangan sampah di lapangan dengan kalkulasi harga beli otomatis, menerbitkan struk/nota digital siap cetak, dan merekap transaksi harian.
-3. **Administrator Bank Sampah Induk (BSI):** Mengelola master data nasabah, katalog harga sampah dual-pricing (harga beli nasabah vs harga jual industri), verifikasi setoran, persetujuan penarikan saldo, transaksi B2B ke offtaker/industri daur ulang, dan ekspor laporan keuangan akurat.
-4. **Kementerian Lingkungan Hidup (Admin KLH):** Mengawasi statistik nasional agregat real-time: total tonase terkelola, sirkulasi dana nasabah, dan performa 34 provinsi dengan grafik komposisi limbah.
+1. **Warga / Nasabah:** Memantau saldo tabungan sampah secara real-time, melihat riwayat transaksi setoran, mengajukan pencairan saldo tabungan mandiri, serta kalkulator simulasi nilai ekonomi sampah dan estimasi reduksi CO2.
+2. **Petugas Unit Bank Sampah (BSU):** Menginput hasil timbangan sampah di lapangan dengan kalkulasi harga beli otomatis dan menerbitkan bukti transaksi digital.
+3. **Administrator Bank Sampah Induk (BSI):** Mengelola master data nasabah, katalog harga sampah dual-pricing (harga beli nasabah vs harga jual industri), verifikasi setoran, persetujuan penarikan saldo, transaksi ke offtaker, dan ekspor laporan keuangan.
+4. **Monitoring Nasional (Admin KLH):** Mengawasi agregasi statistik: total tonase terkelola, sirkulasi dana nasabah, dan sebaran wilayah pilot serta status kesiapan provinsi lainnya.
 
 ---
 
 ## 2. Akun Demo Pengujian (Demo Credentials)
 
-Gunakan akun resmi demo berikut untuk menguji masing-masing hak akses (Role-Based Access Control):
+Akun demo berikut disediakan khusus untuk pengujian alur dewan juri (Role-Based Access Control):
 
 | Peran (Role) | Email Login | Password | Akses URL Utama | Tugas Utama yang Didemokan |
 |--------------|-------------|----------|-----------------|----------------------------|
 | **Administrator BSI** | `admin@simba.id` | `Password123!` | `/admin` | Tata kelola master data, verifikasi transaksi, jual ke offtaker, export CSV laporan |
-| **Petugas BSU** | `petugas.melati@simba.id` | `Password123!` | `/petugas` | Input timbangan nasabah, hitung subtotal otomatis, cetak nota struk transaksi |
-| **Nasabah Warga** | `nasabah.dewi@simba.id` | `Password123!` | `/nasabah` | Cek saldo tabungan, riwayat setoran, ajukan penarikan saldo mandiri, edit profil |
-| **Admin Nasional KLH** | `klh.nasional@menlhk.go.id` | `Password123!` | `/admin/klh` | Monitoring agregasi statistik sampah nasional 34 provinsi & grafik analitik |
+| **Petugas BSU** | `petugas.melati@simba.id` | `Password123!` | `/petugas` | Input timbangan nasabah, hitung subtotal otomatis, nota transaksi digital |
+| **Nasabah Warga** | `nasabah.dewi@simba.id` | `Password123!` | `/nasabah` | Cek saldo tabungan, riwayat setoran, ajukan penarikan saldo, edit profil |
+| **Monitoring KLH** | `klh.nasional@menlhk.go.id` | `Password123!` | `/admin/klh` | Monitoring agregasi statistik wilayah pilot Sumut dan kesiapan 38 provinsi |
 
 ---
 
-## 3. Matriks Fungsionalitas & CRUD Lengkap
+## 3. Matriks Fungsionalitas & Siklus Transaksi
 
-Semua modul telah dilengkapi siklus hidup data lengkap (**Create, Read, Update, Delete/Void**):
+Semua modul transaksi dilengkapi perlindungan integritas data (**Create, Read, Update, Delete/Void**):
 
 | Modul Sistem | Create | Read (Server-Side) | Update | Delete / Void | Mekanisme Integritas Finansial |
 |--------------|:------:|:------------------:|:------:|:-------------:|--------------------------------|
-| **Jenis Sampah** | ✅ | ✅ | ✅ | ✅ | Dual-pricing: `harga_beli` (nasabah) & `harga_jual` (offtaker) |
-| **Nasabah** | ✅ | ✅ (Filter/Cari) | ✅ | ✅ Soft-delete | Toggle status aktif tanpa merusak riwayat transaksi lampau |
-| **Setoran Sampah** | ✅ | ✅ (Pagination) | ✅ (Verifikasi) | ✅ (Void/Batal) | **Trigger DB Auto-Reversal:** Saldo nasabah otomatis dikembalikan jika transaksi dibatalkan |
-| **Penarikan Saldo**| ✅ | ✅ (Pagination) | ✅ (Pencairan) | ✅ (Batal Request)| Validasi saldo tidak boleh defisit; pembatalan request pending mengembalikan alokasi saldo |
-| **Penjualan Offtaker** | ✅ | ✅ (Pagination) | ✅ (Status Kirim)| ✅ (Void Transaksi)| Margin keuntungan BSI terlacak otomatis (`total_nominal` vs modal beli) |
-| **Klien Industri** | ✅ | ✅ (Pagination) | ✅ | ✅ | Relasi aman terhadap data transaksi penjualan |
-| **Laporan Masalah**| ✅ | ✅ | ✅ (Tindak Lanjut)| ✅ Hapus Aduan | Upload bukti foto dengan validasi MIME-type dan batas ukuran |
-| **Berita & Edukasi**| ✅ | ✅ (Slug dynamic) | ✅ | ✅ | CMS edukasi pemilahan sampah dan wawasan bank sampah |
-| **Galeri Foto** | ✅ | ✅ | ✅ | ✅ | Album & multi-foto kegiatan lapangan bank sampah |
-| **Ekspor Laporan** | — | ✅ Real CSV/Excel | — | — | Ekspor instan riwayat setoran, penarikan, dan laba-rugi penjualan |
+| **Jenis Sampah** | Ya | Ya | Ya | Ya | Dual-pricing: harga beli (nasabah) & harga jual (offtaker) |
+| **Nasabah** | Ya | Ya (Filter/Cari) | Ya | Ya (Soft-delete) | Status aktif/non-aktif tanpa merusak riwayat transaksi lampau |
+| **Setoran Sampah** | Ya | Ya (Pagination) | Ya (Verifikasi) | Ya (Void/Batal) | **Trigger Auto-Reversal:** Saldo nasabah otomatis dikembalikan jika transaksi dibatalkan |
+| **Penarikan Saldo**| Ya | Ya (Pagination) | Ya (Pencairan) | Ya (Batal Request)| Validasi saldo tidak boleh defisit; pembatalan request mengembalikan alokasi saldo |
+| **Penjualan Offtaker** | Ya | Ya (Pagination) | Ya (Status Kirim)| Ya (Void Transaksi)| Margin pendapatan BSI terlacak otomatis (`total_nominal` vs modal beli) |
+| **Klien Industri** | Ya | Ya (Pagination) | Ya | Ya | Relasi aman terhadap data transaksi penjualan |
+| **Laporan Masalah**| Ya | Ya | Ya (Tindak Lanjut)| Ya (Hapus Aduan) | Formulir aduan warga dengan validasi tipe berkas dan batas ukuran |
+| **Berita & Edukasi**| Ya | Ya (Dynamic slug) | Ya | Ya | Artikel edukasi pemilahan sampah dan wawasan bank sampah |
+| **Galeri Foto** | Ya | Ya | Ya | Ya | Dokumentasi kegiatan operasional bank sampah |
+| **Ekspor Laporan** | — | Ya (Real CSV) | — | — | Ekspor riwayat setoran, penarikan, dan rekapitulasi data |
 
 ---
 
 ## 4. Skrip Skenario Presentasi & Demo 5 Menit (Final IT Fest 2026)
-
-Gunakan pembagian waktu 5 menit berikut saat demonstrasi di hadapan dewan juri:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -83,40 +75,40 @@ Gunakan pembagian waktu 5 menit berikut saat demonstrasi di hadapan dewan juri:
 │                        Total Durasi: 5 Menit                                │
 └─────────────────────────────────────────────────────────────────────────────┘
   ▼
-[MENIT 01:00] HOMEPAGE & TEMA SKALA BESAR (PELAYANAN PUBLIK)
-  • Buka halaman utama: Jelaskan live counter statistik nasional (tonase, nasabah, BSU).
-  • Tunjukkan Peta Sebaran 34 Provinsi dan kalkulator simulasi konversi sampah ke Rupiah + reduksi CO2.
-  • Jelaskan kesesuaian dengan Permen LHK No. 14/2021 tentang Bank Sampah Nasional.
+[MENIT 01:00] HOMEPAGE & PILOT SUMATERA UTARA
+  • Buka halaman utama: Jelaskan posisi strategis pilot Sumut & arsitektur 38 provinsi.
+  • Tunjukkan Peta Sebaran Interaktif dan kalkulator simulasi nilai ekonomi sampah.
+  • Paparkan keselarasan alur dengan Permen LHK No. 14/2021 tentang Bank Sampah.
 
   ▼
-[MENIT 02:00] ALUR NASABAH (SELF-SERVICE CITIZEN PORTAL)
-  • Login sebagai nasabah (`nasabah.dewi@simba.id`).
-  • Tunjukkan transparansi saldo tabungan di `/nasabah`.
-  • Buka `/nasabah/setoran` untuk melihat riwayat setoran transparan.
-  • Buka `/nasabah/penarikan` dan lakukan simulasi pengajuan penarikan dana tabungan sebesar Rp 50.000.
-  • Status penarikan berubah menjadi "Pending Verifikasi Petugas".
+[MENIT 02:00] ALUR NASABAH (CITIZEN PORTAL)
+  • Login sebagai nasabah (nasabah.dewi@simba.id).
+  • Tunjukkan transparansi saldo tabungan di /nasabah.
+  • Buka /nasabah/setoran untuk melihat riwayat setoran transparan.
+  • Buka /nasabah/penarikan dan lakukan simulasi pengajuan penarikan dana tabungan Rp 50.000.
+  • Status penarikan berubah menjadi pending verifikasi petugas.
 
   ▼
 [MENIT 03:00] ALUR PETUGAS LAPANGAN BSU (TIMBANGAN & NOTA)
-  • Buka tab baru / incognito, login sebagai petugas (`petugas.melati@simba.id`).
-  • Tunjukkan form input timbangan cepat di `/petugas`.
-  • Pilih nasabah "Dewi Lestari", input 5 kg Kardus Box dan 3 kg Botol PET Bersih.
-  • Total nilai terkalkulasi otomatis. Klik "Simpan Setoran".
-  • Muncul modal Nota Transaksi Digital siap cetak/unduh.
-  • Tunjukkan bahwa saldo nasabah Dewi langsung bertambah secara atomik via DB Trigger.
+  • Buka tab baru / incognito, login sebagai petugas (petugas.melati@simba.id).
+  • Tunjukkan form input timbangan cepat di /petugas.
+  • Pilih nasabah "Dewi Lestari", input setoran sampah terpilah.
+  • Subtotal terkalkulasi otomatis. Klik "Simpan Setoran".
+  • Muncul modal Nota Transaksi Digital siap cetak.
+  • Saldo nasabah bertambah secara atomik via trigger database.
 
   ▼
 [MENIT 04:00] ADMINISTRASI BSI, TRANSAKSI INDUSTRI, & EKSPOR
-  • Login sebagai Administrator (`admin@simba.id`).
-  • Buka `/admin/penarikan`: Setujui pengajuan penarikan saldo Dewi yang diajukan di menit 2. Saldo terpotong resmi.
-  • Buka `/admin/penjualan/baru`: Tunjukkan transaksi hilir (penjualan komoditas ke PT Recyclindo offtaker) dengan margin harga jual industri.
-  • Buka `/admin/laporan-transaksi`: Klik tombol "Export Laporan CSV", buka file di Excel untuk membuktikan integritas pelaporan data keuangan publik.
+  • Login sebagai Administrator (admin@simba.id).
+  • Buka /admin/penarikan: Setujui pengajuan penarikan saldo Dewi yang diajukan di menit 2.
+  • Buka /admin/penjualan/baru: Tunjukkan transaksi hilir ke offtaker daur ulang.
+  • Buka /admin/laporan-transaksi: Klik tombol "Export Laporan CSV" untuk unduh data rekap.
 
   ▼
 [MENIT 05:00] MONITORING NASIONAL KLH & KEUNGGULAN ARSITEKTUR
-  • Buka dashboard KLH di `/admin/klh`.
-  • Tunjukkan grafik komposisi sampah, tren pertumbuhan unit, dan tabel agregasi 34 provinsi dengan 1.000+ data ter-index.
-  • Tutup dengan memaparkan bukti teknis: 0 Error build Next.js, 8/8 automated test passed, server-side pagination, dan in-memory caching untuk beban trafik massal.
+  • Buka dashboard monitoring di /admin/klh.
+  • Tunjukkan visualisasi wilayah pilot Sumut dan kesiapan arsitektur 38 provinsi.
+  • Tutup dengan memaparkan bukti teknis: 0 Error build Next.js, 64 automated tests passed, dan kesiapan produksi.
 ```
 
 ---
@@ -127,13 +119,13 @@ Gunakan pembagian waktu 5 menit berikut saat demonstrasi di hadapan dewan juri:
 ┌────────────────────────────────────────────────────────┐
 │               FRONTEND (Next.js 16.3.8)                │
 │  App Router • TypeScript • Tailwind CSS v4 • Radix UI  │
-│  Responsive Mobile Drawer • Dynamic Import • Zero CSS  │
+│  Responsive Mobile Drawer • Dynamic Import • Clean UI  │
 └───────────────────────────┬────────────────────────────┘
                             │ HTTPS / JWT Bearer
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │             BACKEND (Node.js & Express.js)             │
-│  Gzip Compression • 60s In-Memory Cache • Helmet       │
+│  Gzip Compression • In-Memory Cache • Helmet Security  │
 │  Zod Schema Validation • Multer Safe MIME Filter       │
 │  Server-side Pagination (Limit/Offset) & Search        │
 └───────────────────────────┬────────────────────────────┘
@@ -141,18 +133,11 @@ Gunakan pembagian waktu 5 menit berikut saat demonstrasi di hadapan dewan juri:
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │             DATABASE (Supabase PostgreSQL)             │
-│  23 B-Tree Index Tables • Atomic Balancing Triggers    │
-│  Dual-Pricing Engine • 16 Relational Tables            │
-│  Stress-Tested: 1.000 Nasabah & 5.000 Transaksi Setoran│
+│  B-Tree Index Tables • Atomic Balancing Triggers       │
+│  Dual-Pricing Engine • Relational Schema Integrity     │
+│  Pemisahan Data Real vs Demo (is_demo flag)           │
 └────────────────────────────────────────────────────────┘
 ```
-
-### Optimasi Kinerja Skala Besar:
-1. **Server-side Pagination & Filtering:** Menggantikan limit statis dengan `limit` dan `page` dinamis pada endpoint setoran, penarikan, penjualan, dan klien.
-2. **23 Database B-Tree Index:** Index pada foreign key dan filter intensif (`unit_id`, `nasabah_id`, `status`, `created_at`, `kategori`).
-3. **HTTP Compression & Caching:** Kompresi Gzip untuk semua respons API serta cache memori TTL 60 detik pada endpoint statistik publik (`/api/stats/nasional`, `/api/stats/provinsi`, `/api/stats/harga`).
-4. **Dynamic Imports:** Lazy loading komponen berat di halaman utama (Peta interaktif, grafik komposisi, kalkulator).
-5. **Mobile Accessibility:** Standar sentuhan tombol $\ge 44\text{px}$, sliding drawer mobile responsif di 375px, 768px, 1024px, dan 1440px.
 
 ---
 
@@ -173,17 +158,11 @@ cd SIMBA_NKPF_
 1. Buka dashboard proyek Supabase Anda.
 2. Masuk ke menu **SQL Editor**.
 3. Jalankan skrip `backend/supabase/schema.sql` untuk membuat tabel, trigger saldo, fungsi auto-reversal, dan data awal.
-4. *(Opsional untuk pengujian beban)* Jalankan skrip `backend/supabase/seed_large_scale.sql` untuk menginjeksi 1.000 data nasabah dan 5.000 riwayat transaksi setoran.
 
 ### 3. Konfigurasi Environment Variables
 
-Salin template environment yang telah disediakan:
-
 **Backend:**
-```bash
-cp backend/.env.example backend/.env
-```
-Isi variabel dalam `backend/.env`:
+Salin template `backend/.env.example` ke `backend/.env` dan sesuaikan nilainya:
 ```env
 PORT=5000
 NODE_ENV=development
@@ -194,10 +173,7 @@ CORS_ORIGIN=http://localhost:3000
 ```
 
 **Frontend:**
-```bash
-cp frontend/.env.example frontend/.env.local
-```
-Isi variabel dalam `frontend/.env.local`:
+Salin template `frontend/.env.example` ke `frontend/.env.local`:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://proyek-anda.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...
@@ -226,70 +202,47 @@ npm run dev
 
 ## 7. Verifikasi Kualitas & Automated Tests
 
-### Menjalankan Automated Unit & Flow Tests
-Backend dilengkapi test suite terotomasi menggunakan Node.js native test runner tanpa dependensi tambahan yang memberatkan:
+### Menjalankan Automated Unit & Flow Tests (Backend)
+Backend dilengkapi test suite terotomasi menggunakan Node.js native test runner (`node --test`):
 ```bash
 cd backend
 npm test
 ```
-*Hasil uji:* **8/8 Test Suite Passed (100%)** meliputi:
-- Perhitungan saldo atomik setoran & auto-reversal saat void.
-- Pemotongan saldo penarikan dan proteksi saldo defisit.
-- Enforcing RBAC Guard (Role-Based Access Control).
-- Validasi margin positif pada dual-pricing offtaker.
+*Hasil uji:* **64 Tests Passed (100% pass)** meliputi:
+- Alur kritis keuangan setoran & auto-reversal pembatalan (void).
+- Logika penarikan tabungan dan proteksi saldo defisit.
+- Enforcing RBAC Guard (Admin, Petugas, Nasabah, KLH).
+- Validasi dual-pricing offtaker vs nasabah.
+- Validasi masukan data (Zod schemas: nama, NIK, HP, email, password, transaksi).
+- Verifikasi struktur master 38 provinsi dan agregasi matematis.
 
-### Menjalankan Production Build Check
+### Menjalankan Production Build & Regression Check (Frontend)
 ```bash
 cd frontend
+npm test
 npm run build
 ```
-*Hasil build:* **Compiled successfully (0 errors, 27/27 routes generated)**.
+*Hasil build:* **Compiled successfully (0 errors, 27/27 static routes generated)**.
 
 ---
 
 ## 8. Panduan Deployment Produksi
 
 ### A. Deploy Backend (Railway / Render)
-1. Hubungkan repository GitHub ke **Railway** atau **Render**.
-2. Pilih sub-folder `backend`.
-3. Masukkan Environment Variables sesuai `backend/.env.example`.
-4. Command Build: `npm install`
-5. Command Start: `npm start` (menjalankan `node src/index.js` via `Procfile`).
+1. Hubungkan repositori GitHub ke Railway atau Render.
+2. Tentukan sub-folder root ke `backend`.
+3. Masukkan environment variables sesuai `backend/.env.example`.
+4. Build command: `npm install`, Start command: `npm start`.
 
 ### B. Deploy Frontend (Vercel)
-1. Buat proyek baru di [Vercel](https://vercel.com) dan impor repositori ini.
-2. Atur **Root Directory** ke `frontend`.
-3. Masukkan Environment Variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `NEXT_PUBLIC_API_URL` (arahkan ke URL backend di Railway/Render, contoh: `https://api-simba.up.railway.app/api`)
-4. Klik **Deploy**. Vercel akan membaca konfigurasi `vercel.json` dan melakukan build Turbopack otomatis.
+1. Buat proyek baru di Vercel dan hubungkan repositori ini.
+2. Tetapkan **Root Directory** ke `frontend`.
+3. Atur environment variables (`NEXT_PUBLIC_API_URL`, Supabase credentials).
+4. Deploy dengan build output otomatis via Next.js.
 
 ---
 
-## 9. Ringkasan Endpoint API Utama
+## 9. Lisensi & Pernyataan Orisinalitas
 
-| Method | Endpoint | Akses | Fungsi |
-|--------|----------|-------|--------|
-| `GET` | `/api/health` | Publik | Healthcheck status server |
-| `GET` | `/api/stats/nasional` | Publik (Cached 60s) | Agregat total tonase, nasabah, rupiah nasional |
-| `GET` | `/api/stats/provinsi` | Publik (Cached 60s) | Rekapitulasi per provinsi untuk visualisasi peta |
-| `GET` | `/api/stats/harga` | Publik (Cached 60s) | Papan ticker harga beli sampah hari ini |
-| `POST`| `/api/stats/petugas/setoran`| Petugas, Admin | Transaksi setoran langsung di lapangan |
-| `GET` | `/api/setoran` | Admin, Petugas | Daftar transaksi setoran dengan server pagination |
-| `DELETE`| `/api/setoran/:id` | Admin | Batalkan/Void setoran + auto-reversal saldo |
-| `GET` | `/api/penarikan` | Admin, Nasabah | Daftar penarikan saldo dengan server pagination |
-| `PUT` | `/api/penarikan/:id` | Admin | Menyetujui atau mencairkan dana nasabah |
-| `DELETE`| `/api/penarikan/:id` | Admin, Nasabah | Membatalkan pengajuan penarikan pending |
-| `POST`| `/api/penjualan` | Admin | Mencatat penjualan komoditas ke offtaker |
-| `GET` | `/api/laporan/export/csv`| Admin | Unduh laporan transaksi keuangan format CSV/Excel |
-
----
-
-## 10. Lisensi
-
-Proyek ini dilisensikan di bawah **MIT License** — Bebas digunakan, dipelajari, dan dikembangkan untuk kepentingan edukasi dan transformasi digital bank sampah di Indonesia.
-
----
-*Dibuat dengan dedikasi penuh untuk kemajuan tata kelola lingkungan hidup Indonesia.*  
-**Tim SIMBA_NKPF_ — IT Fest 2026**
+Proyek ini dilisensikan di bawah **MIT License**.  
+Dikembangkan secara independen oleh Tim **SIMBA_NKPF_** sebagai prototipe solusi digital tata kelola bank sampah modern untuk IT Fest 2026.

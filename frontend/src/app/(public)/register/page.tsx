@@ -23,10 +23,8 @@ import {
 } from '@/lib/validation'
 
 const DEFAULT_UNITS = [
-  { id: '11111111-1111-1111-1111-111111111111', nama: 'Bank Sampah Induk Pusat', kode: 'BSI-JKT01', alamat: 'Gedung Manggala Wanabakti, Jakarta' },
-  { id: '22222222-2222-2222-2222-222222222222', nama: 'Bank Sampah Unit Melati Mandiri', kode: 'BSU-JKT02', alamat: 'Kec. Cempaka Putih, Jakarta' },
-  { id: '33333333-3333-3333-3333-333333333333', nama: 'Bank Sampah Unit Asri Sejahtera', kode: 'BSU-BDO01', alamat: 'Kota Bandung, Jawa Barat' },
-  { id: '44444444-4444-4444-4444-444444444444', nama: 'Bank Sampah Unit Resik Lestari', kode: 'BSU-SBY01', alamat: 'Kota Surabaya, Jawa Timur' },
+  { id: '11111111-1111-1111-1111-111111111111', nama: 'Bank Sampah Induk Medan Bersih', kode: 'BSI-MDN01', alamat: 'Kota Medan, Sumatera Utara' },
+  { id: '22222222-2222-2222-2222-222222222222', nama: 'Bank Sampah Unit Deli Lestari', kode: 'BSU-MDN02', alamat: 'Kec. Medan Barat, Kota Medan' },
 ]
 
 const DOMAIN_SUGGESTIONS = ['gmail.com', 'yahoo.com', 'outlook.com']

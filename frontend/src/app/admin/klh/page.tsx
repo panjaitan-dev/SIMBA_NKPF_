@@ -501,7 +501,7 @@ export default function AdminKLHDashboard() {
                   <th className="py-3 px-4 text-right">Nasabah</th>
                   <th className="py-3 px-4 text-right">Sampah (Ton)</th>
                   <th className="py-3 px-4 text-center">Partisipasi</th>
-                  <th className="py-3 px-4">Unit Percontohan Resmi</th>
+                  <th className="py-3 px-4">Unit Percontohan</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">

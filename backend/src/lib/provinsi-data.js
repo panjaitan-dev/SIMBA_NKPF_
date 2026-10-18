@@ -22,11 +22,11 @@ const DATA_38_PROVINSI = [
     total_nasabah: 51200,
     partisipasi_persen: 18.5,
     unit_percontohan: {
-      nama: 'Bank Sampah Unit Meuraxa Berseri',
+      nama: 'Bank Sampah Banda Aceh Mandiri',
       kode: 'BSU-11-001',
-      alamat: 'Kec. Meuraxa, Kota Banda Aceh',
-      koordinator: 'Teuku Iskandar, S.T.',
-      nomor_hp: '0812-6543-1101',
+      alamat: 'Kota Banda Aceh',
+      koordinator: 'Koordinator Unit',
+      nomor_hp: '0812-6543-0000',
     },
   },
   {
