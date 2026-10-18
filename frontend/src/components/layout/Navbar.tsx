@@ -112,7 +112,7 @@ export default function Navbar() {
               href="/login"
               className={cn(
                 'flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-colors',
-                scrolled ? 'text-slate-700 hover:bg-slate-100' : 'text-white hover:bg-white/10'
+                scrolled ? 'text-black hover:bg-slate-100' : 'text-black hover:bg-white/10'
               )}
             >
               <LogIn size={16} /> Login
@@ -120,7 +120,7 @@ export default function Navbar() {
           )}
           <Link
             href="/lapor"
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-black text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           >
             <Leaf size={15} aria-hidden="true" /> Lapor
           </Link>
@@ -130,7 +130,7 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/lapor"
-            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 min-h-[44px] rounded-xl transition-colors shadow-sm"
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-black text-xs sm:text-sm font-semibold px-3 sm:px-4 min-h-[44px] rounded-xl transition-colors shadow-sm"
           >
             <Leaf size={14} /> Lapor
           </Link>
@@ -138,7 +138,7 @@ export default function Navbar() {
             onClick={() => setMenuOpen(!menuOpen)}
             className={cn(
               'min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors',
-              scrolled ? 'text-slate-800 hover:bg-slate-100' : 'text-white hover:bg-white/10'
+              scrolled ? 'text-black hover:bg-slate-100' : 'text-black hover:bg-white/10'
             )}
             aria-label="Toggle navigation menu"
           >
