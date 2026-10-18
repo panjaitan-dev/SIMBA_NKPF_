@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node scripts/check-regressions.mjs"
+    "test": "node scripts/verify-map.mjs && node scripts/check-regressions.mjs"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.2.6",

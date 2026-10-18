@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "lint": "eslint src/",
-    "test": "node --test tests/critical-flows.test.js tests/validation-zod.test.js tests/provinsi-38.test.js"
+    "test": "node --test tests/critical-flows.test.js tests/validation-zod.test.js tests/provinsi-38.test.js tests/track2-directory-detail.test.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.47.3",

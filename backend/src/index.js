@@ -22,6 +22,8 @@ const dashboardRoutes = require('./routes/dashboard.routes');
 const klienRoutes = require('./routes/klien.routes');
 const penjualanRoutes = require('./routes/penjualan.routes');
 const statsRoutes = require('./routes/stats.routes');
+const provinsiRoutes = require('./routes/provinsi.routes');
+const kabupatenRoutes = require('./routes/kabupaten.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -135,6 +137,8 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/klien', klienRoutes);
 app.use('/api/penjualan', penjualanRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/provinsi', provinsiRoutes);
+app.use('/api/kabupaten-kota', kabupatenRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -158,7 +162,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-if (!process.env.VERCEL) {
+if (require.main === module && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`🚀 SIMBA API Server berjalan di port ${PORT}`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
