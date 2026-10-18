@@ -439,13 +439,57 @@ export const DAFTAR_PULAU = [
 
 export type PulauType = typeof DAFTAR_PULAU[number]
 
+export interface ProvinsiPinItem extends ProvinsiItem {
+  pinX: number // Koordinat X pada SVG viewBox (1024 x 371)
+  pinY: number // Koordinat Y pada SVG viewBox (1024 x 371)
+}
+
 /**
- * Agregasi Matematika Murni 38 Provinsi
+ * 15 Provinsi Percontohan SIMBA Nasional (sesuai peta 15 pin sebaran Indonesia)
  */
-export function hitungAgregasiNasional(filterPulau: string = 'all') {
+export const DATA_15_PROVINSI: ProvinsiPinItem[] = [
+  // 1. Sumatera Utara
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'SU')!, pinX: 105, pinY: 80 },
+  // 2. Sumatera Barat
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'SB')!, pinX: 140, pinY: 160 },
+  // 3. Banten
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'BT')!, pinX: 260, pinY: 275 },
+  // 4. DKI Jakarta
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JK')!, pinX: 290, pinY: 280 },
+  // 5. Jawa Barat
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JB')!, pinX: 340, pinY: 290 },
+  // 6. Jawa Tengah
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JT')!, pinX: 400, pinY: 305 },
+  // 7. DI Yogyakarta
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'YO')!, pinX: 440, pinY: 314 },
+  // 8. Jawa Timur
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JI')!, pinX: 490, pinY: 320 },
+  // 9. Bali
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'BA')!, pinX: 562, pinY: 318 },
+  // 10. Kalimantan Barat
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'KB')!, pinX: 355, pinY: 155 },
+  // 11. Kalimantan Selatan
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'KS')!, pinX: 440, pinY: 205 },
+  // 12. Kalimantan Timur
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'KI')!, pinX: 465, pinY: 130 },
+  // 13. Sulawesi Utara
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'SW')!, pinX: 600, pinY: 115 },
+  // 14. Maluku
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'MA')!, pinX: 735, pinY: 198 },
+  // 15. Papua
+  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'PA')!, pinX: 830, pinY: 195 },
+]
+
+/**
+ * Agregasi Agregasi Data Wilayah (Mendukung 15 Provinsi Percontohan atau 38 Provinsi)
+ */
+export function hitungAgregasiNasional(
+  filterPulau: string = 'all',
+  dataSource: ProvinsiItem[] = DATA_15_PROVINSI
+) {
   const data = filterPulau === 'all' || filterPulau === 'Semua'
-    ? DATA_38_PROVINSI
-    : DATA_38_PROVINSI.filter((p) => p.pulau.toLowerCase() === filterPulau.toLowerCase())
+    ? dataSource
+    : dataSource.filter((p) => p.pulau.toLowerCase() === filterPulau.toLowerCase())
 
   const total_provinsi = data.length
   const total_bsu = data.reduce((sum, p) => sum + p.bsu_aktif, 0)
@@ -467,3 +511,4 @@ export function hitungAgregasiNasional(filterPulau: string = 'all') {
     avg_partisipasi: parseFloat(avg_partisipasi.toFixed(2)),
   }
 }
+
