@@ -121,10 +121,11 @@ export default function Navbar() {
           )}
           <Link
             href="/lapor"
-            style={{ color: '#000000' }}
             className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            style={{ color: '#111827' }}
           >
-            <Leaf size={15} aria-hidden="true" /> Lapor
+            <Leaf size={15} aria-hidden="true" style={{ color: '#111827' }} />
+            <span style={{ color: '#111827' }}>Lapor</span>
           </Link>
         </div>
 
@@ -132,10 +133,11 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/lapor"
-            style={{ color: '#000000' }}
             className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-xs sm:text-sm font-semibold px-3 sm:px-4 min-h-[44px] rounded-xl transition-colors shadow-sm"
+            style={{ color: '#111827' }}
           >
-            <Leaf size={14} /> Lapor
+            <Leaf size={14} style={{ color: '#111827' }} />
+            <span style={{ color: '#111827' }}>Lapor</span>
           </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
