@@ -110,9 +110,10 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
+              style={{ color: '#000000' }}
               className={cn(
                 'flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-colors',
-                scrolled ? 'text-black hover:bg-slate-100' : 'text-black hover:bg-white/10'
+                scrolled ? 'hover:bg-slate-100' : 'hover:bg-white/10'
               )}
             >
               <LogIn size={16} /> Login
@@ -120,7 +121,8 @@ export default function Navbar() {
           )}
           <Link
             href="/lapor"
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-black text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            style={{ color: '#000000' }}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           >
             <Leaf size={15} aria-hidden="true" /> Lapor
           </Link>
@@ -130,7 +132,8 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/lapor"
-            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-black text-xs sm:text-sm font-semibold px-3 sm:px-4 min-h-[44px] rounded-xl transition-colors shadow-sm"
+            style={{ color: '#000000' }}
+            className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-xs sm:text-sm font-semibold px-3 sm:px-4 min-h-[44px] rounded-xl transition-colors shadow-sm"
           >
             <Leaf size={14} /> Lapor
           </Link>
