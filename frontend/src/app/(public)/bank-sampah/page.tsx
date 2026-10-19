@@ -235,15 +235,20 @@ function BankSampahDirectoryContent() {
       <div className="bg-emerald-950 text-white border-b border-emerald-900 py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-800/80 text-emerald-200 text-xs font-semibold rounded-full mb-4 border border-emerald-700/60">
-              <Sparkles size={14} />
-              <span>Pilot Sumatera Utara — 33 Kabupaten & Kota</span>
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-800/80 text-emerald-200 text-xs font-semibold rounded-full border border-emerald-700/60">
+                <Sparkles size={14} />
+                <span>Pilot Sumatera Utara — 33 Kabupaten & Kota</span>
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-medium border border-amber-500/30">
+                Data Percontohan Simulasi
+              </span>
             </div>
             <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
-              Direktori Resmi Bank Sampah
+              Direktori Unit Bank Sampah
             </h1>
             <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-6">
-              Temukan unit bank sampah terverifikasi di sekitarmu. Dilengkapi jam operasional riil,
+              Temukan unit bank sampah percontohan di sekitarmu. Dilengkapi jam operasional simulasi,
               transparansi harga komoditas daur ulang, petunjuk arah langsung, dan integrasi WhatsApp.
             </p>
 

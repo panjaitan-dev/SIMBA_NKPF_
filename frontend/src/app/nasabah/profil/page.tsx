@@ -118,7 +118,7 @@ export default function ProfilNasabahPage() {
           <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
             <User className="text-emerald-600" size={26} /> Profil Nasabah
           </h1>
-          <p className="text-slate-500 text-sm mt-1">Data identitas nasabah, unit terafiliasi, dan Kartu Nasabah Digital</p>
+          <p className="text-slate-500 text-sm mt-1">Data identitas nasabah, unit terdaftar, dan Kartu Nasabah Digital</p>
         </div>
 
         {loading ? (
@@ -167,7 +167,7 @@ export default function ProfilNasabahPage() {
                   <span>Status Verifikasi Akun</span>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Identitas kependudukan terverifikasi untuk penarikan tabungan perbankan sampah di loket resmi.
+                  Identitas kependudukan terverifikasi untuk penarikan tabungan perbankan sampah di loket unit bank sampah.
                 </p>
                 <div className="pt-2 border-t border-slate-100 flex justify-between items-center text-xs">
                   <span className="text-slate-400">NIK:</span>

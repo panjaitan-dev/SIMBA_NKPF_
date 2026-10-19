@@ -155,7 +155,7 @@ export default function FinderBSUSection() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">{bsu.total_nasabah} nasabah terdaftar</span>
+                  <span className="text-xs text-slate-400">{bsu.total_nasabah.toLocaleString('id-ID')} nasabah terdaftar</span>
                   <a
                     href="/register"
                     className="text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl transition-colors"

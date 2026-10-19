@@ -1,5 +1,5 @@
 /**
- * Data Resmi 38 Provinsi di Seluruh Indonesia (SIMBA Nusantara)
+ * Data Model Simulasi 38 Provinsi di Seluruh Indonesia (SIMBA Nusantara)
  * Frontend Mirror dengan Tipe TypeScript lengkap.
  */
 
@@ -42,7 +42,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 51200, nasabah: 51200, partisipasi_persen: 18.5,
     unit_percontohan: {
       nama: 'Bank Sampah Banda Aceh Mandiri', kode: 'BSU-11-001',
-      alamat: 'Kota Banda Aceh', koordinator: 'Koordinator Unit', nomor_hp: '0812-6543-0000'
+      alamat: 'Kota Banda Aceh', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -52,7 +52,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 142000, nasabah: 142000, partisipasi_persen: 21.4,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Deli Hijau Bersih', kode: 'BSU-12-001',
-      alamat: 'Kec. Medan Kota, Kota Medan', koordinator: 'Bambang Sitorus, S.Sos.', nomor_hp: '0812-7890-1201'
+      alamat: 'Kec. Medan Kota, Kota Medan', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -62,7 +62,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 64500, nasabah: 64500, partisipasi_persen: 19.8,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Ranah Minang Resik', kode: 'BSU-13-001',
-      alamat: 'Kec. Padang Barat, Kota Padang', koordinator: 'Nurhayati Chaniago', nomor_hp: '0813-4567-1301'
+      alamat: 'Kec. Padang Barat, Kota Padang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -72,7 +72,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 59800, nasabah: 59800, partisipasi_persen: 17.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Lancang Kuning', kode: 'BSU-14-001',
-      alamat: 'Kec. Tampan, Kota Pekanbaru', koordinator: 'M. Faisal Azmi', nomor_hp: '0812-9901-1401'
+      alamat: 'Kec. Tampan, Kota Pekanbaru', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -82,7 +82,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 41200, nasabah: 41200, partisipasi_persen: 16.5,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Batanghari Mandiri', kode: 'BSU-15-001',
-      alamat: 'Kec. Telanaipura, Kota Jambi', koordinator: 'Hendra Gunawan', nomor_hp: '0852-6789-1501'
+      alamat: 'Kec. Telanaipura, Kota Jambi', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -92,7 +92,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 88500, nasabah: 88500, partisipasi_persen: 20.1,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Sriwijaya Berdaya', kode: 'BSU-16-001',
-      alamat: 'Kec. Ilir Barat I, Kota Palembang', koordinator: 'Dra. Rosmala Dewi', nomor_hp: '0813-6712-1601'
+      alamat: 'Kec. Ilir Barat I, Kota Palembang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -102,7 +102,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 27400, nasabah: 27400, partisipasi_persen: 15.8,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Rafflesia Lestari', kode: 'BSU-17-001',
-      alamat: 'Kec. Ratu Agung, Kota Bengkulu', koordinator: 'Agus Salim, S.E.', nomor_hp: '0821-8899-1701'
+      alamat: 'Kec. Ratu Agung, Kota Bengkulu', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -112,7 +112,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 79200, nasabah: 79200, partisipasi_persen: 18.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Radin Inten Mandiri', kode: 'BSU-18-001',
-      alamat: 'Kec. Tanjung Karang Pusat, Kota Bandar Lampung', koordinator: 'Farhan Kurniawan', nomor_hp: '0853-7890-1801'
+      alamat: 'Kec. Tanjung Karang Pusat, Kota Bandar Lampung', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -122,7 +122,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 21500, nasabah: 21500, partisipasi_persen: 14.9,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Serumpun Sebalai', kode: 'BSU-19-001',
-      alamat: 'Kec. Gerunggang, Kota Pangkalpinang', koordinator: 'Budi Darmawan', nomor_hp: '0812-7123-1901'
+      alamat: 'Kec. Gerunggang, Kota Pangkalpinang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -132,7 +132,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 33100, nasabah: 33100, partisipasi_persen: 19.3,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Gurindam Sejahtera', kode: 'BSU-21-001',
-      alamat: 'Kec. Bukit Bestari, Kota Tanjungpinang', koordinator: 'Ahmad Zulkarnain', nomor_hp: '0813-8812-2101'
+      alamat: 'Kec. Bukit Bestari, Kota Tanjungpinang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
 
@@ -144,7 +144,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 310000, nasabah: 310000, partisipasi_persen: 28.4,
     unit_percontohan: {
       nama: 'Bank Sampah Induk Cempaka Bestari', kode: 'BSU-31-001',
-      alamat: 'Kec. Cempaka Putih, Jakarta Pusat', koordinator: 'Hj. Siti Aminah, M.Pd.', nomor_hp: '0812-8182-3101'
+      alamat: 'Kec. Cempaka Putih, Jakarta Pusat', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -154,7 +154,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 520000, nasabah: 520000, partisipasi_persen: 24.6,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Bersinar Pasteur', kode: 'BSU-32-001',
-      alamat: 'Kec. Sukajadi, Kota Bandung', koordinator: 'Asep Ridwan, S.T.', nomor_hp: '0813-2211-3201'
+      alamat: 'Kec. Sukajadi, Kota Bandung', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -164,7 +164,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 435000, nasabah: 435000, partisipasi_persen: 23.9,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Pandanaran Asri', kode: 'BSU-33-001',
-      alamat: 'Kec. Semarang Tengah, Kota Semarang', koordinator: 'Tri Wibowo, S.H.', nomor_hp: '0815-6677-3301'
+      alamat: 'Kec. Semarang Tengah, Kota Semarang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -174,7 +174,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 98000, nasabah: 98000, partisipasi_persen: 26.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Malioboro Resik', kode: 'BSU-34-001',
-      alamat: 'Kec. Danurejan, Kota Yogyakarta', koordinator: 'Sri Handayani', nomor_hp: '0817-4455-3401'
+      alamat: 'Kec. Danurejan, Kota Yogyakarta', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -184,7 +184,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 470000, nasabah: 470000, partisipasi_persen: 24.1,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Suroboyo Hijau', kode: 'BSU-35-001',
-      alamat: 'Kec. Wonokromo, Kota Surabaya', koordinator: 'Joko Prasetyo, M.M.', nomor_hp: '0812-3344-3501'
+      alamat: 'Kec. Wonokromo, Kota Surabaya', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -194,7 +194,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 148000, nasabah: 148000, partisipasi_persen: 22.8,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Jawara Resik', kode: 'BSU-36-001',
-      alamat: 'Kec. Cipocok Jaya, Kota Serang', koordinator: 'Tb. Maulana Yusuf', nomor_hp: '0878-1122-3601'
+      alamat: 'Kec. Cipocok Jaya, Kota Serang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
 
@@ -206,7 +206,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 124000, nasabah: 124000, partisipasi_persen: 27.5,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Bali Bersih Shanti', kode: 'BSU-51-001',
-      alamat: 'Kec. Denpasar Selatan, Kota Denpasar', koordinator: 'I Wayan Suardana', nomor_hp: '0812-3890-5101'
+      alamat: 'Kec. Denpasar Selatan, Kota Denpasar', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -216,7 +216,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 61000, nasabah: 61000, partisipasi_persen: 19.4,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Sasak Hijau Lestari', kode: 'BSU-52-001',
-      alamat: 'Kec. Selaparang, Kota Mataram', koordinator: 'Lalu Muhamad Saleh', nomor_hp: '0819-0789-5201'
+      alamat: 'Kec. Selaparang, Kota Mataram', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -226,7 +226,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 44500, nasabah: 44500, partisipasi_persen: 15.1,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Flobamora Bersemi', kode: 'BSU-53-001',
-      alamat: 'Kec. Oebobo, Kota Kupang', koordinator: 'Maria Yohanis, S.Pd.', nomor_hp: '0852-3901-5301'
+      alamat: 'Kec. Oebobo, Kota Kupang', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
 
@@ -238,7 +238,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 65000, nasabah: 65000, partisipasi_persen: 18.7,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Khatulistiwa Mandiri', kode: 'BSU-61-001',
-      alamat: 'Kec. Pontianak Kota, Kota Pontianak', koordinator: 'Fransiskus Aseng', nomor_hp: '0813-4512-6101'
+      alamat: 'Kec. Pontianak Kota, Kota Pontianak', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -248,7 +248,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 37500, nasabah: 37500, partisipasi_persen: 16.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Isen Mulang Hijau', kode: 'BSU-62-001',
-      alamat: 'Kec. Jekan Raya, Kota Palangka Raya', koordinator: 'Kristina Natalia, S.Si.', nomor_hp: '0852-4911-6201'
+      alamat: 'Kec. Jekan Raya, Kota Palangka Raya', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -258,7 +258,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 52000, nasabah: 52000, partisipasi_persen: 19.1,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Lambung Mangkurat', kode: 'BSU-63-001',
-      alamat: 'Kec. Banjarmasin Tengah, Kota Banjarmasin', koordinator: 'Gusti Muhammad Noor', nomor_hp: '0812-5123-6301'
+      alamat: 'Kec. Banjarmasin Tengah, Kota Banjarmasin', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -268,7 +268,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 68000, nasabah: 68000, partisipasi_persen: 22.4,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Etam Nusantara (IKN)', kode: 'BSU-64-001',
-      alamat: 'Kec. Samarinda Ulu, Kota Samarinda', koordinator: 'Drs. Hendro Waskito', nomor_hp: '0813-5001-6401'
+      alamat: 'Kec. Samarinda Ulu, Kota Samarinda', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -278,7 +278,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 20500, nasabah: 20500, partisipasi_persen: 14.8,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Benuanta Berseri', kode: 'BSU-65-001',
-      alamat: 'Kec. Tanjung Selor, Kab. Bulungan', koordinator: 'Abdul Rahim, S.Pd.', nomor_hp: '0853-4812-6501'
+      alamat: 'Kec. Tanjung Selor, Kab. Bulungan', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
 
@@ -290,7 +290,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 42000, nasabah: 42000, partisipasi_persen: 17.9,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Bunaken Lestari', kode: 'BSU-71-001',
-      alamat: 'Kec. Malalayang, Kota Manado', koordinator: 'Mieke Tumewu, S.E.', nomor_hp: '0811-4301-7101'
+      alamat: 'Kec. Malalayang, Kota Manado', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -300,7 +300,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 34500, nasabah: 34500, partisipasi_persen: 15.7,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Tadulako Bangkit', kode: 'BSU-72-001',
-      alamat: 'Kec. Palu Timur, Kota Palu', koordinator: 'Rusdi Mansyur, S.Kom.', nomor_hp: '0852-4112-7201'
+      alamat: 'Kec. Palu Timur, Kota Palu', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -310,7 +310,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 118000, nasabah: 118000, partisipasi_persen: 21.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Anging Mammiri', kode: 'BSU-73-001',
-      alamat: 'Kec. Panakkukang, Kota Makassar', koordinator: 'H. Syamsuddin Dg. Lau', nomor_hp: '0812-4211-7301'
+      alamat: 'Kec. Panakkukang, Kota Makassar', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -320,7 +320,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 31500, nasabah: 31500, partisipasi_persen: 15.3,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Anoa Sejahtera', kode: 'BSU-74-001',
-      alamat: 'Kec. Mandonga, Kota Kendari', koordinator: 'La Ode Armin, S.H.', nomor_hp: '0853-9901-7401'
+      alamat: 'Kec. Mandonga, Kota Kendari', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -330,7 +330,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 21000, nasabah: 21000, partisipasi_persen: 16.4,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Hulonthalo Resik', kode: 'BSU-75-001',
-      alamat: 'Kec. Kota Barat, Kota Gorontalo', koordinator: 'Yusuf Katili', nomor_hp: '0821-9012-7501'
+      alamat: 'Kec. Kota Barat, Kota Gorontalo', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -340,7 +340,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 18200, nasabah: 18200, partisipasi_persen: 14.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Manakarra Mandiri', kode: 'BSU-76-001',
-      alamat: 'Kec. Simboro, Kab. Mamuju', koordinator: 'Nurhidayah Basri', nomor_hp: '0852-5501-7601'
+      alamat: 'Kec. Simboro, Kab. Mamuju', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
 
@@ -352,7 +352,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 24500, nasabah: 24500, partisipasi_persen: 15.9,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Siwalima Manise', kode: 'BSU-81-001',
-      alamat: 'Kec. Sirimau, Kota Ambon', koordinator: 'Piet Pattiasina', nomor_hp: '0812-4701-8101'
+      alamat: 'Kec. Sirimau, Kota Ambon', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -362,7 +362,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 19500, nasabah: 19500, partisipasi_persen: 14.5,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Moloku Kie Raha', kode: 'BSU-82-001',
-      alamat: 'Kec. Oba Utara, Kota Tidore Kepulauan (Sofifi)', koordinator: 'Iskandar Malik', nomor_hp: '0813-5612-8201'
+      alamat: 'Kec. Oba Utara, Kota Tidore Kepulauan (Sofifi)', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -372,7 +372,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 23000, nasabah: 23000, partisipasi_persen: 16.8,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Port Numbay Hijau', kode: 'BSU-91-001',
-      alamat: 'Kec. Jayapura Selatan, Kota Jayapura', koordinator: 'Yohanes Kogoya, S.Sos.', nomor_hp: '0812-4801-9101'
+      alamat: 'Kec. Jayapura Selatan, Kota Jayapura', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -382,7 +382,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 15500, nasabah: 15500, partisipasi_persen: 15.2,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Kasuari Mandiri', kode: 'BSU-92-001',
-      alamat: 'Kec. Manokwari Barat, Kab. Manokwari', koordinator: 'Markus Mandacan', nomor_hp: '0813-4401-9201'
+      alamat: 'Kec. Manokwari Barat, Kab. Manokwari', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -392,7 +392,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 13800, nasabah: 13800, partisipasi_persen: 14.1,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Anim Ha Lestari', kode: 'BSU-93-001',
-      alamat: 'Kec. Merauke, Kab. Merauke', koordinator: 'Petrus Mahuze, S.T.', nomor_hp: '0852-5401-9301'
+      alamat: 'Kec. Merauke, Kab. Merauke', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -402,7 +402,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 17200, nasabah: 17200, partisipasi_persen: 13.8,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Cenderawasih Nabire', kode: 'BSU-94-001',
-      alamat: 'Kec. Nabire, Kab. Nabire', koordinator: 'Mikael Degei', nomor_hp: '0821-9801-9401'
+      alamat: 'Kec. Nabire, Kab. Nabire', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -412,7 +412,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 12500, nasabah: 12500, partisipasi_persen: 12.5,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Lembah Baliem Bersih', kode: 'BSU-95-001',
-      alamat: 'Kec. Wamena, Kab. Jayawijaya', koordinator: 'Keliopas Matuan, S.Pd.', nomor_hp: '0812-4011-9501'
+      alamat: 'Kec. Wamena, Kab. Jayawijaya', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
   {
@@ -422,7 +422,7 @@ export const DATA_38_PROVINSI: ProvinsiItem[] = [
     total_nasabah: 16800, nasabah: 16800, partisipasi_persen: 16.3,
     unit_percontohan: {
       nama: 'Bank Sampah Unit Raja Ampat Bahari Resik', kode: 'BSU-96-001',
-      alamat: 'Kec. Sorong Barat, Kota Sorong', koordinator: 'Agustinus Osok', nomor_hp: '0813-4311-9601'
+      alamat: 'Kec. Sorong Barat, Kota Sorong', koordinator: 'Koordinator Unit (Percontohan)', nomor_hp: '0800-140-2026'
     }
   },
 ]
@@ -445,48 +445,82 @@ export interface ProvinsiPinItem extends ProvinsiItem {
 }
 
 /**
- * 15 Provinsi Percontohan SIMBA Nasional (sesuai peta 15 pin sebaran Indonesia)
+ * Peta Koordinat Pin SVG (viewBox 1024 x 371) untuk 38 Provinsi di Seluruh Indonesia
  */
-export const DATA_15_PROVINSI: ProvinsiPinItem[] = [
-  // 1. Sumatera Utara
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'SU')!, pinX: 105, pinY: 80 },
-  // 2. Sumatera Barat
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'SB')!, pinX: 140, pinY: 160 },
-  // 3. Banten
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'BT')!, pinX: 260, pinY: 275 },
-  // 4. DKI Jakarta
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JK')!, pinX: 290, pinY: 280 },
-  // 5. Jawa Barat
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JB')!, pinX: 340, pinY: 290 },
-  // 6. Jawa Tengah
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JT')!, pinX: 400, pinY: 305 },
-  // 7. DI Yogyakarta
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'YO')!, pinX: 440, pinY: 314 },
-  // 8. Jawa Timur
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'JI')!, pinX: 490, pinY: 320 },
-  // 9. Bali
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'BA')!, pinX: 562, pinY: 318 },
-  // 10. Kalimantan Barat
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'KB')!, pinX: 355, pinY: 155 },
-  // 11. Kalimantan Selatan
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'KS')!, pinX: 440, pinY: 205 },
-  // 12. Kalimantan Timur
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'KI')!, pinX: 465, pinY: 130 },
-  // 13. Sulawesi Utara
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'SW')!, pinX: 600, pinY: 115 },
-  // 14. Maluku
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'MA')!, pinX: 735, pinY: 198 },
-  // 15. Papua
-  { ...DATA_38_PROVINSI.find((p) => p.kode_iso === 'PA')!, pinX: 830, pinY: 195 },
-]
+const KOORDINAT_PIN_38: Record<string, { pinX: number; pinY: number }> = {
+  AC: { pinX: 65, pinY: 55 },   // Aceh
+  SU: { pinX: 105, pinY: 80 },  // Sumatera Utara
+  SB: { pinX: 140, pinY: 160 }, // Sumatera Barat
+  RI: { pinX: 175, pinY: 135 }, // Riau
+  JA: { pinX: 195, pinY: 175 }, // Jambi
+  SS: { pinX: 220, pinY: 205 }, // Sumatera Selatan
+  BE: { pinX: 180, pinY: 215 }, // Bengkulu
+  LA: { pinX: 235, pinY: 250 }, // Lampung
+  BB: { pinX: 255, pinY: 185 }, // Kep. Bangka Belitung
+  KR: { pinX: 215, pinY: 115 }, // Kep. Riau
+  JK: { pinX: 290, pinY: 280 }, // DKI Jakarta
+  JB: { pinX: 340, pinY: 290 }, // Jawa Barat
+  JT: { pinX: 400, pinY: 305 }, // Jawa Tengah
+  YO: { pinX: 440, pinY: 314 }, // DI Yogyakarta
+  JI: { pinX: 490, pinY: 320 }, // Jawa Timur
+  BT: { pinX: 260, pinY: 275 }, // Banten
+  BA: { pinX: 562, pinY: 318 }, // Bali
+  NB: { pinX: 595, pinY: 320 }, // NTB
+  NT: { pinX: 680, pinY: 335 }, // NTT
+  KB: { pinX: 355, pinY: 155 }, // Kalimantan Barat
+  KT: { pinX: 410, pinY: 180 }, // Kalimantan Tengah
+  KS: { pinX: 440, pinY: 205 }, // Kalimantan Selatan
+  KI: { pinX: 465, pinY: 130 }, // Kalimantan Timur
+  KU: { pinX: 470, pinY: 85 },  // Kalimantan Utara
+  SW: { pinX: 600, pinY: 115 }, // Sulawesi Utara
+  ST: { pinX: 535, pinY: 165 }, // Sulawesi Tengah
+  SN: { pinX: 530, pinY: 235 }, // Sulawesi Selatan
+  SG: { pinX: 575, pinY: 215 }, // Sulawesi Tenggara
+  GO: { pinX: 575, pinY: 130 }, // Gorontalo
+  SR: { pinX: 515, pinY: 190 }, // Sulawesi Barat
+  MA: { pinX: 735, pinY: 198 }, // Maluku
+  MU: { pinX: 720, pinY: 125 }, // Maluku Utara
+  PA: { pinX: 830, pinY: 195 }, // Papua
+  PB: { pinX: 785, pinY: 165 }, // Papua Barat
+  PS: { pinX: 865, pinY: 285 }, // Papua Selatan
+  PT: { pinX: 805, pinY: 210 }, // Papua Tengah
+  PP: { pinX: 840, pinY: 220 }, // Papua Pegunungan
+  PD: { pinX: 755, pinY: 160 }, // Papua Barat Daya
+}
 
 /**
- * Agregasi Agregasi Data Wilayah (Mendukung 15 Provinsi Percontohan atau 38 Provinsi)
+ * Master Data Lengkap 38 Provinsi beserta Koordinat Pin Interaktif
+ */
+export const DATA_38_PROVINSI_PETA: ProvinsiPinItem[] = DATA_38_PROVINSI.map((p) => ({
+  ...p,
+  pinX: KOORDINAT_PIN_38[p.kode_iso]?.pinX ?? 500,
+  pinY: KOORDINAT_PIN_38[p.kode_iso]?.pinY ?? 200,
+}))
+
+/**
+ * Backward compatibility alias (seluruh 38 provinsi agar konsisten)
+ */
+export const DATA_15_PROVINSI: ProvinsiPinItem[] = DATA_38_PROVINSI_PETA
+
+export interface StatistikAgregat {
+  total_provinsi: number
+  total_bsi: number
+  total_bsu: number
+  total_nasabah: number
+  total_kg: number
+  total_ton: number
+  total_rupiah: number
+  total_populasi: number
+  avg_partisipasi: number
+}
+
+/**
+ * Agregasi Data Wilayah (Mendukung filter kepulauan atau nasional)
  */
 export function hitungAgregasiNasional(
   filterPulau: string = 'all',
-  dataSource: ProvinsiItem[] = DATA_15_PROVINSI
-) {
+  dataSource: ProvinsiItem[] = DATA_38_PROVINSI
+): StatistikAgregat {
   const data = filterPulau === 'all' || filterPulau === 'Semua'
     ? dataSource
     : dataSource.filter((p) => p.pulau.toLowerCase() === filterPulau.toLowerCase())
@@ -495,6 +529,7 @@ export function hitungAgregasiNasional(
   const total_bsu = data.reduce((sum, p) => sum + p.bsu_aktif, 0)
   const total_nasabah = data.reduce((sum, p) => sum + p.total_nasabah, 0)
   const total_kg = data.reduce((sum, p) => sum + p.total_sampah_kg, 0)
+  const total_ton = Math.round(total_kg / 1000)
   const total_populasi = data.reduce((sum, p) => sum + p.populasi, 0)
   const total_rupiah = total_kg * 2500
   const avg_partisipasi = total_populasi > 0 ? (total_nasabah / total_populasi) * 100 : 0
@@ -506,9 +541,45 @@ export function hitungAgregasiNasional(
     total_bsu,
     total_nasabah,
     total_kg,
+    total_ton,
     total_rupiah,
     total_populasi,
     avg_partisipasi: parseFloat(avg_partisipasi.toFixed(2)),
   }
+}
+
+/**
+ * SUMBER DATA TUNGGAL (SINGLE SOURCE OF TRUTH) STATISTIK NASIONAL SIMBA
+ * Konsisten digunakan oleh Hero, Peta, Tabel Provinsi, dan Fallback API
+ */
+export const STATISTIK_NASIONAL: StatistikAgregat = hitungAgregasiNasional('Semua', DATA_38_PROVINSI)
+
+/**
+ * Format angka ringkas bahasa Indonesia (Contoh: 3.469.900 -> "3,47 juta")
+ * Menghilangkan format janggal seperti "3470k".
+ */
+export function formatRingkasAngka(num: number): string {
+  if (num >= 1_000_000_000) {
+    const val = (num / 1_000_000_000).toLocaleString('id-ID', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
+    })
+    return `${val} Miliar`
+  }
+  if (num >= 1_000_000) {
+    const val = (num / 1_000_000).toLocaleString('id-ID', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
+    })
+    return `${val} juta`
+  }
+  if (num >= 100_000) {
+    const val = (num / 1_000).toLocaleString('id-ID', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1,
+    })
+    return `${val} ribu`
+  }
+  return num.toLocaleString('id-ID')
 }
 

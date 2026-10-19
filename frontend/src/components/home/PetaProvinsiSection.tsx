@@ -18,10 +18,11 @@ import {
   UserCheck,
 } from 'lucide-react'
 import {
-  DATA_15_PROVINSI,
+  DATA_38_PROVINSI_PETA,
   DAFTAR_PULAU,
   ProvinsiPinItem,
   hitungAgregasiNasional,
+  formatRingkasAngka,
 } from '@/lib/provinsi-data'
 import { exportToCSV } from '@/lib/exportUtils'
 import toast from 'react-hot-toast'
@@ -37,15 +38,15 @@ export default function PetaProvinsiSection() {
   const [sortField, setSortField] = useState<keyof ProvinsiPinItem>('total_sampah_kg')
   const [sortAsc, setSortAsc] = useState<boolean>(false)
 
-  // Agregasi Ringkasan 15 Provinsi
+  // Agregasi Ringkasan 38 Provinsi (Konsisten dengan Hero dan Sumber Data Tunggal)
   const agregasi = useMemo(
-    () => hitungAgregasiNasional(selectedPulau, DATA_15_PROVINSI),
+    () => hitungAgregasiNasional(selectedPulau, DATA_38_PROVINSI_PETA),
     [selectedPulau]
   )
 
   // Filter Data
   const filteredProvinsi = useMemo(() => {
-    let list = DATA_15_PROVINSI
+    let list = DATA_38_PROVINSI_PETA
     if (selectedPulau !== 'Semua') {
       list = list.filter((p) => p.pulau === selectedPulau)
     }
@@ -78,14 +79,14 @@ export default function PetaProvinsiSection() {
   const activeKode = hoveredKode || selectedKode
   const activeProv = useMemo(
     () =>
-      DATA_15_PROVINSI.find((p) => p.kode_iso === activeKode || p.kode_bps === activeKode) ||
-      DATA_15_PROVINSI[0],
+      DATA_38_PROVINSI_PETA.find((p) => p.kode_iso === activeKode || p.kode_bps === activeKode) ||
+      DATA_38_PROVINSI_PETA[0],
     [activeKode]
   )
 
   // Urutan render pin: pin yang aktif/hovered dirender terakhir agar berada di tumpukan paling depan
   const renderPins = useMemo(() => {
-    return [...DATA_15_PROVINSI].sort((a, b) => {
+    return [...DATA_38_PROVINSI_PETA].sort((a, b) => {
       if (a.kode_iso === activeKode) return 1
       if (b.kode_iso === activeKode) return -1
       return 0
@@ -130,8 +131,8 @@ export default function PetaProvinsiSection() {
       p.unit_percontohan.nama,
       p.unit_percontohan.koordinator,
     ])
-    exportToCSV(`SIMBA_15_Provinsi_${selectedPulau.replace(/\s+/g, '_')}`, headers, rows)
-    toast.success('Data 15 provinsi berhasil diunduh (CSV)')
+    exportToCSV(`SIMBA_38_Provinsi_${selectedPulau.replace(/\s+/g, '_')}`, headers, rows)
+    toast.success('Data 38 provinsi berhasil diunduh (CSV)')
   }
 
   return (
@@ -143,21 +144,19 @@ export default function PetaProvinsiSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-3">
-            <ShieldCheck size={14} />
-            <span>Cakupan 15 Wilayah Percontohan Nasional</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-3">
+            <span>Data Simulasi — Pemodelan 38 Wilayah Provinsi</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
-            Sebaran 15 Provinsi di Seluruh <span className="text-emerald-400">Indonesia</span>
+            Sebaran 38 Provinsi di Seluruh <span className="text-emerald-400">Indonesia</span>
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-400">
-            Platform SIMBA terhubung langsung dengan Bank Sampah terverifikasi di 15 provinsi
-            percontohan dari Sumatera hingga Papua, memantau reduksi sampah dan pemberdayaan nasabah
-            secara transparan.
+            Prototipe SIMBA Nusantara memvisualisasikan model sebaran bank sampah di 38 provinsi
+            dari Sumatera hingga Papua untuk simulasi tata kelola sampah dan partisipasi warga secara transparan.
           </p>
         </div>
 
-        {/* KPI Ringkasan 15 Provinsi */}
+        {/* KPI Ringkasan 38 Provinsi */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
           <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm">
             <div className="flex items-center justify-between text-slate-400 mb-2 text-xs">
@@ -165,9 +164,9 @@ export default function PetaProvinsiSection() {
               <Building2 size={16} className="text-emerald-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white">
-              {agregasi.total_provinsi} <span className="text-xs text-slate-500 font-normal">/ 15</span>
+              {agregasi.total_provinsi} <span className="text-xs text-slate-500 font-normal">/ {selectedPulau === 'Semua' ? '38' : filteredProvinsi.length}</span>
             </div>
-            <p className="text-[11px] text-emerald-400 mt-1">Basis Data Terverifikasi</p>
+            <p className="text-[11px] text-amber-400 mt-1">Data Model Simulasi</p>
           </div>
 
           <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm">
@@ -187,7 +186,7 @@ export default function PetaProvinsiSection() {
               <Recycle size={16} className="text-amber-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white">
-              {(agregasi.total_kg / 1000).toLocaleString('id-ID', { maximumFractionDigits: 0 })}{' '}
+              {(agregasi.total_ton || Math.round(agregasi.total_kg / 1000)).toLocaleString('id-ID')}{' '}
               <span className="text-xs text-slate-500 font-normal">Ton</span>
             </div>
             <p className="text-[11px] text-amber-400 mt-1">Reduksi TPA Wilayah</p>
@@ -199,7 +198,7 @@ export default function PetaProvinsiSection() {
               <Users size={16} className="text-purple-400" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-white">
-              {(agregasi.total_nasabah / 1000).toFixed(0)}k{' '}
+              {formatRingkasAngka(agregasi.total_nasabah)}{' '}
               <span className="text-xs text-slate-500 font-normal">({agregasi.avg_partisipasi}%)</span>
             </div>
             <p className="text-[11px] text-purple-400 mt-1">Warga Terberdayakan</p>
@@ -249,7 +248,7 @@ export default function PetaProvinsiSection() {
               }`}
             >
               <TableIcon size={14} />
-              <span>Tabel 15 Provinsi</span>
+              <span>Tabel 38 Provinsi</span>
             </button>
             {viewMode === 'tabel' && (
               <button
@@ -263,7 +262,7 @@ export default function PetaProvinsiSection() {
           </div>
         </div>
 
-        {/* VIEW MODE 1: PETA INTERAKTIF INDONESIA (GAMBAR 1 DENGAN 15 PIN SEPERTI GAMBAR 3) */}
+        {/* VIEW MODE 1: PETA INTERAKTIF INDONESIA (38 PROVINSI) */}
         {viewMode === 'peta' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Canvas Peta Container */}
@@ -295,8 +294,8 @@ export default function PetaProvinsiSection() {
 
               {/* Status Indicator */}
               <div className="absolute bottom-4 left-4 z-20 text-[11px] text-slate-400 bg-slate-950/85 px-3 py-1.5 rounded-xl border border-slate-800 backdrop-blur-md flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-                <span className="font-medium text-slate-300">15 Provinsi Percontohan Terverifikasi</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                <span className="font-medium text-slate-300">38 Wilayah Model Simulasi (Percontohan)</span>
               </div>
 
               {/* Viewport SVG Container (Background putih bersih seperti Gambar 3) */}
@@ -503,18 +502,15 @@ export default function PetaProvinsiSection() {
                     <span className="text-slate-500 block text-[10px]">Koordinator:</span>
                     <span className="font-medium">{activeProv.unit_percontohan.koordinator}</span>
                   </div>
-                  <a
-                    href={`tel:${activeProv.unit_percontohan.nomor_hp.replace(/\D/g, '')}`}
-                    className="flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-xs font-semibold"
-                  >
+                  <span className="flex items-center gap-1 text-slate-400 text-xs font-medium">
                     <Phone size={12} />
-                    <span>{activeProv.unit_percontohan.nomor_hp}</span>
-                  </a>
+                    <span>Kontak Tim Simulasi</span>
+                  </span>
                 </div>
               </div>
 
               <p className="text-[11px] text-slate-500 text-center">
-                Disinkronisasi dengan Sistem Informasi Bank Sampah Nasional (SIMBA — KLH)
+                Data Pemodelan Simulasi untuk Prototipe Lomba Web Development IT Fest 2026
               </p>
             </div>
           </div>
@@ -538,7 +534,7 @@ export default function PetaProvinsiSection() {
 
               <div className="text-xs text-slate-400 self-end sm:self-auto">
                 Menampilkan <span className="font-bold text-white">{sortedProvinsi.length}</span>{' '}
-                dari 15 Provinsi Percontohan
+                dari 38 Provinsi
               </div>
             </div>
 

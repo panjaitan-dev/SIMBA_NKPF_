@@ -601,4 +601,18 @@ router.put('/:id', authMiddleware, requireRole('admin'), async (req, res) => {
   }
 });
 
+// DELETE /api/unit/:id (admin delete/deactivate)
+router.delete('/:id', authMiddleware, requireRole('admin'), async (req, res) => {
+  try {
+    const { error } = await supabase
+      .from('unit_bank_sampah')
+      .delete()
+      .eq('id', req.params.id);
+    if (error) return res.status(400).json({ success: false, message: error.message });
+    return res.json({ success: true, message: 'Unit berhasil dihapus' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Gagal menghapus unit' });
+  }
+});
+
 module.exports = router;

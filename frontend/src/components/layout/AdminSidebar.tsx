@@ -23,10 +23,11 @@ import {
   X,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { clearAuthCookies } from '@/lib/auth-client'
 
 export const adminNavItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/admin/klh', icon: Globe, label: 'Statistik Nasional KLH' },
+  { href: '/admin/klh', icon: Globe, label: 'Statistik Nasional' },
   { href: '/admin/nasabah', icon: Users, label: 'Data Nasabah' },
   { href: '/admin/klien', icon: Building2, label: 'Data Client / Pembeli' },
   { href: '/admin/jenis-sampah', icon: Settings, label: 'Kelola Data Sampah' },
@@ -56,6 +57,7 @@ export default function AdminSidebar() {
         localStorage.removeItem('simba_token')
         localStorage.removeItem('simba_user')
         localStorage.removeItem('simba_role')
+        clearAuthCookies()
       }
       const supabase = createClient()
       await supabase.auth.signOut().catch(() => {})

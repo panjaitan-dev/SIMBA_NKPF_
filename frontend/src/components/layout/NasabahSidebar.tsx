@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Leaf, PiggyBank, Recycle, ArrowDownToLine, User, LogOut, Menu, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { clearAuthCookies } from '@/lib/auth-client'
 
 const navItems = [
   { href: '/nasabah', icon: PiggyBank, label: 'Dashboard' },
@@ -29,6 +30,7 @@ export default function NasabahSidebar() {
         localStorage.removeItem('simba_token')
         localStorage.removeItem('simba_user')
         localStorage.removeItem('simba_role')
+        clearAuthCookies()
       }
       const supabase = createClient()
       await supabase.auth.signOut().catch(() => {})

@@ -175,7 +175,7 @@ export default function AjukanProvinsiModal({
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
                 <strong>Status Pilot:</strong> Saat ini SIMBA beroperasi penuh dengan pilot data riil di{' '}
                 <strong>Sumatera Utara</strong> (33 kab/kota). 37 provinsi lain berstatus{' '}
-                <em>"Belum tersedia di SIMBA"</em>.
+                <em>&quot;Belum tersedia di SIMBA&quot;</em>.
               </div>
 
               {error && (

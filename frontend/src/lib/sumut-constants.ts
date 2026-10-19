@@ -1,6 +1,6 @@
 /**
- * Data Resmi 33 Kabupaten/Kota Sumatera Utara & Unit Terverifikasi (Pilot SIMBA Sumut)
- * Sesuai Aturan R1: Data Asli dari Sumber Terbuka Resmi (BPS / Kemendagri / DLH)
+ * Data Percontohan 33 Kabupaten/Kota Sumatera Utara & Unit Terverifikasi (Pilot SIMBA Sumut)
+ * Sesuai Aturan R1: Data Asli dari Sumber Terbuka Percontohan (BPS / Kemendagri / DLH)
  */
 
 export interface KabKotaItem {
@@ -105,8 +105,8 @@ export const FALLBACK_VERIFIED_UNITS: UnitBankSampah[] = [
     lat: 3.542150,
     lng: 98.694820,
     sumber_koordinat: 'Google Maps Geocoding & Survey Lapangan DLH Medan',
-    telepon_publik: '081260112233',
-    whatsapp_publik: '081260112233',
+    telepon_publik: '08001402026',
+    whatsapp_publik: '08001402026',
     jam_operasional: {
       senin: '08:00 - 16:00',
       selasa: '08:00 - 16:00',
@@ -140,9 +140,9 @@ export const FALLBACK_VERIFIED_UNITS: UnitBankSampah[] = [
     alamat_lengkap: 'Kel. Belawan Sicanang, Kec. Medan Belawan, Kota Medan, Sumatera Utara',
     lat: 3.761200,
     lng: 98.675400,
-    sumber_koordinat: 'Dokumen Program Kampung Iklim (Proklim) KLHK & Pemko Medan',
-    telepon_publik: '082165004455',
-    whatsapp_publik: '082165004455',
+    sumber_koordinat: 'Dokumen Program Kampung Iklim (Proklim) Pemko Medan',
+    telepon_publik: '08001402026',
+    whatsapp_publik: '08001402026',
     jam_operasional: {
       senin: '09:00 - 15:00',
       selasa: '09:00 - 15:00',
@@ -177,8 +177,8 @@ export const FALLBACK_VERIFIED_UNITS: UnitBankSampah[] = [
     lat: 2.334100,
     lng: 99.062400,
     sumber_koordinat: 'Katalog Bank Sampah Binaan DLH Kab. Toba',
-    telepon_publik: '081377889900',
-    whatsapp_publik: '081377889900',
+    telepon_publik: '08001402026',
+    whatsapp_publik: '08001402026',
     jam_operasional: {
       senin: '08:30 - 16:00',
       selasa: '08:30 - 16:00',
@@ -211,9 +211,9 @@ export const FALLBACK_VERIFIED_UNITS: UnitBankSampah[] = [
     alamat_lengkap: 'Jl. Medan - Pematang Siantar Km. 28, Lubuk Pakam, Kab. Deli Serdang, Sumatera Utara',
     lat: 3.560400,
     lng: 98.872300,
-    sumber_koordinat: 'Publikasi Resmi DLH Deli Serdang',
-    telepon_publik: '085270119988',
-    whatsapp_publik: '085270119988',
+    sumber_koordinat: 'Publikasi Percontohan DLH Deli Serdang',
+    telepon_publik: '08001402026',
+    whatsapp_publik: '08001402026',
     jam_operasional: {
       senin: '08:00 - 16:00',
       selasa: '08:00 - 16:00',
@@ -247,8 +247,8 @@ export const FALLBACK_VERIFIED_UNITS: UnitBankSampah[] = [
     lat: 2.984200,
     lng: 99.623100,
     sumber_koordinat: 'Surat Keputusan BSU Dinas Lingkungan Hidup Asahan',
-    telepon_publik: '082276554433',
-    whatsapp_publik: '082276554433',
+    telepon_publik: '08001402026',
+    whatsapp_publik: '08001402026',
     jam_operasional: {
       senin: '08:00 - 16:00',
       selasa: '08:00 - 16:00',

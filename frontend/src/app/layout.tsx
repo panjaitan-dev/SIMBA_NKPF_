@@ -11,10 +11,10 @@ const plusJakarta = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'SIMBA — Sistem Informasi Bank Sampah Indonesia',
+    default: 'SIMBA — Sistem Informasi Bank Sampah Indonesia (Prototipe)',
     template: '%s | SIMBA Indonesia',
   },
-  description: 'Sistem Informasi Bank Sampah Indonesia — Platform Pengelolaan Bank Sampah dan Ekonomi Sirkular Berkelanjutan (Pilot Sumatera Utara)',
+  description: 'SIMBA Nusantara — Prototipe Platform Digital Pelayanan Publik & Pengelolaan Bank Sampah (Karya Simulasi Lomba IT Fest 2026)',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    siteName: 'SIMBA — Sistem Informasi Bank Sampah Indonesia',
+    siteName: 'SIMBA Nusantara — Prototipe Simulasi IT Fest 2026',
   },
 }
 

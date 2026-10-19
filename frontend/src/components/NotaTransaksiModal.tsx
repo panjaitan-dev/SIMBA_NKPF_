@@ -79,7 +79,7 @@ export default function NotaTransaksiModal({ data, isOpen, onClose }: NotaModalP
 
         {/* Printable Area */}
         <div id="printable-receipt" className="p-8 sm:p-10 text-slate-800 font-sans bg-white">
-          {/* Header Kop Resmi */}
+          {/* Header Kop Nota Transaksi */}
           <div className="border-b-2 border-slate-900 pb-5 mb-6">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
@@ -210,11 +210,11 @@ export default function NotaTransaksiModal({ data, isOpen, onClose }: NotaModalP
               <p className="text-slate-500 text-[11px] mt-1 leading-relaxed">
                 {data.catatan ||
                   (isBeli
-                    ? 'Nilai setoran sampah telah dikonversi dan dibukukan ke saldo tabungan nasabah. Simpan nota ini sebagai bukti transaksi resmi.'
-                    : 'Faktur resmi penjualan komoditas daur ulang dari Bank Sampah ke industri mitra.')}
+                    ? 'Nilai setoran sampah telah dikonversi dan dibukukan ke saldo tabungan nasabah. Simpan nota ini sebagai bukti transaksi simulasi.'
+                    : 'Faktur penjualan komoditas daur ulang dari Bank Sampah ke industri mitra (Data Simulasi).')}
               </p>
               <div className="flex items-center gap-1.5 text-emerald-700 text-[11px] font-semibold mt-3">
-                <CheckCircle2 size={13} /> Terverifikasi Sistem SIMBA Indonesia
+                <CheckCircle2 size={13} /> Tercatat di Sistem SIMBA (Simulasi)
               </div>
             </div>
 

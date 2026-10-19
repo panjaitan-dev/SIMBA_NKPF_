@@ -109,10 +109,10 @@ export const DEFAULT_JENIS_SAMPAH = [
 // ─── Nasabah ──────────────────────────────────────────────────────────────────
 
 export const DEFAULT_NASABAH = [
-  { id: 'nas-1', nomor_nasabah: 'NSB-001', nama_lengkap: 'Budi Santoso', nomor_hp: '0812-3456-7890', alamat: 'Jl. Merdeka No. 45' },
-  { id: 'nas-2', nomor_nasabah: 'NSB-002', nama_lengkap: 'Siti Rahmawati', nomor_hp: '0813-9876-5432', alamat: 'Komp. Asri Blok D3' },
-  { id: 'nas-3', nomor_nasabah: 'NSB-003', nama_lengkap: 'Ahmad Fauzi', nomor_hp: '0857-1234-5678', alamat: 'Kel. Sukamaju RT 02/04' },
-  { id: 'nas-4', nomor_nasabah: 'NSB-004', nama_lengkap: 'Dewi Lestari', nomor_hp: '0821-6543-2109', alamat: 'Perum Harapan Indah No. 12' },
+  { id: 'nas-1', nomor_nasabah: 'NSB-001', nama_lengkap: 'Budi Santoso', nomor_hp: '0800-140-2026', alamat: 'Jl. Merdeka No. 45' },
+  { id: 'nas-2', nomor_nasabah: 'NSB-002', nama_lengkap: 'Siti Rahmawati', nomor_hp: '0800-140-2026', alamat: 'Komp. Asri Blok D3' },
+  { id: 'nas-3', nomor_nasabah: 'NSB-003', nama_lengkap: 'Ahmad Fauzi', nomor_hp: '0800-140-2026', alamat: 'Kel. Sukamaju RT 02/04' },
+  { id: 'nas-4', nomor_nasabah: 'NSB-004', nama_lengkap: 'Dewi Lestari', nomor_hp: '0800-140-2026', alamat: 'Perum Harapan Indah No. 12' },
 ]
 
 // ─── Klien / Offtaker ─────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ export const DEFAULT_CLIENTS = [
     perusahaan: 'Pabrik Peleburan Tembaga & Aluminium',
     komoditas: 'Logam (Tembaga, Aluminium, Besi)',
     alamat: 'Kawasan Industri Pulogadung Blok B No. 12, Jakarta Timur',
-    nomor_hp: '0812-9876-5432',
+    nomor_hp: '0800-140-2026',
     status_aktif: true,
   },
   {
@@ -135,7 +135,7 @@ export const DEFAULT_CLIENTS = [
     perusahaan: 'Pengepul & Penggilingan Plastik',
     komoditas: 'Plastik (PET, HDPE, PP)',
     alamat: 'Jl. Raya Narogong Km. 12, Bantar Gebang, Bekasi',
-    nomor_hp: '0813-1122-3344',
+    nomor_hp: '0800-140-2026',
     status_aktif: true,
   },
   {
@@ -145,7 +145,7 @@ export const DEFAULT_CLIENTS = [
     perusahaan: 'Industri Pulp & Paper Daur Ulang',
     komoditas: 'Kardus Box, Kertas HVS & Koran',
     alamat: 'Jl. Industri Rungkut Blok C No. 45, Surabaya',
-    nomor_hp: '0857-4455-6677',
+    nomor_hp: '0800-140-2026',
     status_aktif: true,
   },
   {
@@ -155,7 +155,7 @@ export const DEFAULT_CLIENTS = [
     perusahaan: 'Pengolah Biodiesel Ramah Lingkungan',
     komoditas: 'Minyak Jelantah Rumah Tangga & Resto',
     alamat: 'Jl. Soekarno-Hatta No. 88, Gedebage, Bandung',
-    nomor_hp: '0821-7788-9900',
+    nomor_hp: '0800-140-2026',
     status_aktif: true,
   },
 ]

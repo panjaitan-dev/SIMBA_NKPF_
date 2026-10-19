@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Scale, Users, ClipboardList, Plus, Trash2, Printer, Save, Loader2, LogOut, LayoutDashboard, Leaf, Search, ChevronDown, Menu, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { clearAuthCookies } from '@/lib/auth-client'
 import api from '@/lib/api'
 import { formatRupiah, formatDate } from '@/lib/utils'
 import { DEFAULT_JENIS_SAMPAH, DEFAULT_NASABAH } from '@/lib/constants'
@@ -160,6 +161,7 @@ export default function PetugasDashboard() {
         localStorage.removeItem('simba_token')
         localStorage.removeItem('simba_user')
         localStorage.removeItem('simba_role')
+        clearAuthCookies()
       }
       const supabase = createClient()
       await supabase.auth.signOut().catch(() => {})

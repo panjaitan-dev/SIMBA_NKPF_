@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Leaf, Eye, EyeOff, Loader2, AlertCircle, RefreshCw, Server } from 'lucide-react'
 import api from '@/lib/api'
 import { createClient } from '@/lib/supabase/client'
+import { setAuthCookies } from '@/lib/auth-client'
 import toast from 'react-hot-toast'
 import { EMAIL_MAX, PASSWORD_MAX } from '@/lib/limits'
 
@@ -53,16 +54,16 @@ export default function LoginPage() {
         setIsColdStart(false)
 
         if (data?.success) {
-          // 1. Simpan sesi token & info akun ke localStorage
+          const role = data.role || data.profile?.role || 'nasabah'
+          // 1. Simpan sesi token & info akun ke localStorage & cookie
           if (data.token) {
             localStorage.setItem('simba_token', data.token)
+            setAuthCookies(data.token, role)
           }
           if (data.user) {
             localStorage.setItem('simba_user', JSON.stringify(data.user))
           }
-          if (data.role) {
-            localStorage.setItem('simba_role', data.role)
-          }
+          localStorage.setItem('simba_role', role)
 
           // 2. Sinkronkan sesi Supabase client di browser jika tersedia token
           try {
@@ -79,8 +80,16 @@ export default function LoginPage() {
 
           toast.success('Login berhasil!')
 
-          // 3. Arahkan rute berdasarkan role
-          const role = data.role || data.profile?.role
+          // 3. Arahkan rute: periksa parameter redirect terlebih dahulu
+          if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search)
+            const redirectUrl = params.get('redirect')
+            if (redirectUrl && redirectUrl.startsWith('/') && !redirectUrl.startsWith('//')) {
+              router.push(redirectUrl)
+              return
+            }
+          }
+
           if (role === 'admin') router.push('/admin')
           else if (role === 'admin_klh') router.push('/admin/klh')
           else if (role === 'petugas') router.push('/petugas')

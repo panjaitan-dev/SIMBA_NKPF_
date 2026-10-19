@@ -31,11 +31,11 @@ const KOMPOSISI = [
 ]
 
 const MONTHLY = [
-  { bln: 'Nov', bsu: 12100 }, { bln: 'Des', bsu: 12891 },
   { bln: 'Jan', bsu: 13102 }, { bln: 'Feb', bsu: 13489 },
   { bln: 'Mar', bsu: 13821 }, { bln: 'Apr', bsu: 14102 },
-  { bln: 'Mei', bsu: 14356 }, { bln: 'Jun', bsu: 14589 },
-  { bln: 'Jul', bsu: 14721 }, { bln: 'Agt', bsu: 14823 },
+  { bln: 'Mei', bsu: 14856 }, { bln: 'Jun', bsu: 15389 },
+  { bln: 'Jul', bsu: 15921 }, { bln: 'Agt', bsu: 16423 },
+  { bln: 'Sep', bsu: 16950 }, { bln: 'Okt', bsu: 17379 },
 ]
 
 function DonutChart({ totalKg }: { totalKg: number }) {
@@ -275,12 +275,12 @@ export default function AdminKLHDashboard() {
               <h1 className="text-2xl font-bold text-slate-900">
                 Statistik Nasional Bank Sampah Indonesia
               </h1>
-              <span className="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">
-                KLH Terverifikasi
+              <span className="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">
+                Model Data Simulasi
               </span>
             </div>
             <p className="text-slate-500 mt-1 text-sm">
-              Cakupan agregasi data real-time 38 provinsi di seluruh Indonesia
+              Cakupan agregasi data pemodelan 38 provinsi di seluruh Indonesia (Karya Lomba IT Fest 2026)
             </p>
           </div>
 
@@ -344,7 +344,7 @@ export default function AdminKLHDashboard() {
               </div>
               <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-1 rounded-md text-xs font-semibold">
                 <ShieldCheck className="w-3 h-3" />
-                Resmi
+                Percontohan
               </div>
             </div>
             <p className="text-slate-500 text-sm font-medium">Bank Sampah Induk (BSI)</p>

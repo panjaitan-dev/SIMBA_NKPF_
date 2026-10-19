@@ -271,7 +271,7 @@ export default function InputPenjualanPage() {
                     <span className="font-bold">{selectedClient.nama_client}</span> ({selectedClient.alamat}) |{' '}
                     <span>Kontak: {selectedClient.nomor_hp}</span>
                   </div>
-                  <span className="font-bold text-blue-700">Mitra Offtaker Resmi</span>
+                  <span className="font-bold text-blue-700">Mitra Offtaker Terdaftar</span>
                 </div>
               )}
             </div>

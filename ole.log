@@ -1,0 +1,44 @@
+[35mbackend/scripts/verify-demo-accounts.js[m[36m:[m[32m3[m[36m:[m * Memverifikasi 4 akun demo [1;31mresmi[m (README.md), endpoint proxy auth,
+[35mbackend/scripts/verify-demo-accounts.js[m[36m:[m[32m59[m[36m:[m  // 2. Uji Login 4 Akun Demo [1;31mResmi[m
+[35mbackend/scripts/verify-demo-accounts.js[m[36m:[m[32m60[m[36m:[m  console.log('\n[2/5] Menguji Login 4 Akun Demo [1;31mResmi[m via Proxy Backend ...');
+[35mbackend/src/controllers/auth.controller.js[m[36m:[m[32m39[m[36m:[m * Proksi login: Mendukung Supabase Auth & Akun Demo [1;31mResmi[m
+[35mbackend/src/lib/auth-utils.js[m[36m:[m[32m5[m[36m:[m// 4 Akun [1;31mResmi[m Demo Pengujian (README.md)
+[35mbackend/src/lib/auth-utils.js[m[36m:[m[32m61[m[36m:[m    email: '[1;31mklh[m.nasional@menlhk.go.id',
+[35mbackend/src/lib/auth-utils.js[m[36m:[m[32m63[m[36m:[m    role: 'admin_[1;31mklh[m',
+[35mbackend/src/lib/auth-utils.js[m[36m:[m[32m64[m[36m:[m    nama_lengkap: 'Admin Nasional [1;31mKLH[m',
+[35mbackend/src/lib/auth-utils.js[m[36m:[m[32m69[m[36m:[m      role: 'admin_[1;31mklh[m',
+[35mbackend/src/lib/auth-utils.js[m[36m:[m[32m70[m[36m:[m      nama_lengkap: 'Admin Nasional [1;31mKLH[m',
+[35mbackend/src/lib/provinsi-data.js[m[36m:[m[32m2[m[36m:[m * Data [1;31mResmi[m 38 Provinsi di Seluruh Indonesia (SIMBA Nusantara)
+[35mbackend/src/lib/provinsi-data.js[m[36m:[m[32m3[m[36m:[m * Memuat kode BPS [1;31mresmi[m, nama [1;31mresmi[m, koordinat ibu kota, populasi, target pengurangan sampah,
+[35mbackend/src/lib/provinsi-data.js[m[36m:[m[32m5[m[36m:[m * Sesuai baseline data [1;31mKLH[mK & BPS 2024-2026.
+[35mbackend/src/lib/sumut-data.js[m[36m:[m[32m2[m[36m:[m * Data [1;31mResmi[m 33 Kabupaten/Kota Sumatera Utara & Unit Bank Sampah Terverifikasi (Pilot Sumut)
+[35mbackend/src/lib/sumut-data.js[m[36m:[m[32m90[m[36m:[m    sumber_koordinat: 'Dokumen Program Kampung Iklim (Proklim) [1;31mKLH[mK & Pemko Medan',
+[35mbackend/src/lib/sumut-data.js[m[36m:[m[32m161[m[36m:[m    sumber_koordinat: 'Publikasi [1;31mResmi[m DLH Deli Serdang',
+[35mbackend/src/lib/validation.js[m[36m:[m[32m4[m[36m:[m// Daftar [1;31mresmi[m 38 Kode Wilayah Provinsi Indonesia (Kemendagri / BPS)
+[35mbackend/src/routes/stats.routes.js[m[36m:[m[32m18[m[36m:[mrouter.get('/petugas', authMiddleware, requireRole('petugas', 'admin', 'admin_[1;31mklh[m'), getPetugasStats);
+[35mbackend/supabase/cleanup_and_isolate_demo.sql[m[36m:[m[32m105[m[36m:[m  'Dokumen Program Kampung Iklim (Proklim) [1;31mKLH[mK & Pemko Medan',
+[35mbackend/supabase/cleanup_and_isolate_demo.sql[m[36m:[m[32m147[m[36m:[m  'Publikasi [1;31mResmi[m DLH Deli Serdang',
+[35mbackend/supabase/migration_track1_schema.sql[m[36m:[m[32m70[m[36m:[m-- 2. Tabel Master 33 Kabupaten/Kota di Sumatera Utara ([1;31mResmi[m BPS / Kemendagri)
+[35mbackend/supabase/migration_track1_schema.sql[m[36m:[m[32m80[m[36m:[m-- Seed 33 Kabupaten/Kota [1;31mResmi[m Sumatera Utara (Kode BPS 1201 s/d 1278)
+[35mbackend/supabase/schema.sql[m[36m:[m[32m15[m[36m:[m  role TEXT NOT NULL DEFAULT 'nasabah' CHECK (role IN ('nasabah', 'petugas', 'admin', 'admin_[1;31mklh[m')),
+[35mbackend/tests/critical-flows.test.js[m[36m:[m[32m68[m[36m:[m    const middleware = requireRole('admin', 'admin_[1;31mklh[m');
+[35mbackend/tests/critical-flows.test.js[m[36m:[m[32m94[m[36m:[m  it('harus mengizinkan akses jika role pengguna sesuai (Admin / Petugas / [1;31mKLH[m)', () => {
+[35mbackend/tests/critical-flows.test.js[m[36m:[m[32m130[m[36m:[m  it('harus memvalidasi 4 akun demo [1;31mresmi[m dengan role yang sesuai di README', () => {
+[35mbackend/tests/critical-flows.test.js[m[36m:[m[32m133[m[36m:[m    assert.deepStrictEqual(roles, ['admin', 'petugas', 'nasabah', 'admin_[1;31mklh[m']);
+[35mbackend/tests/provinsi-38.test.js[m[36m:[m[32m93[m[36m:[mdescribe('Fase 3: Agregasi Matematika Murni Dashboard [1;31mKLH[m', () => {
+[35mbackend/tests/provinsi-38.test.js[m[36m:[m[32m129[m[36m:[m  it('Timbulan sampah per kapita harus dalam rentang rasio nasional [1;31mKLH[mK (~0.5 - 0.9 kg/hari)', () => {
+[35mdata/templates/unit_sumut.csv[m[36m:[m[32m3[m[36m:[m"Bank Sampah Sicanang Mandiri","bsu-sicanang-mandiri","BSU-1275-002","1275","Kel. Belawan Sicanang, Kec. Medan Belawan, Kota Medan, Sumatera Utara",3.761200,98.675400,"Dokumen Program Kampung Iklim (Proklim) [1;31mKLH[mK & Pemko Medan","082165004455","082165004455","{""senin_jumat"":""09:00 - 15:00"",""sabtu"":""09:00 - 12:00"",""minggu"":""Tutup""}","Plastik;Kardus;Kaca;Logam","terverifikasi","Laporan Program Proklim Sicanang DLH Sumut 2024-2025","2026-10-12","Tim Verifikasi SIMBA","false"
+[35mdata/templates/unit_sumut.csv[m[36m:[m[32m5[m[36m:[m"Bank Sampah Berkah Deli Serdang","bsu-berkah-deli-serdang","BSU-1212-001","1212","Jl. Medan - Pematang Siantar Km. 28, Lubuk Pakam, Kab. Deli Serdang, Sumatera Utara",3.560400,98.872300,"Publikasi [1;31mResmi[m DLH Deli Serdang","085270119988","085270119988","{""senin_jumat"":""08:00 - 16:00"",""sabtu"":""Tutup"",""minggu"":""Tutup""}","Plastik;Kertas;Besi;Tembaga","terverifikasi","Publikasi Binaan Bank Sampah DLH Deli Serdang 2025","2026-10-15","Tim Verifikasi SIMBA","false"
+[35mdocs/AUDIT_DATA.md[m[36m:[m[32m60[m[36m:[m| **Tabel Kab/Kota** | 0 | **33 Kab/Kota** | 25 Kabupaten & 8 Kota [1;31mresmi[m Sumut (BPS 1201-1278) |
+[35mdocs/AUDIT_DATA.md[m[36m:[m[32m72[m[36m:[m1. Menjaga akun demo dewan juri (`admin@simba.id`, `petugas.melati@simba.id`, `nasabah.dewi@simba.id`, `[1;31mklh[m.nasional@menlhk.go.id`) tetap dapat login dan melakukan CRUD.
+[35mfrontend/README.md[m[36m:[m[32m50[m[36m:[m  - `admin/` — Panel Dashboard Administrator BSI & [1;31mKLH[m
+[35mfrontend/package-lock.json[m[36m:[m[32m203[m[36m:[m      "integrity": "sha512-qehxGkRj55h/ff8EMaJ+cYhya[1;31mKlH[mIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==",
+[35mfrontend/scripts/check-regressions.mjs[m[36m:[m[32m11[m[36m:[m  'Portal [1;31mResmi[m',
+[35mfrontend/scripts/check-regressions.mjs[m[36m:[m[32m21[m[36m:[m  'Unit Percontohan [1;31mResmi[m',
+[35mfrontend/src/app/(public)/login/page.tsx[m[36m:[m[32m94[m[36m:[m          else if (role === 'admin_[1;31mklh[m') router.push('/admin/[1;31mklh[m')
+[35mfrontend/src/app/admin/klh/page.tsx[m[36m:[m[32m116[m[36m:[mexport default function Admin[1;31mKLH[mDashboard() {
+[35mfrontend/src/app/admin/klh/page.tsx[m[36m:[m[32m234[m[36m:[m    exportToCSV(`SIMBA_Rekap_[1;31mKLH[m_38_Provinsi_${new Date().toISOString().split('T')[0]}`, headers, rows)
+[35mfrontend/src/components/layout/AdminSidebar.tsx[m[36m:[m[32m30[m[36m:[m  { href: '/admin/[1;31mklh[m', icon: Globe, label: 'Statistik Nasional [1;31mKLH[m' },
+[35mfrontend/src/components/layout/Navbar.tsx[m[36m:[m[32m64[m[36m:[m    if (role === 'admin_[1;31mklh[m') return '/admin/[1;31mklh[m'
+[35mscripts/import-unit.mjs[m[36m:[m[32m19[m[36m:[m// 33 Kode [1;31mResmi[m Kabupaten/Kota di Sumatera Utara (BPS 1201 s/d 1278)
+[35mscripts/import-unit.mjs[m[36m:[m[32m127[m[36m:[m      errs.push(`Kode kab/kota "${row.kabupaten_kota_kode}" bukan bagian dari 33 Kabupaten/Kota [1;31mresmi[m Sumatera Utara (1201-1278)`);

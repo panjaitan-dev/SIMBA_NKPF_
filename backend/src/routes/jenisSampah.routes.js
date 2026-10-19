@@ -8,7 +8,7 @@ router.get('/', getAllJenisSampah);
 
 // Admin only
 router.post('/', authMiddleware, requireRole('admin'), validate(createJenisSampahSchema), createJenisSampah);
-router.put('/:id', authMiddleware, requireRole('admin'), updateJenisSampah);
+router.put('/:id', authMiddleware, requireRole('admin'), validate(createJenisSampahSchema.partial()), updateJenisSampah);
 router.delete('/:id', authMiddleware, requireRole('admin'), deleteJenisSampah);
 
 module.exports = router;

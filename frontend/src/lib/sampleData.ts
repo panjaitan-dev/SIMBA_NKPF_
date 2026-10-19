@@ -8,7 +8,7 @@ export const SAMPLE_BERITA = [
     id: '1',
     judul: 'Peluncuran Aplikasi SIMBA Indonesia untuk Integrasi Operasional Bank Sampah Nasional',
     slug: 'peluncuran-simba-indonesia',
-    ringkasan: 'Platform digital SIMBA Indonesia resmi diluncurkan guna mempermudah pencatatan transaksi pembelian dan penjualan komoditas daur ulang serta transparansi buku tabungan nasabah.',
+    ringkasan: 'Platform digital SIMBA Indonesia dikembangkan sebagai model simulasi guna mempermudah pencatatan transaksi pembelian dan penjualan komoditas daur ulang serta transparansi buku tabungan nasabah.',
     thumbnail_url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80',
     kategori: 'program',
     published_at: new Date().toISOString(),
@@ -86,7 +86,7 @@ export const SAMPLE_EDUKASI = [
     kategori: 'jenis_sampah',
     ringkasan: 'Kenali perbedaan karakteristik sampah organik untuk kompos dan anorganik siap jual ke industri manufaktur daur ulang.',
     thumbnail_url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
-    konten: 'Pemilahan sampah dari sumber adalah kunci kelayakan industri daur ulang. Sampah plastik kering, kertas karton bersih, serta logam memiliki harga serap tinggi di offtaker resmi.',
+    konten: 'Pemilahan sampah dari sumber adalah kunci kelayakan industri daur ulang. Sampah plastik kering, kertas karton bersih, serta logam memiliki harga serap tinggi di mitra offtaker.',
   },
 ]
 

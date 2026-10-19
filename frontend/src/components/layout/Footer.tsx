@@ -16,16 +16,16 @@ const InstagramIcon = () => (
 
 const navLinks = ['Tentang', 'Berita', 'Edukasi', 'Galeri']
 const resources = [
-  { label: 'Portal SIMBA KLHK', href: 'https://simba.kemenlh.go.id/portal/' },
-  { label: 'Permen LHK No. 14/2021', href: 'https://jdih.menlhk.go.id/' },
-  { label: 'SIPSN Kemensetneg / KLHK', href: 'https://sipsn.menlhk.go.id/' },
-  { label: 'Gerakan Indonesia Bersih 2029', href: '#' },
+  { label: 'Referensi: Permen LHK No. 14/2021', href: 'https://jdih.menlhk.go.id/' },
+  { label: 'Referensi: Standar Bank Sampah', href: 'https://sipsn.menlhk.go.id/' },
+  { label: 'Edukasi: Gerakan 3R & Zero Waste', href: '/edukasi' },
+  { label: 'Katalog Komoditas Sampah', href: '/bank-sampah' },
 ]
 const bankLinks = [
   { label: 'Daftar Nasabah', href: '/register' },
   { label: 'Cek Saldo & Tabungan', href: '/nasabah' },
-  { label: 'Setoran Sampah (Beli)', href: '/admin/setoran/baru' },
-  { label: 'Katalog Sampah & Harga', href: '/admin/jenis-sampah' },
+  { label: 'Kalkulator Setoran', href: '/#kalkulator' },
+  { label: 'Katalog Sampah & Harga', href: '/#harga' },
 ]
 
 export default function Footer() {
@@ -45,19 +45,16 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Sistem Informasi Bank Sampah Indonesia — Platform digital pelayanan publik terpadu untuk pencatatan transaksi jual beli, pengelolaan tabungan sampah, dan akselerasi ekonomi sirkular nasional.
+              Sistem Informasi Bank Sampah Indonesia — Prototipe platform digital pelayanan publik untuk pencatatan transaksi setoran, pengelolaan tabungan sampah, dan simulasi ekonomi sirkular (Karya Lomba IT Fest 2026).
             </p>
             <div className="flex gap-3">
               {[
-                { href: 'https://simba.kemenlh.go.id/portal/', icon: <Leaf size={16} />, label: 'SIMBA Nasional' },
-                { href: 'mailto:kontak@banksampah.id', icon: <Mail size={16} />, label: 'Email' },
+                { href: 'mailto:kontak.tim@simba-dev.test', icon: <Mail size={16} />, label: 'Email Tim Pengembang' },
               ].map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="w-10 h-10 bg-slate-800 hover:bg-emerald-600 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-colors"
                 >
                   {s.icon}
@@ -83,7 +80,7 @@ export default function Footer() {
 
           {/* Sumber Daya */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Regulasi & Jaringan</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Referensi & Edukasi</h4>
             <ul className="space-y-3">
               {resources.map((r) => (
                 <li key={r.label}>
@@ -98,19 +95,19 @@ export default function Footer() {
 
           {/* Kontak & Informasi Tim */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Sekretariat Proyek</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm tracking-wider">Sekretariat Tim Pengembang</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-slate-500 shrink-0 mt-0.5" />
-                <span className="text-slate-400">Tim Pengembang SIMBA Nusantara (Pilot Sumatera Utara), Medan, Indonesia</span>
+                <span className="text-slate-400">Tim Pengembang SIMBA_NKPF_ (Prototipe Lomba IT Fest 2026), Medan, Indonesia</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-slate-500 shrink-0" />
-                <a href="mailto:kontak@simba-nusantara.id" className="text-slate-400 hover:text-emerald-400 transition-colors">kontak@simba-nusantara.id</a>
+                <a href="mailto:kontak.tim@simba-dev.test" className="text-slate-400 hover:text-emerald-400 transition-colors">kontak.tim@simba-dev.test</a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} className="text-slate-500 shrink-0" />
-                <span className="text-slate-400">+62 821-6500-2026</span>
+                <span className="text-slate-400">+62 800-140-2026 (Kontak Tim)</span>
               </li>
             </ul>
           </div>
@@ -118,9 +115,14 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">
-            © 2026 <strong className="text-slate-300">Sistem Informasi Bank Sampah Indonesia</strong>. Hak Cipta Dilindungi Undang-Undang.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+            <p className="text-slate-500 text-sm">
+              © 2026 <strong className="text-slate-300">SIMBA Nusantara</strong>. Karya Prototipe Kompetisi IT Fest 2026.
+            </p>
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-semibold">
+              Data Simulasi
+            </span>
+          </div>
           <div className="flex gap-6 text-sm font-medium">
             <Link href="/kebijakan-privasi" className="text-slate-500 hover:text-emerald-400 transition-colors">Kebijakan Privasi</Link>
             <Link href="/syarat-ketentuan" className="text-slate-500 hover:text-emerald-400 transition-colors">Syarat & Ketentuan</Link>

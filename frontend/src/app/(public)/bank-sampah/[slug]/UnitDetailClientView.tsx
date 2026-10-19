@@ -312,7 +312,7 @@ export default function UnitDetailClientView({ unit }: UnitDetailClientViewProps
             <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
               <h3 className="text-base font-bold text-slate-900 mb-2">Koordinat & Navigasi</h3>
               <p className="text-xs text-slate-500 mb-4">
-                Titik koordinat resmi:{' '}
+                Titik koordinat percontohan:{' '}
                 <span className="font-mono text-slate-700">
                   {unit.lat}, {unit.lng}
                 </span>{' '}

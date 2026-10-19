@@ -123,7 +123,7 @@ export default function AdminLaporanTransaksiPage() {
               Laporan Transaksi Jual Beli Sampah
             </h1>
             <p className="text-slate-500 text-sm mt-0.5">
-              Filter transaksi berdasarkan rentang tanggal, evaluasi perputaran dana, tonase komoditas, dan cetak laporan resmi.
+              Filter transaksi berdasarkan rentang tanggal, evaluasi perputaran dana, tonase komoditas, dan cetak rekap transaksi.
             </p>
           </div>
           <div className="flex items-center gap-3">

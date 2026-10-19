@@ -51,16 +51,14 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
-  // Field element refs for autofocusing first error
-  const fieldRefs = {
-    nama_lengkap: useRef<HTMLInputElement>(null),
-    email: useRef<HTMLInputElement>(null),
-    nik: useRef<HTMLInputElement>(null),
-    nomor_hp: useRef<HTMLInputElement>(null),
-    unit_id: useRef<HTMLSelectElement>(null),
-    alamat: useRef<HTMLTextAreaElement>(null),
-    password: useRef<HTMLInputElement>(null),
-  }
+  // Individual field refs for autofocusing errors
+  const namaRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const nikRef = useRef<HTMLInputElement>(null);
+  const hpRef = useRef<HTMLInputElement>(null);
+  const unitRef = useRef<HTMLSelectElement>(null);
+  const alamatRef = useRef<HTMLTextAreaElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     api
@@ -269,7 +267,7 @@ export default function RegisterPage() {
                   </p>
                 ) : (
                   <p id="help-nama" className="text-[11px] text-slate-400 mt-1">
-                    Gunakan huruf resmi sesuai kartu identitas, tanpa angka atau simbol.
+                    Gunakan huruf sesuai kartu identitas (KTP), tanpa angka atau simbol.
                   </p>
                 )}
               </div>

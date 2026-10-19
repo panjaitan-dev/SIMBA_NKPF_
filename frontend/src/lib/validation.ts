@@ -7,7 +7,7 @@ import {
   LAPOR_TIKET_LENGTH,
 } from './limits'
 
-// Daftar resmi 38 Kode Wilayah Provinsi Indonesia (Kemendagri / BPS)
+// Daftar 38 Kode Wilayah BPS Provinsi Indonesia
 export const VALID_PROVINCE_CODES = [
   // Sumatera (10)
   '11', '12', '13', '14', '15', '16', '17', '18', '19', '21',

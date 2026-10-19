@@ -58,7 +58,7 @@ const DEMO_ACCOUNTS = [
   },
   {
     id: 'd3b07384-d113-4001-9001-000000000004',
-    email: 'klh.nasional@menlhk.go.id',
+    email: 'admin.nasional@simba.id',
     password: 'Password123!',
     role: 'admin_klh',
     nama_lengkap: 'Admin Nasional KLH',
