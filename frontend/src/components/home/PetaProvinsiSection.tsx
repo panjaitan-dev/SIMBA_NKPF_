@@ -359,19 +359,6 @@ export default function PetaProvinsiSection() {
                           opacity="0.3"
                         />
 
-                        {/* Lingkaran Pulsing jika terpilih atau di-hover */}
-                        {(isSelected || isHovered) && (
-                          <circle
-                            cx={prov.pinX}
-                            cy={prov.pinY}
-                            r={14}
-                            fill="none"
-                            stroke="#ef4444"
-                            strokeWidth="2"
-                            className="animate-ping"
-                            opacity="0.75"
-                          />
-                        )}
 
                         {/* Ikon Drop Pin Merah (Gaya Gambar 3) */}
                         <g
