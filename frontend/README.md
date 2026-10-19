@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌿 SIMBA Frontend — Next.js Web Application
 
-## Getting Started
+Aplikasi antarmuka web modern untuk platform **SIMBA (Sistem Informasi Bank Sampah Indonesia)** yang dibangun menggunakan Next.js App Router, React 19, TypeScript, dan Tailwind CSS v4.
 
-First, run the development server:
+---
 
+## 🚀 Memulai Pengembangan Lokal
+
+### 1. Instalasi Dependensi
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Konfigurasi Environment Variables
+Salin contoh konfigurasi ke `.env.local`:
+```bash
+cp .env.example .env.local
+```
+Isi nilai variabel:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Menjalankan Server Development
+```bash
+npm run dev
+```
+Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📜 Skrip yang Tersedia
 
-To learn more about Next.js, take a look at the following resources:
+| Perintah | Deskripsi |
+|---|---|
+| `npm run dev` | Menjalankan server Next.js mode development dengan hot-reloading |
+| `npm run build` | Melakukan build produksi teroptimasi menggunakan Next.js Turbopack |
+| `npm run start` | Menjalankan server aplikasi Next.js dalam mode produksi |
+| `npm test` | Menjalankan verifikasi peta wilayah & pemeriksaan regresi kode |
+| `npm run lint` | Memeriksa kualitas kode menggunakan ESLint |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Struktur Direktori Frontend
 
-## Deploy on Vercel
+- `src/app/` — Halaman aplikasi & rute (App Router)
+  - `(public)/` — Halaman publik (Beranda, Bank Sampah, Lapor, Berita, Edukasi, Login, Register)
+  - `admin/` — Panel Dashboard Administrator BSI & KLH
+  - `nasabah/` — Panel Dashboard Nasabah Warga
+  - `petugas/` — Panel Input Timbangan Petugas Lapangan
+- `src/components/` — Komponen UI modular
+  - `home/` — Komponen khusus beranda (Hero, Peta Provinsi, Kalkulator)
+  - `layout/` — Komponen layout (Navbar responsif dinamis, Footer, Sidebar)
+  - `modals/` — Dialog pop-up interaktif & bukti nota cetak
+- `src/lib/` — Utilitas pembantu, client API, validasi Zod, dan data referensi provinsi
+- `public/` — Aset gambar, ikon, dan peta statis
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Dokumentasi lengkap proyek dapat dilihat di [README.md utama](../README.md).
