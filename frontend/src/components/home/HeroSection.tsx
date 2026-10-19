@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { STATISTIK_NASIONAL } from '@/lib/provinsi-data';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 
 interface StatItem {
   label: string;
@@ -70,26 +68,31 @@ export default function HeroSection() {
             Prototipe platform digital pelayanan publik untuk pencatatan transaksi bank sampah, transparansi saldo nasabah, dan pemodelan data ekonomi sirkular secara real‑time.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button variant="default" onClick={() => scrollTo('kalkulator')}>
+            <button
+              onClick={() => scrollTo('kalkulator')}
+              className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/40 hover:-translate-y-0.5 cursor-pointer"
+            >
               Hitung Setoran Saya
-            </Button>
-            <Button variant="secondary" onClick={() => scrollTo('finder')}>
+            </button>
+            <button
+              onClick={() => scrollTo('finder')}
+              className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl transition-all backdrop-blur-sm hover:-translate-y-0.5 cursor-pointer"
+            >
               Cari Bank Sampah
-            </Button>
+            </button>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 md:gap-6">
           {stats.map(s => (
-            <Card key={s.label} className="bg-white/10 backdrop-blur-sm border-white/20 text-center">
-              <CardHeader className="p-3">
-                <CardTitle className="text-2xl font-bold text-emerald-300">
-                  {s.prefix}{s.value.toLocaleString('id-ID')}{s.suffix}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pb-3">
-                <p className="text-sm text-slate-300">{s.label}</p>
-              </CardContent>
-            </Card>
+            <div
+              key={s.label}
+              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 text-center shadow-sm"
+            >
+              <div className="text-2xl font-bold text-emerald-300">
+                {s.prefix}{s.value.toLocaleString('id-ID')}{s.suffix}
+              </div>
+              <p className="text-sm text-slate-300 mt-1">{s.label}</p>
+            </div>
           ))}
         </div>
       </div>

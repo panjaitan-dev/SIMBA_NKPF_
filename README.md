@@ -125,3 +125,14 @@ For the competition, no external contributions are required. Feel free to fork t
 ---
 
 *This README is intentionally minimal and free of any official claims. All contact information, logos, and statistics are placeholders used only for the competition demonstration.*
+
+## 📋 Demo Accounts
+
+For quick testing, the following demo accounts are pre‑configured in the application:
+
+- **Admin (National)**
+  - Email: `admin.nasional@simba.id`
+  - Password: `Password123!`
+  - Role: `admin_klh` (admin with KLH label, now neutralized in UI)
+
+Use these credentials to log in via the **Login** page (`/login`). After login you will be redirected to the admin dashboard.

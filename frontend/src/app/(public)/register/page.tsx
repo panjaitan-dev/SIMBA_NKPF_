@@ -60,6 +60,16 @@ export default function RegisterPage() {
   const alamatRef = useRef<HTMLTextAreaElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const fieldRefs = {
+    nama_lengkap: namaRef,
+    email: emailRef,
+    nik: nikRef,
+    nomor_hp: hpRef,
+    unit_id: unitRef,
+    alamat: alamatRef,
+    password: passwordRef,
+  };
+
   useEffect(() => {
     api
       .get('/unit')
