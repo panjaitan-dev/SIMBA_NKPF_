@@ -9,7 +9,12 @@ export interface UnitPercontohan {
   alamat: string
   koordinator: string
   nomor_hp: string
+  /** optional opening hours, e.g. "08:00‑17:00" */
+  jam_buka?: string
+  /** optional list of waste categories the unit accepts */
+  kategori_sampah?: string[]
 }
+
 
 export interface ProvinsiItem {
   kode_bps: string
