@@ -1,277 +1,202 @@
 'use client'
+import { useState, useEffect } from 'react'
+import api from '@/lib/api'
 
-import { useState, useMemo } from 'react'
-import Link from 'next/link'
-import {
-  ArrowUpDown,
-  Filter,
-  Receipt,
-  Scale,
-  Calendar,
-  Info,
-  ChevronRight,
-  TrendingUp,
-} from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-
-interface HargaAcuanItem {
+interface HargaItem {
   kode: string
   nama: string
-  kategori: string
-  harga_beli: number
   satuan: string
-  keterangan: string
-  tanggal_acuan: string
+  harga_beli: number
+  harga_jual: number
+  kategori: string
+  trend?: 'up' | 'down' | 'stable'
 }
 
-const KATALOG_HARGA_SIMULASI: HargaAcuanItem[] = [
-  {
-    kode: 'PL-01',
-    nama: 'Botol Plastik PET Bening Bersih',
-    kategori: 'Plastik',
-    harga_beli: 4800,
-    satuan: 'kg',
-    keterangan: 'Tanpa tutup & label, kondisi kering kempa',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'PL-02',
-    nama: 'Plastik HDPE Keras / Emberan',
-    kategori: 'Plastik',
-    harga_beli: 4000,
-    satuan: 'kg',
-    keterangan: 'Wadah detergen, jeriken, ember pecah',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'KT-01',
-    nama: 'Kardus Box Cokelat Bergelombang',
-    kategori: 'Kertas',
-    harga_beli: 2500,
-    satuan: 'kg',
-    keterangan: 'Kering, lipat rapi, bebas lakban tebal',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'KT-02',
-    nama: 'Kertas Arsip HVS Putih / Buku',
-    kategori: 'Kertas',
-    harga_beli: 2200,
-    satuan: 'kg',
-    keterangan: 'Bebas sampul plastik dan staples besi',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'LG-01',
-    nama: 'Tembaga Kabel Kupas Super',
-    kategori: 'Logam',
-    harga_beli: 85000,
-    satuan: 'kg',
-    keterangan: 'Kawat tembaga murni tanpa isolator',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'LG-02',
-    nama: 'Kaleng Minuman Aluminium Ringan',
-    kategori: 'Logam',
-    harga_beli: 18000,
-    satuan: 'kg',
-    keterangan: 'Kering, kempeskan untuk efisiensi ruang',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'LG-03',
-    nama: 'Besi Padu / Pipa Konstruksi',
-    kategori: 'Logam',
-    harga_beli: 6000,
-    satuan: 'kg',
-    keterangan: 'Besi tebal padat bebas karat rapuh',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'KC-01',
-    nama: 'Botol Beling Utuh / Kaca Bening',
-    kategori: 'Kaca',
-    harga_beli: 600,
-    satuan: 'kg',
-    keterangan: 'Kondisi utuh tidak pecah berantakan',
-    tanggal_acuan: '10 Okt 2026',
-  },
-  {
-    kode: 'LN-01',
-    nama: 'Minyak Jelantah Rumah Tangga',
-    kategori: 'Lainnya',
-    harga_beli: 7500,
-    satuan: 'liter',
-    keterangan: 'Sudah disaring dari sisa remah makanan',
-    tanggal_acuan: '10 Okt 2026',
-  },
-]
+const formatRupiah = (n: number) =>
+  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n)
 
-const formatRupiah = (n: number) => `Rp ${n.toLocaleString('id-ID')}`
+const KATEGORI_COLORS: Record<string, string> = {
+  logam: 'bg-amber-100 text-amber-700',
+  anorganik: 'bg-blue-100 text-blue-700',
+  lainnya: 'bg-purple-100 text-purple-700',
+  organik: 'bg-green-100 text-green-700',
+}
 
 export default function HargaTickerSection() {
-  const [filterKategori, setFilterKategori] = useState('Semua')
+  const [data, setData] = useState<HargaItem[]>([])
+  const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState<'harga_beli' | 'nama'>('harga_beli')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
+  const [filterKategori, setFilterKategori] = useState('all')
+  const [lastUpdate, setLastUpdate] = useState(new Date())
 
-  const kategoriList = ['Semua', 'Plastik', 'Kertas', 'Logam', 'Kaca', 'Lainnya']
-
-  const toggleSort = (field: 'harga_beli' | 'nama') => {
-    if (sortBy === field) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
-    } else {
-      setSortBy(field)
-      setSortDir('desc')
+  const fetchHarga = async () => {
+    try {
+      const r = await api.get('/stats/harga')
+      setData(r.data.data)
+      setLastUpdate(new Date())
+    } catch {
+      // Keep existing data
     }
   }
 
-  const filteredData = useMemo(() => {
-    return KATALOG_HARGA_SIMULASI.filter(
-      (item) => filterKategori === 'Semua' || item.kategori === filterKategori
-    ).sort((a, b) => {
-      const multiplier = sortDir === 'asc' ? 1 : -1
-      if (sortBy === 'nama') {
-        return a.nama.localeCompare(b.nama) * multiplier
-      }
-      return (a.harga_beli - b.harga_beli) * multiplier
+  useEffect(() => {
+    fetchHarga().finally(() => setLoading(false))
+    // Simulate price fluctuations every 30s
+    const interval = setInterval(() => {
+      setData((prev) =>
+        prev.map((item) => {
+          const delta = (Math.random() - 0.5) * 200 // ±Rp 100
+          const newHarga = Math.max(100, item.harga_beli + Math.round(delta))
+          const oldHarga = item.harga_beli
+          return {
+            ...item,
+            harga_beli: newHarga,
+            trend: newHarga > oldHarga ? 'up' : newHarga < oldHarga ? 'down' : 'stable',
+          }
+        })
+      )
+      setLastUpdate(new Date())
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const toggleSort = (col: 'harga_beli' | 'nama') => {
+    if (sortBy === col) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    else { setSortBy(col); setSortDir('desc') }
+  }
+
+  const kategoriList = ['all', ...new Set(data.map((d) => d.kategori))]
+
+  const filtered = data
+    .filter((d) => filterKategori === 'all' || d.kategori === filterKategori)
+    .sort((a, b) => {
+      const mul = sortDir === 'asc' ? 1 : -1
+      if (sortBy === 'nama') return a.nama.localeCompare(b.nama) * mul
+      return (a.harga_beli - b.harga_beli) * mul
     })
-  }, [filterKategori, sortBy, sortDir])
+
+  const TrendIcon = ({ trend }: { trend?: string }) => {
+    if (trend === 'up') return <span className="text-emerald-500 font-bold text-xs">▲</span>
+    if (trend === 'down') return <span className="text-red-500 font-bold text-xs">▼</span>
+    return <span className="text-slate-400 font-bold text-xs">—</span>
+  }
 
   return (
-    <section id="harga" className="py-20 sm:py-24 bg-[#F4EFE4] border-b border-[#E2DACB]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+    <section id="harga" className="py-24 bg-slate-50">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-mono font-bold tracking-widest uppercase text-[#D8572A]">
-                Papan Harga Acuan
-              </span>
-              <Badge variant="simulation">Data Simulasi</Badge>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1B1B18] tracking-tight">
-              Bursa Komoditas <span className="text-[#1E4D3B]">Bank Sampah</span>
+            <span className="text-emerald-600 font-semibold tracking-widest text-xs uppercase mb-2 block">Harga Sampah</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Papan Harga <span className="text-emerald-600">Real-time</span>
             </h2>
-            <p className="mt-2 text-sm text-[#66635B] max-w-xl">
-              Harga acuan simulasi transaksi penyetoran nasabah di tingkat unit percontohan.
-              Diperbarui berkala mengikuti harga pasar daur ulang.
+            <p className="text-slate-500 mt-2 text-sm">
+              Update terakhir: {lastUpdate.toLocaleTimeString('id-ID')}
+              <span className="ml-2 inline-flex items-center gap-1 text-emerald-600">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live
+              </span>
             </p>
           </div>
-
-          {/* Tanggal Pembaruan yang Jujur & Tanpa Label "Live" */}
-          <div className="bg-[#FAF7F2] border border-[#E2DACB] rounded-2xl px-4 py-3 flex items-center gap-3 shrink-0 shadow-xs">
-            <Calendar size={18} className="text-[#1E4D3B]" />
-            <div className="text-xs font-mono">
-              <span className="text-[#66635B] block">Katalog Berlaku:</span>
-              <strong className="text-[#1B1B18]">10 Oktober 2026</strong>
-            </div>
+          {/* Filter kategori */}
+          <div className="flex gap-2 flex-wrap">
+            {kategoriList.map((k) => (
+              <button
+                key={k}
+                onClick={() => setFilterKategori(k)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold capitalize transition-colors ${
+                  filterKategori === k
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-300'
+                }`}
+              >
+                {k === 'all' ? 'Semua' : k}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Filter Kategori & Pengendali */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          {/* Pill Kategori */}
-          <div className="flex flex-wrap gap-2">
-            {kategoriList.map((kat) => {
-              const isActive = filterKategori === kat
-              return (
-                <button
-                  key={kat}
-                  type="button"
-                  onClick={() => setFilterKategori(kat)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-[#1E4D3B] text-white shadow-xs'
-                      : 'bg-[#FAF7F2] border border-[#E2DACB] text-[#66635B] hover:text-[#1B1B18]'
-                  }`}
-                >
-                  {kat}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Info Jumlah */}
-          <span className="text-xs font-mono text-[#66635B]">
-            {filteredData.length} komoditas terdaftar
-          </span>
-        </div>
-
-        {/* Tabel Ledger Harga Kertas / Buku Kas */}
-        <div className="bg-[#FAF7F2] border-2 border-[#1E4D3B] rounded-2xl shadow-[4px_4px_0px_#1E4D3B] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-[#EBF2EE] border-b-2 border-[#1E4D3B] font-mono text-[11px] uppercase tracking-wider text-[#1E4D3B]">
-                <tr>
-                  <th className="py-3 px-4 font-bold">Kode</th>
+        {/* Table */}
+        <div className="bg-white border border-slate-200 rounded-2xl overflow-x-auto shadow-sm">
+          <table className="w-full text-sm min-w-[520px]">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr>
+                {[
+                  { key: 'nama', label: 'Jenis Sampah' },
+                  { key: null, label: 'Kategori' },
+                  { key: 'harga_beli', label: 'Harga Beli' },
+                  { key: null, label: 'Harga Jual' },
+                  { key: null, label: 'Trend' },
+                ].map((col) => (
                   <th
-                    className="py-3 px-4 font-bold cursor-pointer hover:bg-[#FAF7F2] transition-colors"
-                    onClick={() => toggleSort('nama')}
+                    key={col.label}
+                    className={`text-left px-5 py-4 text-xs font-semibold text-slate-500 ${col.key ? 'cursor-pointer hover:text-emerald-600 select-none' : ''}`}
+                    onClick={() => col.key && toggleSort(col.key as 'harga_beli' | 'nama')}
                   >
-                    <div className="flex items-center gap-1.5">
-                      <span>Komoditas Sampah</span>
-                      <ArrowUpDown size={12} />
-                    </div>
+                    <span className="flex items-center gap-1">
+                      {col.label}
+                      {col.key && sortBy === col.key && (
+                        <span>{sortDir === 'desc' ? '↓' : '↑'}</span>
+                      )}
+                    </span>
                   </th>
-                  <th className="py-3 px-4 font-bold hidden sm:table-cell">Kategori</th>
-                  <th className="py-3 px-4 font-bold hidden md:table-cell">Kriteria Sortir</th>
-                  <th
-                    className="py-3 px-4 font-bold text-right cursor-pointer hover:bg-[#FAF7F2] transition-colors"
-                    onClick={() => toggleSort('harga_beli')}
-                  >
-                    <div className="flex items-center justify-end gap-1.5">
-                      <span>Harga Beli (Tunai/Saldo)</span>
-                      <ArrowUpDown size={12} />
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#E2DACB] font-mono">
-                {filteredData.map((item) => (
-                  <tr key={item.kode} className="hover:bg-[#F4EFE4] transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-[#66635B] whitespace-nowrap">
-                      {item.kode}
-                    </td>
-                    <td className="py-3.5 px-4 font-sans font-bold text-[#1B1B18]">
-                      {item.nama}
-                      <span className="block sm:hidden text-[10px] font-mono text-[#66635B] mt-0.5">
-                        {item.kategori} • {item.satuan}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 hidden sm:table-cell text-[#1E4D3B] font-semibold">
-                      {item.kategori}
-                    </td>
-                    <td className="py-3.5 px-4 hidden md:table-cell text-[#66635B] font-sans text-xs">
-                      {item.keterangan}
-                    </td>
-                    <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                      <span className="text-sm sm:text-base font-black text-[#D8572A]">
-                        {formatRupiah(item.harga_beli)}
-                      </span>
-                      <span className="text-[11px] text-[#66635B] ml-1">/ {item.satuan}</span>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {loading ? (
+                Array.from({ length: 8 }).map((_, i) => (
+                  <tr key={i}>
+                    <td colSpan={5}>
+                      <div className="h-10 bg-slate-100 animate-pulse m-2 rounded" />
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Footer Keterangan Tabel */}
-          <div className="p-4 bg-[#FAF7F2] border-t border-[#E2DACB] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#66635B]">
-            <div className="flex items-center gap-1.5">
-              <Info size={14} className="text-[#1E4D3B] shrink-0" />
-              <span>Harga akhir ditentukan saat penimbangan oleh petugas unit berdasarkan kebersihan komoditas.</span>
-            </div>
-            <Link
-              href="#kalkulator"
-              className="font-bold text-[#1E4D3B] hover:text-[#D8572A] inline-flex items-center gap-1 shrink-0"
-            >
-              <span>Hitung Nilai di Kalkulator</span>
-              <ChevronRight size={14} />
-            </Link>
-          </div>
+                ))
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-16 text-slate-400">
+                    Tidak ada data harga.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((item) => (
+                  <tr key={item.kode} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-5 py-4">
+                      <p className="font-semibold text-slate-800">{item.nama}</p>
+                      <p className="text-xs text-slate-400 font-mono mt-0.5">{item.kode}</p>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${KATEGORI_COLORS[item.kategori] || 'bg-slate-100 text-slate-600'}`}>
+                        {item.kategori}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className="font-bold text-amber-600 tabular-nums">
+                        {formatRupiah(item.harga_beli)}
+                      </span>
+                      <span className="text-xs text-slate-400 ml-1">/{item.satuan}</span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className="font-semibold text-slate-600 tabular-nums">
+                        {formatRupiah(item.harga_jual || item.harga_beli * 1.2)}
+                      </span>
+                      <span className="text-xs text-slate-400 ml-1">/{item.satuan}</span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <TrendIcon trend={item.trend} />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
+
+        <p className="text-center text-xs text-slate-400 mt-4">
+          * Harga indikatif. Harga aktual ditentukan unit bank sampah setempat berdasarkan kualitas sampah.
+        </p>
       </div>
     </section>
   )

@@ -1,89 +1,7 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-serif: var(--font-fraunces), Georgia, serif;
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
-
-  /* PALET KHAS: BUKU TABUNGAN SAMPAH (SUMATERA UTARA PILOT) */
-  --color-paper: #F4EFE4;
-  --color-paper-light: #FAF7F2;
-  --color-paper-card: #FFFFFF;
-  --color-paper-dark: #E8E1D3;
-  --color-paper-border: #E2DACB;
-  --color-paper-border-dark: #D4CABA;
-
-  /* Warna Tinta Cetak */
-  --color-ink: #1B1B18;
-  --color-ink-light: #3E3C37;
-  --color-ink-muted: #66635B;
-  --color-ink-faint: #99958C;
-
-  /* Merek: Hijau Tua Hutan Danau Toba */
-  --color-brand-forest: #1E4D3B;
-  --color-brand-forest-dark: #143528;
-  --color-brand-forest-light: #2A6650;
-  --color-brand-forest-soft: #EBF2EE;
-
-  /* Aksen: Terakota Hangat (CTA & Penanda Penting) */
-  --color-brand-terracotta: #D8572A;
-  --color-brand-terracotta-dark: #B8431A;
-  --color-brand-terracotta-light: #E87146;
-  --color-brand-terracotta-soft: #FDF1EC;
-
-  /* Status Colors */
-  --color-status-success: #1E4D3B;
-  --color-status-success-bg: #EBF2EE;
-  --color-status-warning: #C05621;
-  --color-status-warning-bg: #FDF3E7;
-  --color-status-danger: #B91C1C;
-  --color-status-danger-bg: #FDF2F2;
-  --color-status-info: #2B6CB0;
-  --color-status-info-bg: #EBF4FA;
-
-  /* Backward-compatible Aliases for Existing Components */
-  --color-forest-50: #EBF2EE;
-  --color-forest-100: #D7E5DD;
-  --color-forest-200: #B3CBBB;
-  --color-forest-600: #2A6650;
-  --color-forest-700: #235744;
-  --color-forest-800: #1E4D3B;
-  --color-forest-900: #143528;
-  --color-forest-950: #0C2119;
-
-  --color-amber-50: #FFF9F5;
-  --color-amber-100: #FDF1EC;
-  --color-amber-400: #E87146;
-  --color-amber-500: #D8572A;
-  --color-amber-600: #B8431A;
-  --color-amber-700: #993715;
-
-  /* Spasi Skala 4/8px & Touch Target Mobile */
-  --spacing-touch: 44px;
-
-  /* Radius Variatif (bukan seragam rounded-2xl) */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-  --radius-2xl: 28px;
-  --radius-full: 9999px;
-
-  /* Bayangan Offset Khas Nota Kertas & Tinta */
-  --shadow-offset-forest: 3px 3px 0px #1E4D3B;
-  --shadow-offset-terracotta: 3px 3px 0px #D8572A;
-  --shadow-offset-paper: 2px 2px 0px #D4CABA;
-  --shadow-offset-lg: 5px 5px 0px #1E4D3B;
-  --shadow-card: 0 1px 3px rgba(27, 27, 24, 0.04), 0 4px 12px rgba(27, 27, 24, 0.05);
-  --shadow-card-hover: 0 4px 8px rgba(27, 27, 24, 0.06), 0 10px 24px rgba(27, 27, 24, 0.08);
-}
-
 :root {
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-fraunces: 'Fraunces', Georgia, serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-plus-jakarta: 'Plus Jakarta Sans', sans-serif;
 }
 
 * {
@@ -92,129 +10,41 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #F4EFE4;
 }
 
 body {
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
-  background-color: #F4EFE4;
-  color: #1B1B18;
+  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
 }
 
-h1, h2, h3, .font-serif, .font-display {
-  font-family: var(--font-fraunces), Georgia, serif;
-  letter-spacing: -0.015em;
-  font-feature-settings: "liga" 1, "kern" 1;
-}
-
-.font-mono, [data-mono] {
-  font-family: var(--font-mono), monospace;
-  font-feature-settings: "tnum" 1, "zero" 1;
-}
-
-/* Custom scrollbar kertas & tinta */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #E8E1D3;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E4D3B;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #143528;
+  background: #10b981;
+  border-radius: 99px;
 }
 
-/* Accessible focus ring */
-.focus-ring {
-  outline: none;
-}
-.focus-ring:focus-visible {
-  outline: 2px solid #D8572A;
-  outline-offset: 2px;
-}
+/* Prose styles for content */
+.prose h2 { @apply text-2xl font-bold text-slate-900 mt-8 mb-4; }
+.prose h3 { @apply text-xl font-semibold text-slate-800 mt-6 mb-3; }
+.prose p { @apply text-slate-600 leading-relaxed mb-4; }
+.prose ul { @apply list-disc list-inside text-slate-600 mb-4 space-y-1; }
+.prose ol { @apply list-decimal list-inside text-slate-600 mb-4 space-y-1; }
+.prose strong { @apply font-semibold text-slate-800; }
+.prose a { @apply text-emerald-600 hover:underline; }
 
-/* Tepi Sobek Nota Fisik (CSS Serrated / Perforated Edge) */
-.receipt-edge-top {
-  background-image: radial-gradient(circle at 10px -5px, transparent 8px, #FFFFFF 9px);
-  background-size: 20px 20px;
-  background-repeat: repeat-x;
-}
-
-.receipt-edge-bottom {
-  background-image: radial-gradient(circle at 10px 15px, transparent 8px, #FFFFFF 9px);
-  background-size: 20px 20px;
-  background-repeat: repeat-x;
-}
-
-/* Garis Putus-putus Nota */
-.receipt-perforation {
-  border-top: 2px dashed #D4CABA;
-  position: relative;
-}
-.receipt-perforation::before,
-.receipt-perforation::after {
-  content: '';
-  position: absolute;
-  top: -9px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: #F4EFE4;
-}
-.receipt-perforation::before {
-  left: -24px;
-}
-.receipt-perforation::after {
-  right: -24px;
-}
-
-/* Stiker Miring */
-.sticker-tilt-left {
-  transform: rotate(-1.5deg);
-  transition: transform 0.2s ease;
-}
-.sticker-tilt-left:hover {
-  transform: rotate(0deg) scale(1.01);
-}
-
-.sticker-tilt-right {
-  transform: rotate(1.5deg);
-  transition: transform 0.2s ease;
-}
-.sticker-tilt-right:hover {
-  transform: rotate(0deg) scale(1.01);
-}
-
-/* Prose styles for reading content */
-.prose h2 { font-family: var(--font-fraunces), serif; font-size: 1.5rem; font-weight: 700; color: #1B1B18; margin-top: 2rem; margin-bottom: 0.75rem; }
-.prose h3 { font-family: var(--font-fraunces), serif; font-size: 1.25rem; font-weight: 600; color: #1B1B18; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-.prose p { color: #3E3C37; line-height: 1.7; margin-bottom: 1rem; }
-.prose ul { list-style-type: disc; list-style-position: inside; color: #3E3C37; margin-bottom: 1rem; }
-.prose ol { list-style-type: decimal; list-style-position: inside; color: #3E3C37; margin-bottom: 1rem; }
-.prose strong { font-weight: 700; color: #1B1B18; }
-.prose a { color: #D8572A; text-decoration: underline; text-underline-offset: 3px; }
-.prose a:hover { color: #B8431A; }
-
-@keyframes fadeInPaper {
-  from { opacity: 0; transform: translateY(10px); }
+/* Animation helpers */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-paper-in {
-  animation: fadeInPaper 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 /* Print Optimization */

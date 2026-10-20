@@ -96,9 +96,7 @@ export default function AdminEdukasiPage() {
       if (thumbnail) fd.append('thumbnail', thumbnail)
 
       if (editItem) {
-        try {
-          await api.put(`/edukasi/${editItem.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
-        } catch {}
+        await api.put(`/edukasi/${editItem.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
         setData((prev) =>
           prev.map((item) =>
             item.id === editItem.id
@@ -114,10 +112,8 @@ export default function AdminEdukasiPage() {
         toast.success('Materi edukasi berhasil diperbarui')
       } else {
         let createdId = `edu-${Date.now()}`
-        try {
-          const res = await api.post('/edukasi', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
-          if (res.data?.data?.id) createdId = res.data.data.id
-        } catch {}
+        const res = await api.post('/edukasi', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+        if (res.data?.data?.id) createdId = res.data.data.id
         const newItem: EdukasiItem = {
           id: createdId,
           judul: form.judul,

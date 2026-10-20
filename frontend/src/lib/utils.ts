@@ -43,14 +43,14 @@ export function truncate(text: string, length: number = 120): string {
 }
 
 export const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-[var(--color-amber-50)] text-[var(--color-amber-800)] border border-[var(--color-amber-200)]/80',
-  diproses: 'bg-[var(--color-brand-forest)] text-[var(--color-ink)] border border-[var(--color-forest-200)]/80',
-  diverifikasi: 'bg-[var(--color-forest-50)] text-[var(--color-forest-800)] border border-[var(--color-forest-200)]/80',
-  selesai: 'bg-[var(--color-forest-50)] text-[var(--color-forest-800)] border border-[var(--color-forest-200)]/80',
-  ditolak: 'bg-[var(--color-amber-600)] text-[var(--color-ink-light)] border border-[var(--color-amber-500)]/80',
-  disetujui: 'bg-[var(--color-forest-50)] text-[var(--color-forest-800)] border border-[var(--color-forest-200)]/80',
-  dibayar: 'bg-[var(--color-forest-50)] text-[var(--color-forest-800)] border border-[var(--color-forest-200)]/80',
-  dibatalkan: 'bg-[var(--color-paper)] text-[var(--color-ink)] border border-[var(--color-paper-border)]/80',
+  pending: 'bg-amber-50 text-amber-800 border border-amber-200/80',
+  diproses: 'bg-blue-50 text-blue-800 border border-blue-200/80',
+  diverifikasi: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  selesai: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  ditolak: 'bg-rose-50 text-rose-800 border border-rose-200/80',
+  disetujui: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  dibayar: 'bg-emerald-50 text-emerald-800 border border-emerald-200/80',
+  dibatalkan: 'bg-slate-100 text-slate-700 border border-slate-300/80',
 }
 
 export const STATUS_LABELS: Record<string, string> = {

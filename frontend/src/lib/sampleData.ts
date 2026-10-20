@@ -76,7 +76,7 @@ export const SAMPLE_EDUKASI = [
     slug: 'optimalisasi-nilai-logam-berharga',
     kategori: 'jenis_sampah',
     ringkasan: 'Mengapa logam non-ferrous seperti tembaga dan aluminium memiliki nilai tukar rupiah tertinggi di bank sampah.',
-    thumbnail_url: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80',
+    thumbnail_url: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=800&q=80',
     konten: 'Logam seperti tembaga super dan kaleng aluminium dapat didaur ulang tanpa batas tanpa menurunkan kualitas materialnya. Pengumpulan logam secara terpilah memberikan margin keuntungan signifikan bagi nasabah dan unit bank sampah.',
   },
   {

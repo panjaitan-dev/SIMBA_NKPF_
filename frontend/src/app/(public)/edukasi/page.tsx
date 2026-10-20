@@ -1,20 +1,15 @@
 import Link from 'next/link'
-import { BookOpen, ArrowRight, Recycle, AlertTriangle, Trash2, Building2, LucideIcon } from 'lucide-react'
+import { BookOpen, ArrowRight } from 'lucide-react'
 import { safeFetch, SAMPLE_EDUKASI } from '@/lib/sampleData'
 
 export const dynamic = 'force-dynamic'
 
-interface KategoriMeta {
-  label: string
-  icon: LucideIcon
-}
-
-const KATEGORI_CONFIG: Record<string, KategoriMeta> = {
-  '3r': { label: '3R (Reduce, Reuse, Recycle)', icon: Recycle },
-  bahaya_sampah: { label: 'Bahaya Sampah Sembarangan', icon: AlertTriangle },
-  jenis_sampah: { label: 'Jenis-Jenis Sampah', icon: Trash2 },
-  bank_sampah: { label: 'Bank Sampah', icon: Building2 },
-  lainnya: { label: 'Lainnya', icon: BookOpen },
+const KATEGORI_LABELS: Record<string, string> = {
+  '3r': '♻️ 3R (Reduce, Reuse, Recycle)',
+  bahaya_sampah: '⚠️ Bahaya Sampah Sembarangan',
+  jenis_sampah: '🗑️ Jenis-Jenis Sampah',
+  bank_sampah: '🏦 Bank Sampah',
+  lainnya: '📚 Lainnya',
 }
 
 async function getEdukasi() {
@@ -42,17 +37,11 @@ export default async function EdukasiPage() {
           <p className="text-slate-500 mt-2 max-w-2xl">Pelajari cara menjaga lingkungan, mengelola sampah, dan manfaat bergabung di bank sampah.</p>
         </div>
 
-        {Object.entries(byKategori).map(([kategori, items]) => {
-          const meta = KATEGORI_CONFIG[kategori] || { label: kategori, icon: BookOpen }
-          const CatIcon = meta.icon
-          return (
-            <div key={kategori} className="mb-14">
-              <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-3 font-display">
-                <span className="w-9 h-9 rounded-xl bg-forest-50 text-forest-800 flex items-center justify-center border border-forest-100/80 shadow-2xs">
-                  <CatIcon size={18} />
-                </span>
-                <span>{meta.label}</span>
-              </h2>
+        {Object.entries(byKategori).map(([kategori, items]) => (
+          <div key={kategori} className="mb-14">
+            <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+              {KATEGORI_LABELS[kategori] || kategori}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {items.map((item: any) => (
                 <Link key={item.id} href={`/edukasi/${item.slug}`} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-md hover:border-emerald-200 transition-all">
@@ -74,7 +63,7 @@ export default async function EdukasiPage() {
               ))}
             </div>
           </div>
-        )})}
+        ))}
       </div>
     </div>
   )

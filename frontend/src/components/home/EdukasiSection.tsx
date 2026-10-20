@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, BookOpen, Recycle, AlertTriangle, Trash2, Building2, LucideIcon } from 'lucide-react'
+import { ArrowRight, BookOpen } from 'lucide-react'
 import { safeFetch, SAMPLE_EDUKASI } from '@/lib/sampleData'
 
 async function getEdukasi() {
@@ -10,12 +10,12 @@ async function getEdukasi() {
   return res?.data?.length ? res.data : SAMPLE_EDUKASI
 }
 
-const KATEGORI_CONFIG: Record<string, { label: string; icon: LucideIcon }> = {
-  '3r': { label: '3R', icon: Recycle },
-  bahaya_sampah: { label: 'Bahaya Sampah', icon: AlertTriangle },
-  jenis_sampah: { label: 'Jenis Sampah', icon: Trash2 },
-  bank_sampah: { label: 'Bank Sampah', icon: Building2 },
-  lainnya: { label: 'Lainnya', icon: BookOpen },
+const KATEGORI_LABELS: Record<string, string> = {
+  '3r': '♻️ 3R',
+  bahaya_sampah: '⚠️ Bahaya Sampah',
+  jenis_sampah: '🗑️ Jenis Sampah',
+  bank_sampah: '🏦 Bank Sampah',
+  lainnya: '📚 Lainnya',
 }
 
 export default async function EdukasiSection() {
@@ -64,16 +64,9 @@ export default async function EdukasiSection() {
               )}
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  {(() => {
-                    const meta = KATEGORI_CONFIG[item.kategori] || { label: item.kategori, icon: BookOpen }
-                    const CatIcon = meta.icon
-                    return (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-forest-800 bg-forest-50 border border-forest-200/80 px-2.5 py-1 rounded-full shadow-2xs">
-                        <CatIcon size={12} className="text-forest-700" />
-                        <span>{meta.label}</span>
-                      </span>
-                    )
-                  })()}
+                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+                    {KATEGORI_LABELS[item.kategori] || item.kategori}
+                  </span>
                   <h3 className="font-bold text-slate-800 mt-3 mb-2 group-hover:text-emerald-700 transition-colors line-clamp-2">
                     {item.judul}
                   </h3>
