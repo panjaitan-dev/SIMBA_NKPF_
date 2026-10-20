@@ -8,6 +8,7 @@ import { Table } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Stempel } from '@/components/ui/stempel';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Pagination } from '@/components/ui/pagination';
 import { STATISTIK_NASIONAL } from '@/lib/provinsi-data';
 
 // Simple mock data for transaksi (could be replaced by real API later)
@@ -26,6 +27,11 @@ const mockTransaksi: Transaksi[] = [
 ];
 
 export default function DashboardPage() {
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalItems = mockTransaksi.length;
+  const paginatedData = mockTransaksi.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const [stats, setStats] = useState({
     nasabah: STATISTIK_NASIONAL.total_nasabah,
     sampahTon: STATISTIK_NASIONAL.total_ton,
@@ -85,7 +91,7 @@ export default function DashboardPage() {
             </tr>
           </thead>
           <tbody>
-            {mockTransaksi.map((t) => (
+            {paginatedData.map((t) => (
               <tr key={t.id} className="border-t">
                 <td className="px-4 py-2">{t.id}</td>
                 <td className="px-4 py-2">{t.tanggal}</td>
@@ -96,6 +102,12 @@ export default function DashboardPage() {
             ))}
           </tbody>
         </Table>
+          <Pagination
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
       </div>
 
       {/* Footer note with Stempel */}
