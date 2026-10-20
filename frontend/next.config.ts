@@ -10,12 +10,16 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/:path*`,
-      },
-    ]
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+    if (apiUrl && !apiUrl.includes('localhost')) {
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${apiUrl}/:path*`,
+        },
+      ]
+    }
+    return []
   },
   devIndicators: false,
 }

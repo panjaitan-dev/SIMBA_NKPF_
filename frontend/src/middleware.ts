@@ -40,7 +40,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.rewrite(url, { status: 403 })
     }
   } else if (isAdminRoute) {
-    if (userRole !== 'admin') {
+    if (userRole !== 'admin' && userRole !== 'admin_klh') {
       const url = new URL('/403', request.url)
       url.searchParams.set('from', pathname)
       url.searchParams.set('required', 'admin')
