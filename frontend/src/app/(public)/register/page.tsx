@@ -60,16 +60,6 @@ export default function RegisterPage() {
   const alamatRef = useRef<HTMLTextAreaElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const fieldRefs = {
-    nama_lengkap: namaRef,
-    email: emailRef,
-    nik: nikRef,
-    nomor_hp: hpRef,
-    unit_id: unitRef,
-    alamat: alamatRef,
-    password: passwordRef,
-  };
-
   useEffect(() => {
     api
       .get('/unit')
@@ -135,7 +125,7 @@ export default function RegisterPage() {
     setForm((f) => ({ ...f, email: newEmail }))
     setTouched((prev) => ({ ...prev, email: true }))
     validateField('email', newEmail)
-    fieldRefs.email.current?.focus()
+    emailRef.current?.focus()
   }
 
   const handleNikChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,8 +176,17 @@ export default function RegisterPage() {
       })
 
       // Fokuskan kursor ke field error pertama
-      if (firstErrorKey && fieldRefs[firstErrorKey as keyof typeof fieldRefs]?.current) {
-        fieldRefs[firstErrorKey as keyof typeof fieldRefs].current?.focus()
+      const fieldRefs: Record<string, React.RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null>> = {
+        nama_lengkap: namaRef,
+        email: emailRef,
+        nik: nikRef,
+        nomor_hp: hpRef,
+        unit_id: unitRef,
+        alamat: alamatRef,
+        password: passwordRef,
+      }
+      if (firstErrorKey && fieldRefs[firstErrorKey]?.current) {
+        fieldRefs[firstErrorKey].current?.focus()
       }
 
       toast.error(issues[0]?.message || 'Periksa kembali formulir pendaftaran')
@@ -251,7 +250,7 @@ export default function RegisterPage() {
                 </div>
                 <input
                   id="reg-nama"
-                  ref={fieldRefs.nama_lengkap}
+                  ref={namaRef}
                   type="text"
                   required maxLength={NAMA_MAX}
                   value={form.nama_lengkap}
@@ -289,7 +288,7 @@ export default function RegisterPage() {
                 </label>
                 <input
                   id="reg-email"
-                  ref={fieldRefs.email}
+                  ref={emailRef}
                   type="email"
                   required
                   maxLength={EMAIL_MAX}
@@ -360,7 +359,7 @@ export default function RegisterPage() {
                 </div>
                 <input
                   id="reg-nik"
-                  ref={fieldRefs.nik}
+                  ref={nikRef}
                   type="text"
                   inputMode="numeric"
                   maxLength={16}
@@ -399,7 +398,7 @@ export default function RegisterPage() {
                 </label>
                 <input
                   id="reg-hp"
-                  ref={fieldRefs.nomor_hp}
+                  ref={hpRef}
                   type="text"
                   inputMode="numeric" maxLength={PHONE_MAX}
                   value={form.nomor_hp ? formatPhoneDisplay(form.nomor_hp) : ''}
@@ -438,7 +437,7 @@ export default function RegisterPage() {
                 </label>
                 <select
                   id="reg-unit"
-                  ref={fieldRefs.unit_id}
+                  ref={unitRef}
                   required
                   value={form.unit_id}
                   onChange={(e) => setForm((f) => ({ ...f, unit_id: e.target.value }))}
@@ -463,7 +462,7 @@ export default function RegisterPage() {
                 </label>
                 <textarea
                   id="reg-alamat"
-                  ref={fieldRefs.alamat}
+                  ref={alamatRef}
                   rows={2}
                   maxLength={ALAMAT_MAX}
                   value={form.alamat}
@@ -493,7 +492,7 @@ export default function RegisterPage() {
                 <div className="relative">
                   <input
                     id="reg-password"
-                    ref={fieldRefs.password}
+                    ref={passwordRef}
                     type={showPw ? 'text' : 'password'}
                     required maxLength={PASSWORD_MAX}
                     value={form.password}

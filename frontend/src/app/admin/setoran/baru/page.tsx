@@ -9,6 +9,7 @@ import NotaTransaksiModal, { NotaData } from '@/components/NotaTransaksiModal'
 import { DEFAULT_JENIS_SAMPAH, DEFAULT_NASABAH } from '@/lib/constants'
 import api from '@/lib/api'
 import { formatRupiah, formatNumberId, formatWeight } from '@/lib/utils'
+import { parseIndonesianDecimal } from '@/lib/validation'
 import toast from 'react-hot-toast'
 
 
@@ -107,8 +108,6 @@ export default function InputSetoranPage() {
       return next
     })
   }
-
-  const { parseIndonesianDecimal } = require('@/lib/validation')
 
   const totalNilai = items.reduce((acc, it) => {
     const qty = parseIndonesianDecimal(it.berat_kg) || 0

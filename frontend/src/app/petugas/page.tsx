@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { clearAuthCookies } from '@/lib/auth-client'
 import api from '@/lib/api'
 import { formatRupiah, formatDate } from '@/lib/utils'
+import { parseIndonesianDecimal } from '@/lib/validation'
 import { DEFAULT_JENIS_SAMPAH, DEFAULT_NASABAH } from '@/lib/constants'
 import NotaTransaksiModal, { NotaData } from '@/components/NotaTransaksiModal'
 import toast from 'react-hot-toast'
@@ -57,7 +58,6 @@ export default function PetugasDashboard() {
     fetchStats()
   }, [fetchStats])
 
-  const { parseIndonesianDecimal } = require('@/lib/validation')
   const totalNilai = items.reduce((s, item) => s + (parseIndonesianDecimal(item.berat_kg) || 0) * item.harga_satuan, 0)
   const totalBerat = items.reduce((s, item) => s + (parseIndonesianDecimal(item.berat_kg) || 0), 0)
 

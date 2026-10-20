@@ -6,6 +6,7 @@ import { ArrowLeft, User, Phone, MapPin, CreditCard, ShieldCheck, Save, Loader2,
 import NasabahSidebar from '@/components/layout/NasabahSidebar'
 import api from '@/lib/api'
 import { createClient } from '@/lib/supabase/client'
+import { namaLengkapSchema, nomorHpSchema, alamatSchema } from '@/lib/validation'
 import toast from 'react-hot-toast'
 
 export default function ProfilNasabahPage() {
@@ -60,20 +61,19 @@ export default function ProfilNasabahPage() {
     e.preventDefault()
 
     // Validasi Zod
-    const { namaLengkapSchema, nomorHpSchema, alamatSchema } = require('@/lib/validation')
     const vNama = namaLengkapSchema.safeParse(form.nama_lengkap)
     if (!vNama.success) {
-      toast.error(vNama.error.errors[0]?.message || 'Nama lengkap tidak valid')
+      toast.error(vNama.error.issues[0]?.message || 'Nama lengkap tidak valid')
       return
     }
     const vHp = nomorHpSchema.safeParse(form.nomor_hp)
     if (!vHp.success) {
-      toast.error(vHp.error.errors[0]?.message || 'Nomor HP tidak valid')
+      toast.error(vHp.error.issues[0]?.message || 'Nomor HP tidak valid')
       return
     }
     const vAlamat = alamatSchema.safeParse(form.alamat)
     if (!vAlamat.success) {
-      toast.error(vAlamat.error.errors[0]?.message || 'Alamat tidak valid')
+      toast.error(vAlamat.error.issues[0]?.message || 'Alamat tidak valid')
       return
     }
 

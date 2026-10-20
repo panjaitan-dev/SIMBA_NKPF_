@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Sprout, Leaf, Trophy, Recycle, CheckCircle2, XCircle, LucideIcon } from 'lucide-react'
 
 const SOAL = [
   {
@@ -44,10 +45,18 @@ const SOAL = [
   },
 ]
 
-const BADGES = [
-  { min: 0, label: 'Pemula', emoji: '🌱', desc: 'Terus belajar untuk menjaga lingkungan!', color: 'text-slate-600 bg-slate-100' },
-  { min: 2, label: 'Mahir', emoji: '🌿', desc: 'Kamu sudah paham dasar pemilahan sampah!', color: 'text-emerald-700 bg-emerald-100' },
-  { min: 4, label: 'Pakar', emoji: '🏆', desc: 'Luar biasa! Kamu adalah Pahlawan Lingkungan!', color: 'text-amber-700 bg-amber-100' },
+interface BadgeItem {
+  min: number
+  label: string
+  icon: LucideIcon
+  desc: string
+  color: string
+}
+
+const BADGES: BadgeItem[] = [
+  { min: 0, label: 'Pemula', icon: Sprout, desc: 'Terus belajar untuk menjaga lingkungan!', color: 'text-slate-700 bg-slate-100 border border-slate-300' },
+  { min: 2, label: 'Mahir', icon: Leaf, desc: 'Kamu sudah paham dasar pemilahan sampah!', color: 'text-[#1E4D3B] bg-[#EBF2EE] border border-[#B3CBBB]' },
+  { min: 4, label: 'Pakar', icon: Trophy, desc: 'Luar biasa! Kamu adalah Pahlawan Lingkungan!', color: 'text-[#D8572A] bg-[#FFF9F5] border border-[#E87146]' },
 ]
 
 export default function KuisEdukasiSection() {
@@ -100,24 +109,31 @@ export default function KuisEdukasiSection() {
 
         {/* Intro */}
         {step === 'intro' && (
-          <div className="bg-gradient-to-br from-emerald-900 to-slate-900 rounded-3xl p-10 text-center text-white">
-            <div className="text-6xl mb-5">♻️</div>
-            <h3 className="text-2xl font-extrabold mb-3">Siap Memulai?</h3>
-            <p className="text-slate-300 mb-8 max-w-sm mx-auto">
+          <div className="bg-[#1E4D3B] text-white rounded-2xl p-8 sm:p-10 text-center border-2 border-[#143528] shadow-[4px_4px_0px_#143528]">
+            <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-[#2A6650] border border-[#B3CBBB]/30 flex items-center justify-center text-emerald-200 shadow-md">
+              <Recycle className="w-8 h-8" />
+            </div>
+            <h3 className="font-serif text-2xl font-bold mb-3">Siap Memulai?</h3>
+            <p className="text-[#EBF2EE] mb-8 max-w-sm mx-auto text-sm leading-relaxed">
               {SOAL.length} pertanyaan pilihan ganda tentang pemilahan sampah. Raih badge Pakar jika skormu sempurna!
             </p>
             <div className="flex justify-center gap-3 mb-8">
-              {BADGES.map((b) => (
-                <div key={b.label} className="bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-center">
-                  <div className="text-2xl mb-1">{b.emoji}</div>
-                  <p className="text-xs font-semibold">{b.label}</p>
-                  <p className="text-xs text-slate-400">{b.min}+ benar</p>
-                </div>
-              ))}
+              {BADGES.map((b) => {
+                const IconComp = b.icon
+                return (
+                  <div key={b.label} className="bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-center">
+                    <div className="w-7 h-7 mx-auto mb-1 flex items-center justify-center text-emerald-200">
+                      <IconComp className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs font-semibold">{b.label}</p>
+                    <p className="text-xs text-[#EBF2EE]/70 font-mono">{b.min}+ benar</p>
+                  </div>
+                )
+              })}
             </div>
             <button
               onClick={() => setStep('playing')}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-xl transition-colors"
+              className="bg-[#D8572A] hover:bg-[#B8431A] text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-[2px_2px_0px_#78350F] cursor-pointer"
             >
               Mulai Kuis →
             </button>
@@ -171,10 +187,20 @@ export default function KuisEdukasiSection() {
 
             {/* Penjelasan */}
             {showExplain && (
-              <div className={`rounded-xl p-4 mb-4 text-sm ${pilihan === q.jawaban ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-red-50 border border-red-200 text-red-800'}`}>
-                <p className="font-semibold mb-1">
-                  {pilihan === q.jawaban ? '✅ Benar!' : '❌ Kurang tepat.'}
-                </p>
+              <div className={`rounded-xl p-4 mb-4 text-sm ${pilihan === q.jawaban ? 'bg-[#EBF2EE] border border-[#B3CBBB] text-[#1E4D3B]' : 'bg-[#FDF2F2] border border-[#FEB2B2] text-[#B91C1C]'}`}>
+                <div className="flex items-center gap-1.5 font-bold mb-1">
+                  {pilihan === q.jawaban ? (
+                    <>
+                      <CheckCircle2 size={16} className="text-[#1E4D3B]" />
+                      <span>Jawaban Benar!</span>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle size={16} className="text-[#B91C1C]" />
+                      <span>Kurang Tepat.</span>
+                    </>
+                  )}
+                </div>
                 <p className="text-sm leading-relaxed">{q.penjelasan}</p>
               </div>
             )}
@@ -182,9 +208,9 @@ export default function KuisEdukasiSection() {
             {pilihan !== null && (
               <button
                 onClick={handleNext}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-colors"
+                className="w-full bg-[#1E4D3B] hover:bg-[#143528] text-white font-bold py-3.5 rounded-xl transition-all shadow-[2px_2px_0px_#143528] cursor-pointer"
               >
-                {currentQ + 1 >= SOAL.length ? 'Lihat Hasil' : 'Pertanyaan Berikutnya →'}
+                {currentQ + 1 >= SOAL.length ? 'Lihat Hasil Kuis' : 'Pertanyaan Berikutnya →'}
               </button>
             )}
           </div>
@@ -192,15 +218,22 @@ export default function KuisEdukasiSection() {
 
         {/* Done */}
         {step === 'done' && (
-          <div className="bg-gradient-to-br from-emerald-900 to-slate-900 rounded-3xl p-10 text-center text-white">
-            <div className="text-6xl mb-3">{badge.emoji}</div>
-            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-4 ${badge.color}`}>
+          <div className="bg-[#1E4D3B] text-white rounded-2xl p-8 sm:p-10 text-center border-2 border-[#143528] shadow-[4px_4px_0px_#143528]">
+            {(() => {
+              const BadgeIcon = badge.icon
+              return (
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#2A6650] border border-[#B3CBBB]/30 flex items-center justify-center text-[#FDF1EC] shadow-md">
+                  <BadgeIcon className="w-8 h-8 text-[#D8572A]" />
+                </div>
+              )
+            })()}
+            <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider mb-4 ${badge.color}`}>
               Badge: {badge.label}
             </div>
-            <h3 className="text-2xl font-extrabold mb-2">
-              Skor: {score}/{SOAL.length}
+            <h3 className="font-serif text-2xl font-bold mb-2">
+              Skor: {score} dari {SOAL.length} Benar
             </h3>
-            <p className="text-slate-300 mb-8 max-w-sm mx-auto">{badge.desc}</p>
+            <p className="text-[#EBF2EE] mb-8 max-w-sm mx-auto text-sm leading-relaxed">{badge.desc}</p>
 
             {/* Score bar */}
             <div className="max-w-sm mx-auto mb-8">

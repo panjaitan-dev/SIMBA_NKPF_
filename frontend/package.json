@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "node scripts/verify-map.mjs && node scripts/check-regressions.mjs"
   },
   "dependencies": {

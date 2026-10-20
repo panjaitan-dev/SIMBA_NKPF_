@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowDownToLine, PiggyBank, XCircle, Loader2, Calendar, Aler
 import NasabahSidebar from '@/components/layout/NasabahSidebar'
 import api from '@/lib/api'
 import { formatRupiah, formatDate, STATUS_COLORS, STATUS_LABELS } from '@/lib/utils'
+import { parseIndonesianDecimal } from '@/lib/validation'
 import toast from 'react-hot-toast'
 
 interface PenarikanItem {
@@ -75,7 +76,6 @@ export default function RiwayatPenarikanNasabahPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { parseIndonesianDecimal } = require('@/lib/validation')
     const jumlahNum = parseIndonesianDecimal(amount)
     if (isNaN(jumlahNum) || jumlahNum <= 0) {
       toast.error('Masukkan jumlah nominal yang valid')

@@ -7,6 +7,7 @@ import api from '@/lib/api'
 import { formatRupiah } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { DEFAULT_JENIS_SAMPAH } from '@/lib/constants'
+import { parseIndonesianDecimal } from '@/lib/validation'
 
 
 const KATEGORI_OPTIONS = [
@@ -88,7 +89,6 @@ export default function AdminJenisSampahPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { parseIndonesianDecimal } = require('@/lib/validation')
     const hBeli = parseIndonesianDecimal(form.harga_beli)
     const hJual = parseIndonesianDecimal(form.harga_jual)
 

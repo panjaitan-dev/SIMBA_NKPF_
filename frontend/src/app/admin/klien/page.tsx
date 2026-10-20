@@ -6,6 +6,7 @@ import AdminSidebar from '@/components/layout/AdminSidebar'
 import api from '@/lib/api'
 import toast from 'react-hot-toast'
 import { DEFAULT_CLIENTS } from '@/lib/constants'
+import { normalizePhone } from '@/lib/validation'
 
 export default function AdminKlienPage() {
   const [clients, setClients] = useState<any[]>(DEFAULT_CLIENTS)
@@ -71,7 +72,6 @@ export default function AdminKlienPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const { normalizePhone } = require('@/lib/validation')
     const cleanHp = normalizePhone(form.nomor_hp)
     if (!cleanHp || !/^628[1-9][0-9]{7,10}$/.test(cleanHp)) {
       toast.error('Nomor telepon klien harus berupa nomor seluler Indonesia yang valid (contoh: 081234567890)')
