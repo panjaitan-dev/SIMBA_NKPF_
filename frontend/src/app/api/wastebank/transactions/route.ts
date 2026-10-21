@@ -7,6 +7,10 @@ const transactions = [
   { id: 3, date: '2024-09-10', type: 'Penarikan', amount: -20000, description: 'Penarikan saldo' },
 ];
 
+import { NextResponse } from 'next/server';
+import { getTransactions } from '@/app/api/wastebank/store';
+
 export async function GET() {
+  const transactions = getTransactions();
   return NextResponse.json({ transactions });
 }

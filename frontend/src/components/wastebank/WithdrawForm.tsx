@@ -23,9 +23,29 @@ export default function WithdrawForm({ currentBalance, onClose }: Props) {
       return;
     }
     setError('');
-    // TODO: integrate with real API endpoint
-    setSuccess(true);
-    // Simulate brief success then close
+    // Call backend API to request withdrawal
+    const submit = async () => {
+      try {
+        const res = await fetch('/api/wastebank/withdraw', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: val }),
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          setError(json.error || 'Gagal mengirim permintaan');
+          return;
+        }
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+          onClose();
+        }, 1500);
+      } catch (e) {
+        setError('Terjadi kesalahan jaringan');
+      }
+    };
+    submit();
     setTimeout(() => {
       setSuccess(false);
       onClose();

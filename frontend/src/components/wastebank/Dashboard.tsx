@@ -1,18 +1,56 @@
-import React, { useState } from 'react';
-import { Leaf, CreditCard, ArrowDownToLine } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Leaf, ArrowDownToLine } from 'lucide-react';
 import TransactionTable from './TransactionTable';
 import WithdrawForm from './WithdrawForm';
 
+type Transaction = {
+  id: number;
+  date: string;
+  type: 'Setoran' | 'Penarikan';
+  amount: number;
+  description: string;
+};
+
 export default function Dashboard() {
   const [showWithdraw, setShowWithdraw] = useState(false);
+  const [balance, setBalance] = useState<number>(0);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data – replace with real API calls later
-  const balance = 125_000; // in rupiah
-  const transactions = [
-    { id: 1, date: '2024-09-01', type: 'Setoran', amount: 30_000, description: 'Plastik' },
-    { id: 2, date: '2024-09-05', type: 'Setoran', amount: 45_000, description: 'Kertas' },
-    { id: 3, date: '2024-09-10', type: 'Penarikan', amount: -20_000, description: 'Penarikan saldo' },
-  ];
+  const fetchData = async () => {
+    try {
+      const [balRes, txRes] = await Promise.all([
+        fetch('/api/wastebank/balance'),
+        fetch('/api/wastebank/transactions'),
+      ]);
+      const balJson = await balRes.json();
+      const txJson = await txRes.json();
+      setBalance(balJson.balance);
+      setTransactions(txJson.transactions);
+    } catch (e) {
+      console.error('Error loading wastebank data', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Refresh balance & transactions after a successful withdrawal
+  const handleWithdrawClose = () => {
+    setShowWithdraw(false);
+    fetchData();
+  };
+
+  if (loading) {
+    return (
+      <section className="py-12 bg-slate-50" id="wastebank-dashboard">
+        <div className="max-w-5xl mx-auto px-4 text-center text-slate-500">Loading...</div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-12 bg-slate-50" id="wastebank-dashboard">
@@ -50,7 +88,7 @@ export default function Dashboard() {
         {showWithdraw && (
           <WithdrawForm
             currentBalance={balance}
-            onClose={() => setShowWithdraw(false)}
+            onClose={handleWithdrawClose}
           />
         )}
       </div>
