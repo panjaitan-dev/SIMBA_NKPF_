@@ -10,6 +10,20 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // Forward all API calls to external backend except our internal wastebank routes
+  if (apiUrl && !apiUrl.includes('localhost')) {
+    return [
+      {
+        // Match any /api/* path that does NOT start with /api/wastebank
+        source: '/api/:path((?!wastebank).*)*',
+        destination: `${apiUrl}/:path*`,
+      },
+    ];
+  }
+  return [];
+},
+
     const apiUrl = process.env.NEXT_PUBLIC_API_URL
     if (apiUrl && !apiUrl.includes('localhost')) {
       return [
