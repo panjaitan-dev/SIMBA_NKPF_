@@ -35,11 +35,19 @@ const formatDesimalId = (n: number, maxDec = 1) =>
   n.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: maxDec })
 
 export default function KalkulatorSection() {
-  const [selected, setSelected] = useState<Record<string, boolean>>({ pet: true, kardus: true })
-  const [berat, setBerat] = useState<Record<string, string>>({ pet: '5', kardus: '10' })
+  // Awalnya kosong (0) sesuai permintaan pengguna: tidak langsung terisi data simulasi
+  const [selected, setSelected] = useState<Record<string, boolean>>({})
+  const [berat, setBerat] = useState<Record<string, string>>({})
 
   const toggleItem = (id: string) => {
-    setSelected((prev) => ({ ...prev, [id]: !prev[id] }))
+    setSelected((prev) => {
+      const next = { ...prev, [id]: !prev[id] }
+      // Jika baru dicentang dan belum ada bobot, isi default 1 agar mempermudah pengguna
+      if (next[id] && !berat[id]) {
+        setBerat((b) => ({ ...b, [id]: '1' }))
+      }
+      return next
+    })
   }
 
   const setBobotItem = useCallback((id: string, val: string) => {
@@ -90,7 +98,7 @@ export default function KalkulatorSection() {
           </p>
         </div>
 
-        {/* DIAGRAM ALIR HORIZONTAL DAMPAK LINGKUNGAN HIDUP (PENGGANTI RUMUS LATEX) */}
+        {/* DIAGRAM ALIR HORIZONTAL DAMPAK LINGKUNGAN HIDUP */}
         <div className="bg-white rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 mb-10">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
@@ -266,28 +274,28 @@ export default function KalkulatorSection() {
                 </div>
               </div>
 
-              {selectedItems.length === 0 ? (
-                <div className="py-10 text-center text-slate-400">
-                  <p className="text-sm">Silakan pilih minimal 1 jenis sampah di samping untuk melihat taksiran rupiah.</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {/* Estimasi Saldo Kasir */}
-                  <div className="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-4">
-                    <span className="text-xs text-emerald-300 font-semibold block mb-1">
-                      Estimasi Nilai Tukar Tunai / Tabungan
-                    </span>
-                    <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">
-                      {formatRupiah(results.rupiah)}
-                    </div>
-                    <span className="text-[11px] text-slate-400 mt-1 block">
-                      Dihitung dari {formatDesimalId(results.beratTotal)} kg komoditas terpilah
-                    </span>
+              <div className="space-y-4">
+                {/* Estimasi Saldo Kasir */}
+                <div className="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-4">
+                  <span className="text-xs text-emerald-300 font-semibold block mb-1">
+                    Estimasi Nilai Tukar Tunai / Tabungan
+                  </span>
+                  <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">
+                    {formatRupiah(results.rupiah)}
                   </div>
+                  <span className="text-[11px] text-slate-400 mt-1 block">
+                    Dihitung dari {formatDesimalId(results.beratTotal)} kg komoditas terpilah
+                  </span>
+                </div>
 
-                  {/* List Item Rincian */}
-                  <div className="space-y-2 border-y border-slate-800 py-3 max-h-48 overflow-y-auto pr-1">
-                    {selectedItems.map((item) => {
+                {/* List Item Rincian */}
+                <div className="space-y-2 border-y border-slate-800 py-3 max-h-48 overflow-y-auto pr-1">
+                  {selectedItems.length === 0 ? (
+                    <p className="text-xs text-slate-400 py-4 text-center">
+                      Belum ada komoditas dipilih. Silakan centang jenis sampah di sebelah kiri untuk mulai menghitung estimasi nilai tabungan.
+                    </p>
+                  ) : (
+                    selectedItems.map((item) => {
                       const kg = parseFloat(berat[item.id] || '0') || 0
                       const subtotal = kg * item.harga
                       return (
@@ -300,37 +308,37 @@ export default function KalkulatorSection() {
                           </span>
                         </div>
                       )
-                    })}
-                  </div>
+                    })
+                  )}
+                </div>
 
-                  {/* Metrik Emisi & Pohon */}
-                  <div className="grid grid-cols-2 gap-3 pt-1">
-                    <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
-                      <span className="text-[11px] text-slate-400 block mb-0.5">Emisi Dicegah:</span>
-                      <span className="font-bold text-blue-400 text-sm">
-                        {formatDesimalId(results.co2)} kg CO₂
-                      </span>
-                    </div>
-                    <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
-                      <span className="text-[11px] text-slate-400 block mb-0.5">Setara Serapan:</span>
-                      <span className="font-bold text-amber-400 text-sm">
-                        {formatDesimalId(pohon)} Pohon/Thn
-                      </span>
-                    </div>
+                {/* Metrik Emisi & Pohon */}
+                <div className="grid grid-cols-2 gap-3 pt-1">
+                  <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
+                    <span className="text-[11px] text-slate-400 block mb-0.5">Emisi Dicegah:</span>
+                    <span className="font-bold text-blue-400 text-sm">
+                      {formatDesimalId(results.co2)} kg CO₂
+                    </span>
                   </div>
-
-                  {/* CTA Link Pendaftaran */}
-                  <div className="pt-2">
-                    <a
-                      href="/register"
-                      className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-900/40"
-                    >
-                      <span>Buka Tabungan & Setor Sekarang</span>
-                      <ArrowRight size={16} />
-                    </a>
+                  <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60">
+                    <span className="text-[11px] text-slate-400 block mb-0.5">Setara Serapan:</span>
+                    <span className="font-bold text-amber-400 text-sm">
+                      {formatDesimalId(pohon)} Pohon/Thn
+                    </span>
                   </div>
                 </div>
-              )}
+
+                {/* CTA Link Pendaftaran */}
+                <div className="pt-2">
+                  <a
+                    href="/register"
+                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition-all shadow-lg shadow-emerald-900/40"
+                  >
+                    <span>Buka Tabungan & Setor Sekarang</span>
+                    <ArrowRight size={16} />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
