@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState } from 'react';
 import { X, CheckCircle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   currentBalance: number;
@@ -9,9 +12,8 @@ type Props = {
 export default function WithdrawForm({ currentBalance, onClose }: Props) {
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const val = Number(amount.replace(/[^0-9]/g, ''));
     if (isNaN(val) || val <= 0) {
@@ -23,33 +25,22 @@ export default function WithdrawForm({ currentBalance, onClose }: Props) {
       return;
     }
     setError('');
-    // Call backend API to request withdrawal
-    const submit = async () => {
-      try {
-        const res = await fetch('/api/wastebank/withdraw', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: val }),
-        });
-        const json = await res.json();
-        if (!res.ok) {
-          setError(json.error || 'Gagal mengirim permintaan');
-          return;
-        }
-        setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false);
-          onClose();
-        }, 1500);
-      } catch (e) {
-        setError('Terjadi kesalahan jaringan');
+    try {
+      const res = await fetch('/api/wastebank/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: val }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error || 'Gagal mengirim permintaan');
+        return;
       }
-    };
-    submit();
-    setTimeout(() => {
-      setSuccess(false);
+      toast.success('Permintaan penarikan berhasil!');
       onClose();
-    }, 1500);
+    } catch (e) {
+      toast.error('Terjadi kesalahan jaringan');
+    }
   };
 
   return (
@@ -62,33 +53,26 @@ export default function WithdrawForm({ currentBalance, onClose }: Props) {
           <X className="w-5 h-5" />
         </button>
         <h2 className="text-xl font-bold text-white mb-4">Ajukan Penarikan</h2>
-        {success ? (
-          <div className="flex items-center gap-2 text-emerald-400">
-            <CheckCircle className="w-6 h-6" />
-            <span>Permintaan berhasil dikirim!</span>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm text-slate-300 mb-1">Jumlah (IDR)</label>
+            <input
+              type="text"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="contoh: 50000"
+              className="w-full px-3 py-2 bg-slate-700 text-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm text-slate-300 mb-1">Jumlah (IDR)</label>
-              <input
-                type="text"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="contoh: 50000"
-                className="w-full px-3 py-2 bg-slate-700 text-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            {error && <p className="text-sm text-rose-400">{error}</p>}
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded"
-            >
-              <CheckCircle className="w-4 h-4" />
-              Kirim Permintaan
-            </button>
-          </form>
-        )}
+          {error && <p className="text-sm text-rose-400">{error}</p>}
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded"
+          >
+            <CheckCircle className="w-4 h-4" />
+            Kirim Permintaan
+          </button>
+        </form>
       </div>
     </div>
   );
