@@ -29,6 +29,7 @@ export default function HargaTickerSection() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [filterKategori, setFilterKategori] = useState('all')
   const [lastUpdate, setLastUpdate] = useState(new Date())
+  const [mounted, setMounted] = useState(false)
 
   const fetchHarga = async () => {
     try {
@@ -41,6 +42,7 @@ export default function HargaTickerSection() {
   }
 
   useEffect(() => {
+    setMounted(true)
     fetchHarga().finally(() => setLoading(false))
     // Simulate price fluctuations every 30s
     const interval = setInterval(() => {
@@ -93,7 +95,10 @@ export default function HargaTickerSection() {
               Papan Harga <span className="text-emerald-600">Real-time</span>
             </h2>
             <p className="text-slate-500 mt-2 text-sm">
-              Update terakhir: {lastUpdate.toLocaleTimeString('id-ID')}
+              Update terakhir:{' '}
+              <span suppressHydrationWarning>
+                {mounted ? lastUpdate.toLocaleTimeString('id-ID') : '--:--:--'}
+              </span>
               <span className="ml-2 inline-flex items-center gap-1 text-emerald-600">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Live

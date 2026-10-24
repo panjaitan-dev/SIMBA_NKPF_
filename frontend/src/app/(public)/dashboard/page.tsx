@@ -113,7 +113,7 @@ export default function DashboardPage() {
       {/* Footer note with Stempel */}
       <div className="mt-6 flex items-center justify-end gap-2 text-sm text-[#66635B]">
         <Stempel variant="verified" label="VERIFIKASI DATA" size="sm" />
-        <span>Data terakhir diperbarui: {new Date().toLocaleDateString('id-ID')}</span>
+        <span suppressHydrationWarning>Data terakhir diperbarui: {new Date().toLocaleDateString('id-ID')}</span>
       </div>
     </section>
   );

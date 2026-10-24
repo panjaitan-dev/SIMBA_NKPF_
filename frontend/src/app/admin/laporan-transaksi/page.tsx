@@ -232,7 +232,7 @@ export default function AdminLaporanTransaksiPage() {
               <p className="text-xs font-extrabold text-slate-800 mt-0.5">
                 {formatDate(startDate)} s/d {formatDate(endDate)}
               </p>
-              <p className="text-[10px] text-slate-500 mt-0.5">
+              <p suppressHydrationWarning className="text-[10px] text-slate-500 mt-0.5">
                 Dicetak pada: {new Date().toLocaleDateString('id-ID', { dateStyle: 'full' })}
               </p>
             </div>
