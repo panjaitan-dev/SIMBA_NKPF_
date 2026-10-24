@@ -206,6 +206,7 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
-    </section>
+    <video src="/animasi.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10" />
+</section>
   );
 }
