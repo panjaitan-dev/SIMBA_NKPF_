@@ -125,6 +125,8 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-r from-emerald-600 to-slate-900 py-16 md:py-20 text-white">
+        {/* Background video */}
+        <video src="/images/animasi.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10" />
       {/* Wadah utama Hero Section */}
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
 
