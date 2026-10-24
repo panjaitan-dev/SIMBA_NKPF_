@@ -17,11 +17,24 @@ export default function NasabahDashboard() {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
+    let isMounted = true
     api.get('/dashboard/nasabah')
-      .then(r => setStats(r.data.data))
-      .catch(() => router.push('/login'))
-      .finally(() => setLoading(false))
-  }, [])
+      .then(r => {
+        if (isMounted && r.data?.data) {
+          setStats(r.data.data)
+        }
+      })
+      .catch((err) => {
+        if (err?.status === 401 || err?.response?.status === 401) {
+          router.push('/login')
+        }
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false)
+      })
+
+    return () => { isMounted = false }
+  }, [router])
 
   const handleLogout = async () => {
     try {

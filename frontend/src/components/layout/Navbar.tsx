@@ -93,7 +93,7 @@ export default function Navbar() {
                     showDarkText ? 'text-slate-800' : 'text-white'
                   )}
                 >
-                  SIMBA
+                  SIMBAH
                 </h1>
                 <p className="text-[10px] font-bold tracking-widest uppercase text-emerald-500">
                   Bank Sampah Indonesia

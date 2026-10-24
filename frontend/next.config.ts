@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL
-    // Forward all API calls to external backend except our internal wastebank routes
+    const apiUrl = process.env.ENABLE_EXTERNAL_BACKEND_REWRITE === 'true' ? process.env.NEXT_PUBLIC_API_URL : null
+    // By default, Next.js handles /api routes via high-performance internal Serverless endpoints
     if (apiUrl && !apiUrl.includes('localhost')) {
       return [
         {

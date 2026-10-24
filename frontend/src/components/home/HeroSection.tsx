@@ -58,7 +58,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="bg-gradient-to-r from-emerald-600 to-slate-900 py-20 text-white">
+    <section className="relative bg-gradient-to-r from-emerald-600 to-slate-900 py-20 text-white">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-8">
         <div className="flex-1 space-y-6">
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">

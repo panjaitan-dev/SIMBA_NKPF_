@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Leaf, Eye, EyeOff, Loader2, AlertCircle, RefreshCw, Server, ShieldCheck, UserCheck, KeyRound } from 'lucide-react'
+import { Leaf, Eye, EyeOff, Loader2, AlertCircle, RefreshCw, Server, ShieldCheck, UserCheck } from 'lucide-react'
 import api from '@/lib/api'
 import { createClient } from '@/lib/supabase/client'
 import { setAuthCookies } from '@/lib/auth-client'
@@ -141,14 +141,6 @@ export default function LoginPage() {
       setErrorMsg(msg)
       toast.error(msg)
     }
-  }
-
-  const fillDemoAccount = (accEmail: string, accPw: string) => {
-    setEmail(accEmail)
-    setPassword(accPw)
-    setErrorMsg('')
-    setNetworkError(false)
-    toast.success(`Akun demo dipilih! Silakan klik Masuk.`, { icon: '🔑' })
   }
 
   return (
@@ -297,61 +289,10 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Quick Demo Accounts Selection */}
-          <div className="mt-6 pt-5 border-t border-slate-100">
-            <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-slate-600 uppercase tracking-wider mb-2.5">
-              <KeyRound size={13} className="text-emerald-600" />
-              <span>Pilihan Akun Demo (Klik untuk Isi Cepat)</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => fillDemoAccount('admin@simba.id', 'Password123!')}
-                className="p-2.5 text-left rounded-xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 bg-slate-50 transition-all text-xs"
-              >
-                <div className="font-bold text-slate-800 flex items-center gap-1">
-                  <span>👑 Admin BSI</span>
-                </div>
-                <div className="text-[11px] text-slate-500 truncate mt-0.5">admin@simba.id</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => fillDemoAccount('admin.nasional@simba.id', 'Password123!')}
-                className="p-2.5 text-left rounded-xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 bg-slate-50 transition-all text-xs"
-              >
-                <div className="font-bold text-slate-800 flex items-center gap-1">
-                  <span>🏛️ Admin Nasional</span>
-                </div>
-                <div className="text-[11px] text-slate-500 truncate mt-0.5">admin.nasional@simba.id</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => fillDemoAccount('petugas.melati@simba.id', 'Password123!')}
-                className="p-2.5 text-left rounded-xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 bg-slate-50 transition-all text-xs"
-              >
-                <div className="font-bold text-slate-800 flex items-center gap-1">
-                  <span>👷 Petugas Unit</span>
-                </div>
-                <div className="text-[11px] text-slate-500 truncate mt-0.5">petugas.melati@simba.id</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => fillDemoAccount('nasabah.dewi@simba.id', 'Password123!')}
-                className="p-2.5 text-left rounded-xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 bg-slate-50 transition-all text-xs"
-              >
-                <div className="font-bold text-slate-800 flex items-center gap-1">
-                  <span>🌱 Nasabah Warga</span>
-                </div>
-                <div className="text-[11px] text-slate-500 truncate mt-0.5">nasabah.dewi@simba.id</div>
-              </button>
-            </div>
-
-            <p className="text-[11px] text-slate-400 text-center mt-3">
-              Password semua akun demo: <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Password123!</span>
+          {/* Informasi akun evaluasi untuk penguji & juri lomba */}
+          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+            <p className="text-xs text-slate-500">
+              Akun uji untuk juri tersedia di dokumen pengumpulan.
             </p>
           </div>
 
