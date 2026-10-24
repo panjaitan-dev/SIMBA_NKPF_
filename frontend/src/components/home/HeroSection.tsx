@@ -171,7 +171,7 @@ export default function HeroSection() {
             <video
               className="absolute inset-0 h-full w-full object-cover"
               
-              src="/images/animasi.mp4"
+              src="public/images/animasi.mp4"
               autoPlay
               muted
               loop
