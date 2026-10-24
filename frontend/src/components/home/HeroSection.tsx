@@ -127,7 +127,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative isolate overflow-hidden py-16 md:py-20 text-white">
+    <section className="relative isolate overflow-hidden py-20 md:py-20 text-white">
 
       {/* VIDEO BACKGROUND: memenuhi seluruh Hero Section */}
       <video
