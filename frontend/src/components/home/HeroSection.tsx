@@ -165,7 +165,25 @@ export default function HeroSection() {
           </div>
         </div>
 
-       
+        {/* Bagian kanan: video animasi dan statistik */}
+        <div className="flex-1 min-w-0 w-full space-y-6">
+
+          {/* Wadah video animasi.mp4 */}
+          <div className="relative w-full aspect-video overflow-hidden rounded-2xl border border-white/20 bg-slate-950/30 shadow-xl">
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              
+              src="public/images/animasi.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Video animasi Bank Sampah"
+            >
+              Browser kamu tidak mendukung pemutaran video.
+            </video>
+          </div>
 
           {/* Grid statistik nasional */}
           <div className="grid grid-cols-2 gap-4 md:gap-5">
