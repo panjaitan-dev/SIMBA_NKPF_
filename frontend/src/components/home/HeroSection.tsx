@@ -124,7 +124,45 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-emerald-600 to-slate-900 py-16 md:py-20 text-white">
+    <section className="relative overflow-hidden py-16 md:py-20 text-white">
+      {/* Video background full area */}
+      <video src="/animasi.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10" />
+      {/* Gradient overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-slate-900 opacity-70 -z-5" />
+      {/* Wadah utama Hero Section */}
+      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 relative z-10">
+        {/* Bagian kiri: judul, deskripsi, tombol */}
+        <div className="flex-1 min-w-0 space-y-6">
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+            Bank Sampah <span className="text-emerald-300">Lebih Mudah</span> &amp; Digital
+          </h1>
+          <p className="text-lg text-slate-200 max-w-lg">
+            Prototipe platform digital pelayanan publik untuk pencatatan transaksi bank sampah, transparansi saldo nasabah, dan pemodelan data ekonomi sirkular secara real-time.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <button onClick={() => scrollTo('kalkulator')} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/40 hover:-translate-y-0.5 cursor-pointer">
+              Hitung Setoran Saya
+            </button>
+            <button onClick={() => scrollTo('finder')} className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl transition-all backdrop-blur-sm hover:-translate-y-0.5 cursor-pointer">
+              Cari Bank Sampah
+            </button>
+          </div>
+        </div>
+        {/* Bagian kanan: statistik (empat kartu) */}
+        <div className="flex-1 min-w-0 w-full space-y-6">
+          <div className="grid grid-cols-2 gap-4 md:gap-5">
+            {stats.map((s) => (
+              <div key={s.label} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 md:p-5 text-center shadow-sm transition-all duration-300 hover:bg-white/15 hover:-translate-y-1">
+                <div className="text-xl md:text-2xl font-bold text-emerald-300">
+                  {s.prefix}{s.value.toLocaleString('id-ID')}{s.suffix}
+                </div>
+                <p className="text-sm text-slate-300 mt-1">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
         {/* Background video */}
         <video src="/images/animasi.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10" />
       {/* Wadah utama Hero Section */}
