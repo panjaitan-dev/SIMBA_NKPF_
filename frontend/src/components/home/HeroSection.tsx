@@ -150,7 +150,7 @@ export default function HeroSection() {
       />
 
       {/* KONTEN HERO: berada di atas video dan overlay */}
-      <div className="relative z-20 max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+      <div className="relative z-25 max-w-6xl mx-auto px-8 flex flex-col md:flex-row items-center gap-10">
 
         {/* BAGIAN KIRI: judul, deskripsi, dan tombol */}
         <div className="flex-1 min-w-0 space-y-6">
