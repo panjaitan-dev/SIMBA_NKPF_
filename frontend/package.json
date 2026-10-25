@@ -1,6 +1,8 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "description": "Frontend Next.js untuk SIMBA — Sistem Informasi Bank Sampah (Karya Prototipe IT Fest 2026)",
+  "author": "Tim SIMBA Nusantara",
   "private": true,
   "scripts": {
     "dev": "next dev",

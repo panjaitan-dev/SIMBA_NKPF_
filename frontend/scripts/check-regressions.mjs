@@ -20,6 +20,26 @@ const PROHIBITED = [
   'Gedung Manggala',
   'Unit Percontohan Resmi',
 ];
+
+const AI_PROHIBITED = [
+  'claude',
+  'anthropic',
+  'chatgpt',
+  'openai',
+  'gemini',
+  'copilot',
+  'windsurf',
+  'antigravity',
+  'anti gravity',
+  'as an ai',
+  'ai-generated',
+  'ai assistant',
+  'co-authored-by',
+  'dibuat dengan ai',
+  'dibantu ai',
+  'menggunakan ai',
+];
+
 const EXTENSIONS = new Set(['.tsx', '.ts', '.jsx', '.js', '.json']);
 
 async function* walk(dir) {
@@ -53,6 +73,13 @@ async function main() {
     for (const term of PROHIBITED) {
       if (content.includes(term)) {
         console.error(`Prohibited term "${term}" found in ${file}`);
+        found = true;
+      }
+    }
+    const lower = content.toLowerCase();
+    for (const term of AI_PROHIBITED) {
+      if (lower.includes(term.toLowerCase())) {
+        console.error(`Prohibited AI attribution term "${term}" found in ${file}`);
         found = true;
       }
     }

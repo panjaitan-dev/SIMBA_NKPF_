@@ -9,13 +9,38 @@ const PROHIBITED = [
   '← Kembali ke Beranda',
 ];
 
+const AI_PROHIBITED = [
+  'claude',
+  'anthropic',
+  'chatgpt',
+  'openai',
+  'gemini',
+  'copilot',
+  'windsurf',
+  'antigravity',
+  'anti gravity',
+  'as an ai',
+  'ai-generated',
+  'ai assistant',
+  'co-authored-by',
+  'dibuat dengan ai',
+  'dibantu ai',
+  'menggunakan ai',
+];
+
 async function* walk(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
   for (const entry of entries) {
+    if (entry.name === 'cache') continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       yield* walk(full);
-    } else if (entry.isFile()) {
+    } else if (entry.isFile() && !entry.name.endsWith('.map')) {
       yield full;
     }
   }
@@ -24,10 +49,22 @@ async function* walk(dir) {
 async function main() {
   let found = false;
   for await (const file of walk(ROOT)) {
-    const content = await fs.readFile(file, 'utf8');
+    let content;
+    try {
+      content = await fs.readFile(file, 'utf8');
+    } catch {
+      continue;
+    }
     for (const term of PROHIBITED) {
       if (content.includes(term)) {
         console.error(`Prohibited term "${term}" found in ${file}`);
+        found = true;
+      }
+    }
+    const lower = content.toLowerCase();
+    for (const term of AI_PROHIBITED) {
+      if (lower.includes(term.toLowerCase())) {
+        console.error(`Prohibited AI attribution term "${term}" found in ${file}`);
         found = true;
       }
     }

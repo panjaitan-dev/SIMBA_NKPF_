@@ -10,7 +10,7 @@ Situs dirancang khusus untuk warga Sumatera Utara dan Indonesia dengan pendekata
 
 ### Menghindari Kesan:
 - **Bukan portal birokrasi pemerintah yang kaku**: Tidak memakai warna biru korporat dingin, banner berlebihan, atau bahasa formal yang berbelit-belit.
-- **Bukan template AI generik / crypto neon**: Tidak memakai tema gelap penuh, gradien neon limau, efek glassmorphism berlebihan, atau terminal hacking.
+- **Bukan template generik / crypto neon**: Tidak memakai tema gelap penuh, gradien neon limau, efek glassmorphism berlebihan, atau terminal hacking.
 
 ### Mengangkat Keaslian Fisik Bank Sampah:
 - **Kertas Hangat & Tinta Fisik**: Latar belakang bernuansa kertas arsip tabungan (`#F4EFE4`) dan kartu catatan (`#FAF7F2`), dipadu tinta cetak (`#1B1B18`).

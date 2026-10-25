@@ -1,7 +1,8 @@
 {
   "name": "simba-backend",
   "version": "1.0.0",
-  "description": "Backend API untuk SIMBA - Sistem Informasi Bank Sampah",
+  "description": "Backend API untuk SIMBA — Sistem Informasi Bank Sampah (Karya Prototipe IT Fest 2026)",
+  "author": "Tim SIMBA Nusantara",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
