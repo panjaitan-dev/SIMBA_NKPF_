@@ -45,15 +45,3 @@ submission.zip
 docs/screenshots/
 .next/
 
-# AI & Assistant tool-specific files
-CLAUDE.md
-AGENTS.md
-GEMINI.md
-.claude/
-.cursor/
-.cursorrules
-.windsurfrules
-*copilot-instructions*
-prompts/
-
-

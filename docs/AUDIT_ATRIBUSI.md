@@ -42,8 +42,8 @@ Pencarian dilakukan secara sensitif huruf besar-kecil (*case-insensitive*) dan p
 
 | No | Lokasi Berkas / Objek | String / Temuan Terdeteksi | Kategori | Klasifikasi Tindakan | Rincian Tindakan yang Diterapkan |
 |:---|:---|:---|:---|:---|:---|
-| 1 | `frontend/CLAUDE.md` | Berkas asisten pengembang `@AGENTS.md` | (d) Berkas Alat AI | **Hapus dari Git Tracking (Untrack)** | Dijalankan `git rm --cached frontend/CLAUDE.md`. Berkas lokal tidak dihapus permanen, namun dimasukkan ke `.gitignore` agar tidak masuk repositori. |
-| 2 | `frontend/AGENTS.md` | Header konfigurasi `nextjs-agent-rules` | (d) Berkas Alat AI / Next.js | **Hapus dari Git Tracking (Untrack)** | Dijalankan `git rm --cached frontend/AGENTS.md`. Berkas lokal tidak dihapus permanen, namun dimasukkan ke `.gitignore` agar tidak masuk repositori. |
+| 1 | `frontend/CLAUDE.md` | Berkas asisten pengembang `@AGENTS.md` | (d) Berkas Alat AI | **Hapus Permanen (Deleted)** | Berkas dihapus permanen dari repositori dan direktori proyek. |
+| 2 | `frontend/AGENTS.md` | Header konfigurasi `nextjs-agent-rules` | (d) Berkas Alat AI / Next.js | **Hapus Permanen (Deleted)** | Berkas dihapus permanen dari repositori dan direktori proyek. |
 | 3 | `docs/DESAIN.md:13` | `- Bukan template AI generik / crypto neon: ...` | (c) Dokumentasi Desain | **Ganti Netral** | Diubah menjadi: `- Bukan template generik / crypto neon: ...` untuk menghilangkan kata "AI" tanpa mengubah esensi desain fisik "Buku Tabungan Sampah". |
 | 4 | `package.json` (Root) | Tidak memiliki field `author` & `description` | (c) Metadata Repositori | **Lengkapi Netral** | Dilengkapi dengan identitas resmi: `author: "Tim SIMBA Nusantara"` dan `description: "SIMBA Nusantara — Sistem Informasi Bank Sampah (Karya Prototipe IT Fest 2026)"`. |
 | 5 | `backend/package.json` | Tidak memiliki field `author` | (c) Metadata Backend | **Lengkapi Netral** | Ditambahkan: `author: "Tim SIMBA Nusantara"` dan deskripsi diperbarui netral. |

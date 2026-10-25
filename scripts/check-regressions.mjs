@@ -7,9 +7,6 @@ const ROOT = path.resolve('frontend/.next');
 const PROHIBITED = [
   'Kembali ke Beranda',
   '← Kembali ke Beranda',
-];
-
-const AI_PROHIBITED = [
   'claude',
   'anthropic',
   'chatgpt',
@@ -55,16 +52,10 @@ async function main() {
     } catch {
       continue;
     }
-    for (const term of PROHIBITED) {
-      if (content.includes(term)) {
-        console.error(`Prohibited term "${term}" found in ${file}`);
-        found = true;
-      }
-    }
     const lower = content.toLowerCase();
-    for (const term of AI_PROHIBITED) {
+    for (const term of PROHIBITED) {
       if (lower.includes(term.toLowerCase())) {
-        console.error(`Prohibited AI attribution term "${term}" found in ${file}`);
+        console.error(`Prohibited term "${term}" found in ${file}`);
         found = true;
       }
     }

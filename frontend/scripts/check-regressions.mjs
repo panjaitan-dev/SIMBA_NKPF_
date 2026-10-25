@@ -19,9 +19,6 @@ const PROHIBITED = [
   'lorem',
   'Gedung Manggala',
   'Unit Percontohan Resmi',
-];
-
-const AI_PROHIBITED = [
   'claude',
   'anthropic',
   'chatgpt',
@@ -70,16 +67,10 @@ async function main() {
     } catch {
       continue; // skip binary or inaccessible files
     }
-    for (const term of PROHIBITED) {
-      if (content.includes(term)) {
-        console.error(`Prohibited term "${term}" found in ${file}`);
-        found = true;
-      }
-    }
     const lower = content.toLowerCase();
-    for (const term of AI_PROHIBITED) {
+    for (const term of PROHIBITED) {
       if (lower.includes(term.toLowerCase())) {
-        console.error(`Prohibited AI attribution term "${term}" found in ${file}`);
+        console.error(`Prohibited term "${term}" found in ${file}`);
         found = true;
       }
     }
