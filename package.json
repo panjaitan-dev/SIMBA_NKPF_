@@ -1,4 +1,9 @@
 {
+  "name": "simba-nusantara",
+  "version": "1.0.0",
+  "description": "SIMBA Nusantara — Sistem Informasi Bank Sampah (Karya Prototipe IT Fest 2026)",
+  "author": "Tim SIMBA Nusantara",
+  "private": true,
   "dependencies": {
     "react-hot-toast": "^2.6.1"
   }

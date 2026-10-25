@@ -10,7 +10,7 @@ type Transaction = {
 };
 
 let balance = 125_000; // initial mock balance (IDR)
-let transactions: Transaction[] = [
+const transactions: Transaction[] = [
   { id: 1, date: '2024-09-01', type: 'Setoran', amount: 30_000, description: 'Plastik' },
   { id: 2, date: '2024-09-05', type: 'Setoran', amount: 45_000, description: 'Kertas' },
   { id: 3, date: '2024-09-10', type: 'Penarikan', amount: -20_000, description: 'Penarikan saldo' },

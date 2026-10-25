@@ -50,7 +50,7 @@ export default function DashboardPage() {
       <header className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-[#1E4D3B]">Dashboard Nasabah</h1>
         <Link href="/" className="inline-flex items-center gap-1 text-sm text-[#1E4D3B] hover:underline">
-          <ArrowRight size={14} /> Kembali ke Beranda
+          <ArrowRight size={14} /> Beranda
         </Link>
       </header>
 

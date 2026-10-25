@@ -60,41 +60,43 @@ const login = async (req, res) => {
       });
     }
 
-    // Coba autentikasi ke Supabase jika aktif
-    try {
-      const { data: sbData, error: sbError } = await supabase.auth.signInWithPassword({
-        email: normalizedEmail,
-        password,
-      });
-
-      if (!sbError && sbData?.session) {
-        let role = demoAccount.role;
-        try {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', sbData.user.id)
-            .single();
-          if (profile?.role) role = profile.role;
-        } catch {}
-
-        return res.json({
-          success: true,
-          message: 'Login berhasil',
-          token: sbData.session.access_token,
-          refresh_token: sbData.session.refresh_token,
-          role,
-          user: {
-            id: sbData.user.id,
-            email: sbData.user.email,
-            nama_lengkap: demoAccount.nama_lengkap,
-            role,
-          },
-          profile: demoAccount.profile,
+    // Coba autentikasi ke Supabase jika aktif dan bukan mode pengujian otomatis
+    if (process.env.NODE_ENV !== 'test' && !process.env.SUPABASE_URL?.includes('mock')) {
+      try {
+        const { data: sbData, error: sbError } = await supabase.auth.signInWithPassword({
+          email: normalizedEmail,
+          password,
         });
+
+        if (!sbError && sbData?.session) {
+          let role = demoAccount.role;
+          try {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', sbData.user.id)
+              .single();
+            if (profile?.role) role = profile.role;
+          } catch {}
+
+          return res.json({
+            success: true,
+            message: 'Login berhasil',
+            token: sbData.session.access_token,
+            refresh_token: sbData.session.refresh_token,
+            role,
+            user: {
+              id: sbData.user.id,
+              email: sbData.user.email,
+              nama_lengkap: demoAccount.nama_lengkap,
+              role,
+            },
+            profile: demoAccount.profile,
+          });
+        }
+      } catch {
+        // Supabase unresolvable / offline fallback
       }
-    } catch {
-      // Supabase unresolvable / offline fallback
     }
 
     // Fallback akun demo terotentikasi aman via signed JWT

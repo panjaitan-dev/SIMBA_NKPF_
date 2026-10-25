@@ -27,7 +27,18 @@ jobs:
 
       - name: Run Backend Tests
         working-directory: backend
-        run: npm test
+        env:
+          NODE_ENV: test
+          SUPABASE_URL: https://mock-project.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.mock
+          SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.mock
+          JWT_SECRET: simba_secret_key_dlh_toba_2026
+        run: |
+          echo "Node version: $(node -v)" >> $GITHUB_STEP_SUMMARY
+          npm test 2>&1 | tee test-out.txt
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat test-out.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
   frontend-build:
     name: Frontend Build & Test
@@ -53,4 +64,7 @@ jobs:
 
       - name: Build Next.js Frontend
         working-directory: frontend
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://mock-project.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.mock
         run: npm run build
